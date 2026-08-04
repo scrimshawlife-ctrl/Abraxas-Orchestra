@@ -35,7 +35,8 @@ Install targets:
 - OpenClaw: `~/.openclaw/skills/orchestra`
 
 CLI entry: `scripts/orchestra.py`  
-Contract entry: this file (`SKILL.md`)
+Contract entry: this file (`SKILL.md`)  
+Canonical loci: `schemas/frameworks.v1.json`
 
 ## Core Stance
 
@@ -89,7 +90,7 @@ Activate on requests that involve any of:
    Propose one primary framework and optionally one secondary overlay. Provide short rationale. Accept operator override without resistance. Chaos Magic may be proposed as meta-overlay when multiple maps compete.
 
 3. **Correspondence Table**  
-   Emit an explicit table mapping every major functional concern onto the chosen map (Sephira, Path, Stage, Rune, Hexagram, Sphere, Rank, Sign, Zone, Aethyr, Watchtower, etc.). Mark any weak or forced mappings.
+   Emit an explicit table mapping every major functional concern onto the chosen map. Mark any weak or forced mappings.
 
 4. **Skeleton Generation**  
    Produce directory and module layout using dual naming:
@@ -98,7 +99,7 @@ Activate on requests that involve any of:
    Include interface/path modules where the map requires them. Prefer typed Python stubs when emitting code.
 
 5. **Cost & Projection**  
-   For every non-trivial correspondence, state the engineering cost. When pure mapping would harm maintainability, type safety, or testability, offer a pragmatic projection (collapsed or conventional alternative). Use `do project` semantics when collapsing oversized maps.
+   For every non-trivial correspondence, state the engineering cost. When pure mapping would harm maintainability, type safety, or testability, offer a pragmatic projection. Use `do project` semantics when collapsing oversized maps.
 
 6. **Fail-Closed Gate**  
    If evidence for a required mapping is weak, return `NOT_COMPUTABLE` or `FORCED_CORRESPONDENCE` and stop. Do not invent structure to satisfy the map.
@@ -122,7 +123,7 @@ Activate on requests that involve any of:
 | `enochian` | Enochian | Watchtowers, Aethyrs, Calls as tokens |
 | `chaos-magic` | Chaos Magic | Meta-paradigm, sigils, banishing, results gates |
 
-Detailed tables live in `references/`. Load them when the chosen framework requires detail. Keep active context lean.
+Detailed tables live in `references/`. Loci for CLI emission live in `schemas/frameworks.v1.json`. Load markdown references when the chosen framework requires detail. Keep active context lean.
 
 ## Dual Naming Rule
 
@@ -167,7 +168,7 @@ Install:
 
 Prefer structured artifacts:
 
-- Correspondence tables (markdown or JSON matching `schemas/correspondence-table.v1.schema.json`)
+- Correspondence tables (markdown or JSON matching `schemas/correspondence-table.v1.schema.json`; framework loci in `schemas/frameworks.v1.json`)
 - Directory trees with dual-named entries
 - Short rationale blocks labeled OBSERVED / INFERRED / SPECULATIVE
 - Explicit pragmatic projection alternatives when relevant
@@ -190,4 +191,4 @@ Hosts: **Hermes**, **OpenClaw**. Same contract, different install roots.
 
 ## Reference Loading
 
-Load files from `references/` only when the chosen framework requires detail. Keep the active context lean. Load `references/agent-posture.md` when implementing or evolving code under this skill.
+Load files from `references/` only when the chosen framework requires detail. Keep the active context lean. Load `references/agent-posture.md` when implementing or evolving code under this skill. For Enochian CLI loci prefer `references/enochian-cli-loci.md` plus `schemas/frameworks.v1.json`.
