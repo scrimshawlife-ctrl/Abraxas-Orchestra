@@ -1,7 +1,7 @@
 # Abraxas Orchestra — Design Specification
 
 **Status**: Hermes/OpenClaw coding-agent skill — design surface + executable CLI + open corpus  
-**Version target**: 0.1.1  
+**Version target**: 0.1.2  
 **Date**: 2026-08-04  
 **Repo**: scrimshawlife-ctrl/Abraxas-Orchestra-Hermes  
 
@@ -24,7 +24,7 @@ Orchestra is a coding-agent skill that structures software architecture using tr
 - Correspondence table schema + emission
 - Atomic installer for Hermes and OpenClaw paths
 - Worked examples (signal-forager; enochian-chaos structure)
-- Schema validation inside `check` (v0.1.1)
+- Schema validation inside `check` (v0.1.2)
 
 **Explicitly out of scope for v0.1**
 
@@ -73,7 +73,7 @@ See `docs/OPENCLAW.md`.
 
 ## 7. Versioning
 
-- Current target: 0.1.1
+- Current target: 0.1.2
 - Schema: `correspondence-table.v1` (enum covers all frameworks + composite)
 - Corpus remains open; additive frameworks do not break v0.1 CLI contracts when registered in `FRAMEWORKS`, schema enum, manifest, and installer refs together.
 
