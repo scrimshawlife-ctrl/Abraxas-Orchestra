@@ -1,29 +1,73 @@
 # Pragmatic Projections
 
-When a pure symbolic mapping would produce structure that is baroque, untestable, or hostile to ordinary engineering tools, the skill offers a pragmatic projection.
+When a pure symbolic map would harm maintainability, type safety, testability, or cognitive load, Orchestra **projects** rather than forces.
 
-A pragmatic projection is a deliberate reduction or re-expression of the map that preserves as much of the original intent as possible while restoring usability.
+Projections are always recorded. Never silent.
 
-## Common Projection Patterns
+## When to project
 
-### 1. Sephirotic Collapse
-Unused or low-value Sephirot are folded into neighboring nodes.  
-Example: a small tool may map only Kether → Tiphareth → Malkuth and record the collapsed intermediate Sephirot in the correspondence table notes.
+| Trigger | Typical action |
+|---------|----------------|
+| Map has more loci than the concern set needs | Collapse to framework **core set** |
+| Concern has no clean locus | Mark `FORCED` or drop under `do project` |
+| Two frameworks compete for the same concern | Pick primary; optional Chaos overlay; do not dual-primary |
+| Nested maps exceed review capacity | Flatten to ≤6 mechanical modules |
+| Symbolic name would become public API | Keep mechanical primary; symbolic in docs only |
 
-### 2. Four-World Flattening
-When full vertical stratification is excessive, collapse Atziluth+Briah into a single “contracts” layer and Yetzirah+Assiah into an “implementation + runtime” layer. Record the original Four-World intent.
+## `do project` semantics (CLI)
 
-### 3. Alchemical Stage Compression
-For short pipelines, Nigredo and Albedo may be combined into a single “ingest_and_clean” stage, or Citrinitas and Rubedo into “score_and_emit”. The original four-stage intention remains in provenance.
+1. Drop loci whose notes start with `FORCED`
+2. If remaining count > 6 and the framework defines `core_collapse`, keep only those mechanical names
+3. Write the projection note into `correspondence-table.json` → `pragmatic_projection`
+4. Status stays `CLEAN` if only clean loci remain after drop; otherwise prior forced status may already have failed `do structure`
 
-### 4. Path Reduction
-Only the highest-traffic Paths are materialized as explicit modules. Low-traffic Paths become ordinary function calls or typed dependencies and are noted as “implicit path”.
+## Core collapse sets (aligned with CLI)
 
-### 5. Dual-Name Softening
-Symbolic names may be omitted from the most frequently imported public surfaces if the operator requests maximum conventional readability. The symbolic mapping is retained only in the correspondence table and internal design docs.
+| Framework | Core mechanical names |
+|-----------|------------------------|
+| tree-of-life | intent, synthesis, output |
+| alchemical-stages | raw_ingest, illuminate, coagulate |
+| elder-futhark | signal_intake, just_judgment, human_surface |
+| planetary-spheres | boundary, core, comms |
+| iching-hexagrams | init, harmony, completion |
+| solomonic | sovereign, executive, task_agent |
+| peircean-signs | trace, convention, inference |
+| numogram | init, threshold, completion |
+| sacred-geometry | nested_core, shared_zone |
+| enochian | edge_intake, domain_entry, sovereign_intent |
+| chaos-magic | paradigm_switch, intent_token, outcome_gate |
 
-## Recording Rule
+## Dual-naming under projection
 
-Every pragmatic projection must be recorded in the correspondence table under `pragmatic_projection` and in the strength column of affected mappings (usually marked WEAK or FORCED). The original pure map remains recoverable.
+Projection **must not** invent new symbolic loci. It only selects or drops existing rows.
 
-The skill never applies a projection silently. The operator always sees both the pure mapping and the proposed collapse before acceptance.
+```text
+# BEFORE (oversized Tree map)
+intent, intake, constraint, expand, adversarial, synthesis, persist, analyze, store, output
+
+# AFTER do project (core collapse)
+intent / kether
+synthesis / tiphareth
+output / malkuth
+# projection note: Collapsed N non-core loci to framework core set.
+```
+
+## Operator sovereignty
+
+- Accept projection when maintainability wins
+- Reject and expand core set only by editing `FRAMEWORKS` + this table + schema together
+- Never treat projection as auto-canon into Abraxas
+
+## Strength after projection
+
+| Strength | Meaning post-project |
+|----------|----------------------|
+| STRONG / ADEQUATE | Retained clean locus |
+| FORCED | Should have been dropped by `do project`; if still present, operator must review |
+| WEAK | Prefer explicit human acceptance before implement |
+
+## Related
+
+- CLI: `scripts/orchestra.py` → `_apply_pragmatic_projection`
+- Schema: `schemas/correspondence-table.v1.schema.json` field `pragmatic_projection`
+- Agent posture: `references/agent-posture.md` (smallest working layer first)
