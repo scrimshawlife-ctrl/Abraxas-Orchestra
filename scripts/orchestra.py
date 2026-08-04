@@ -5,7 +5,7 @@ Abraxas Orchestra — CLI entrypoint (v0.1 executable surface)
 Minimal, fail-closed, dual-naming skeleton emitter.
 Stdlib only. No external dependencies.
 
-Commands: check | list | structure | project
+Commands: check | list | structure | project | diagram
 Legacy: do <command> still accepted.
 """
 
@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.1.4"
+VERSION = "0.1.5"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:
@@ -66,7 +66,6 @@ def cmd_list_frameworks(_: argparse.Namespace) -> int:
 
 
 def _validate_table_against_schema(table: dict[str, Any]) -> list[str]:
-    """Lightweight schema check (stdlib only — no jsonschema dependency)."""
     errors: list[str] = []
     allowed_fw = {
         "tree-of-life", "alchemical-stages", "elder-futhark", "planetary-spheres",
@@ -444,11 +443,50 @@ def cmd_project(args: argparse.Namespace) -> int:
     return _emit_structure(args.framework, args.overlay, concerns, args.out, project=True)
 
 
+def cmd_diagram(args: argparse.Namespace) -> int:
+    """Emit interactive HTML + agent JSON graph for a framework."""
+    scripts_dir = str(Path(__file__).resolve().parent)
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    from diagram_emit import run_diagram, set_context
+
+    set_context(VERSION, FRAMEWORKS)
+    framework = args.framework
+    overlay = args.overlay
+    if framework not in FRAMEWORKS:
+        print(f"NOT_COMPUTABLE — unknown framework: {framework}", file=sys.stderr)
+        return 2
+    if overlay and overlay not in FRAMEWORKS:
+        print(f"NOT_COMPUTABLE — unknown overlay: {overlay}", file=sys.stderr)
+        return 2
+    if overlay and overlay == framework:
+        print("NOT_COMPUTABLE — overlay must differ from primary framework", file=sys.stderr)
+        return 2
+
+    concerns = None
+    if args.concerns:
+        concerns = [c.strip() for c in args.concerns.split(",") if c.strip()]
+    loci = _select_loci(framework, concerns)
+    if getattr(args, "project", False):
+        loci, _proj = _apply_pragmatic_projection(framework, loci)
+        if not loci:
+            print("NOT_COMPUTABLE — pragmatic projection removed all loci", file=sys.stderr)
+            return 2
+    overlay_notes = _overlay_annotation(loci, overlay) if overlay else []
+    return run_diagram(
+        framework=framework,
+        overlay=overlay,
+        loci=loci,
+        overlay_notes=overlay_notes,
+        out=args.out,
+    )
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="orchestra",
         description="Abraxas Orchestra — symbolic code architecture CLI",
-        epilog="Commands: check | list | structure | project",
+        epilog="Commands: check | list | structure | project | diagram",
     )
     p.add_argument("--version", action="version", version=f"Orchestra {VERSION}")
     sub = p.add_subparsers(dest="command", required=True)
@@ -475,6 +513,19 @@ def build_parser() -> argparse.ArgumentParser:
     )
     add_structure_args(project_p)
     project_p.set_defaults(func=cmd_project)
+
+    diag_p = sub.add_parser(
+        "diagram",
+        aliases=["diagrammit"],
+        help="Emit interactive HTML + agent JSON architecture graph",
+    )
+    add_structure_args(diag_p)
+    diag_p.add_argument(
+        "--project",
+        action="store_true",
+        help="Apply pragmatic projection before graphing",
+    )
+    diag_p.set_defaults(func=cmd_diagram)
 
     return p
 
