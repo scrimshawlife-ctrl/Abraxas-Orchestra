@@ -4,6 +4,17 @@ All notable changes to Abraxas Orchestra will be recorded here.
 
 The format follows Keep a Changelog principles. Versions follow Semantic Versioning.
 
+## [0.1.2] — 2026-08-04
+
+### Added
+- `tests/test_orchestra.py` — stdlib unittest suite (check, structure, fail-closed, disk emit, schema enum)
+- `scripts/smoke.sh` — check + tests + demo + install dry-run
+- `.github/workflows/ci.yml` — Python 3.11/3.12 CI
+- `docs/ROADMAP.md` — done vs deferred production bar
+
+### Fixed
+- Enochian-chaos example regenerated with dual-named module stubs on disk
+
 ## [0.1.1] — 2026-08-04
 
 ### Fixed
@@ -17,12 +28,10 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 - README rewritten: How to use (humans + agents), definition of done, safety
 - `docs/COMMUNITY.md` — community-skills compliance checklist and license gap
 - SKILL.md frontmatter: version, license, openclaw/hermes metadata, when-not-to-use
-- `references/agent-posture.md` — coding-agent build rules (layered growth, current-req only, gated compatibility)
-- SKILL.md / DESIGN pointers to agent posture (not a framework enum entry)
+- `references/agent-posture.md` — coding-agent build rules
 - Proprietary `LICENSE` and `.gitignore`
-- Example: `examples/enochian-chaos-skeleton/` (Enochian primary + Chaos Magic overlay)
-- Mermaid diagrams for Enochian + Chaos overlay (`EXAMPLE.md`, `references/enochian.md`)
-- Enochian corpus depth (streams, seals, Heptarchia, Parts, Union, cacodemons) from prior Unreleased work
+- Example: `examples/enochian-chaos-skeleton/`
+- Mermaid diagrams for Enochian + Chaos overlay
 - Hermes/OpenClaw coding-agent packaging surface
 
 ## [0.1.0] — 2026-08-04
