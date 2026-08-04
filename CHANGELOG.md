@@ -16,6 +16,7 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ### Added
 - Proprietary `LICENSE` and `.gitignore`
 - Example: `examples/enochian-chaos-skeleton/` (Enochian primary + Chaos Magic overlay)
+- Mermaid diagrams for Enochian + Chaos overlay (`EXAMPLE.md`, `references/enochian.md`)
 - Enochian corpus depth (streams, seals, Heptarchia, Parts, Union, cacodemons) from prior Unreleased work
 - Hermes/OpenClaw coding-agent packaging surface
 
