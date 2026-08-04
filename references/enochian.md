@@ -263,4 +263,48 @@ Dual-naming in Orchestra is closer to mild chaos sigilization (mechanical name a
 - Enochian seals are authority markers, not intent-compression sigils; keep them distinct from Chaos Magic sigilization in correspondence tables.
 - Prefer one root truth seal per session; do not multiply Sigillum-class objects without a clear governance need.
 
+---
+
+## Chaos Magic Overlay Map
+
+When `chaos-magic` is secondary overlay on Enochian primary, treat Chaos as the **session control plane** and Enochian as the **domain plane**.
+
+```mermaid
+flowchart LR
+  subgraph CONTROL["Chaos — control plane"]
+    PS[paradigm_switch]
+    IT[intent_token]
+    BR[banishing]
+    RG[results_gate]
+  end
+
+  subgraph DOMAIN["Enochian — domain plane"]
+    SEAL[root_truth_seal]
+    CALL[domain_entry Call]
+    WT[Watchtowers ×4]
+    UNION[tablet_of_union]
+    INV[cacodemon_mirror]
+    APEX[aethyr_lil]
+  end
+
+  PS -->|adopt map| DOMAIN
+  BR -->|clear map| DOMAIN
+  IT -->|bind| CALL
+  SEAL --> CALL
+  CALL --> WT
+  WT --> UNION
+  INV -.-> WT
+  UNION --> APEX
+  RG -->|score| APEX
+```
+
+| Chaos locus | Couples to Enochian | Rule |
+|-------------|---------------------|------|
+| paradigm_switch | whole Enochian map | Select/deselect framework; never mutate tables in place |
+| intent_token | domain_entry / Calls | Compress operator intent; Call still required for entry |
+| banishing_clear | residual Watchtower state | Session teardown; no silent carry-over |
+| results_metric | sovereign_intent / synthesis | Outcome gate after domain work |
+
+Do not collapse Chaos sigils into Enochian seals in the correspondence table.
+
 Load this file when Enochian Watchtowers, Aethyrs, Calls, Parts of the Earth, Heptarchia, tablet-names, or seals/sigils are selected as primary or secondary framework.
