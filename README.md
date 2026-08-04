@@ -28,8 +28,9 @@ cd Abraxas-Orchestra-Hermes
 
 bash scripts/smoke.sh
 python3 scripts/orchestra.py check
-python3 scripts/orchestra.py do list-frameworks
-python3 scripts/orchestra.py do structure -f tree-of-life -c "intent,synthesis,output"
+python3 scripts/orchestra.py list
+python3 scripts/orchestra.py structure -f tree-of-life -c "intent,synthesis,output"
+python3 scripts/orchestra.py analyze --path tests/fixtures/mini_pkg -f tree-of-life --out /tmp/orch-an
 ```
 
 Install into an agent host:
@@ -107,6 +108,7 @@ Do **not** invent symbolic loci to satisfy a map. Return `NOT_COMPUTABLE` or mar
 |----|--------|
 | Architecture structuring skill | Runtime ritual / operative magic |
 | Dual-name + provenance emitter | Auto-canon promotion into Abraxas |
+| Repo analyze + gated optimize | Silent rewrite of FORCED/WEAK maps |
 | Hermes + OpenClaw portable package | Network service or SaaS |
 | Open correspondence corpus | Speculative deep trees without projection |
 
@@ -119,12 +121,14 @@ assets/hero.svg          # README hero (JPEG optional)
 SKILL.md                 # Agent contract
 orchestra.manifest.yaml  # Install / discovery metadata
 scripts/orchestra.py     # CLI
+scripts/analyze_repo.py  # Phase A
+scripts/optimize_*.py    # Phase B/C
 scripts/smoke.sh         # Production smoke
 references/              # Framework tables + agent-posture
-schemas/                 # correspondence-table.v1 + frameworks.v1
+schemas/                 # correspondence, frameworks, analysis, optimize-plan
 examples/                # signal-forager; enochian-chaos
-tests/                   # stdlib unittest
-docs/                    # DESIGN, DEPLOY, COMPLETION, PUBLIC_RELEASE, …
+tests/                   # stdlib unittest + fixtures
+docs/                    # DESIGN, DEPLOY, COMPLETION, ANALYZE_OPTIMIZE_PLAN, …
 install.sh               # Atomic installer (path jail)
 LICENSE / NOTICE         # Apache-2.0
 ```
@@ -137,9 +141,10 @@ LICENSE / NOTICE         # Apache-2.0
 |-----|----------|
 | `SKILL.md` | Agents |
 | `README.md` | Humans + agents |
-| `docs/COMPLETION.md` | Private production freeze checklist |
+| `docs/COMPLETION.md` | Production freeze checklist (0.3.1) |
+| `docs/ANALYZE_OPTIMIZE_PLAN.md` | Analyze → map → optimize plan (shipped) |
 | `docs/PUBLIC_RELEASE.md` | Public debut packaging checklist |
-| `docs/SECURITY_AUDIT.md` | Security audit record (0.1.3) |
+| `docs/SECURITY_AUDIT.md` | Security audit record (+ 0.3.x apply addendum) |
 | `docs/RELEASE_NOTES.md` | Narrative release notes |
 | `docs/DEPLOY.md` | Ordered deployment next steps |
 | `docs/ROADMAP.md` | Done / deferred / production bar |
@@ -158,9 +163,9 @@ LICENSE / NOTICE         # Apache-2.0
 Installer refuses system paths and targets outside `$HOME` unless `--allow-outside-home`. CLI performs no network I/O. No third-party runtime dependencies. See [`docs/SECURITY_AUDIT.md`](docs/SECURITY_AUDIT.md).
 
 - **Runtime:** Python 3.11+ standard library only for the CLI
-- **Network:** Not required for `check` / `structure` / `project`
+- **Network:** Not required for `check` / `structure` / `project` / `analyze` / `optimize`
 - **State:** Mutable state stays outside the install root
-- **Destructive ops:** Installer replaces target after backup; use `--dry-run` first
+- **Destructive ops:** Installer replaces target after backup; optimize apply requires `--confirm`; use dry-run first
 - **License:** Apache-2.0 — see `LICENSE` and `NOTICE`
 
 ---
@@ -169,6 +174,7 @@ Installer refuses system paths and targets outside `$HOME` unless `--allow-outsi
 
 - Repo: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
 - Freeze checklist: [`docs/COMPLETION.md`](docs/COMPLETION.md)
+- Analyze/optimize plan: [`docs/ANALYZE_OPTIMIZE_PLAN.md`](docs/ANALYZE_OPTIMIZE_PLAN.md)
 - Public debut: [`docs/PUBLIC_RELEASE.md`](docs/PUBLIC_RELEASE.md)
 - Security audit: [`docs/SECURITY_AUDIT.md`](docs/SECURITY_AUDIT.md)
 - Release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)

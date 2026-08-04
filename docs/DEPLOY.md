@@ -84,6 +84,9 @@ bash ~/.hermes/skills/orchestra/scripts/smoke.sh
 
 python3 ~/.hermes/skills/orchestra/scripts/orchestra.py structure \
   -f tree-of-life -c "intent,synthesis,output" --out /tmp/orch-skel
+
+python3 ~/.hermes/skills/orchestra/scripts/orchestra.py analyze \
+  --path /path/to/pkg -f tree-of-life --out /tmp/orch-an
 ```
 
 ---
@@ -99,12 +102,12 @@ python3 ~/.hermes/skills/orchestra/scripts/orchestra.py structure \
 ## Optional: pin a release tag
 
 ```bash
-git tag -a v0.1.4 -m "Orchestra 0.1.4 simplified CLI"
-git push origin v0.1.4
+git tag -a v0.3.1 -m "Orchestra 0.3.1 analyze/optimize"
+git push origin v0.3.1
 ```
 
 ```bash
-git clone --branch v0.1.4 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
+git clone --branch v0.3.1 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
 ```
 
 ---
