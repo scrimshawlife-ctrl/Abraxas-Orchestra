@@ -103,3 +103,16 @@ Adversarial and store stages often stay on the **primary** map (Tree Geburah / Y
 
 - Primary hierarchical alternative: `references/tree-of-life-mappings.md`
 - Projection rules: `references/pragmatic-projections.md`
+
+## CLI default loci (mechanical → symbolic)
+
+| Mechanical | Symbolic | Note |
+|------------|----------|------|
+| `raw_ingest` | `nigredo` | Chaos / putrefaction intake |
+| `purify` | `albedo` | Separation / schema wash |
+| `illuminate` | `citrinitas` | Insight / scoring |
+| `coagulate` | `rubedo` | Final stable emission |
+
+Core collapse for `do project`: **`raw_ingest`, `illuminate`, `coagulate`**.
+
+Canonical machine table: `schemas/frameworks.v1.json`.
