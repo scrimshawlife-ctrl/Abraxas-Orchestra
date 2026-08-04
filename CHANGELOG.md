@@ -7,23 +7,16 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
-- Enochian correspondence (`references/enochian.md`)
-  - Four Watchtowers as elemental domain separation
-  - Thirty Aethyrs as progressive depth (banded + curated high-signal set)
-  - Calls/Keys as invocation protocols and capability tokens
-  - Divine names & Seniors as sealed authority
-- Chaos Magic correspondence (`references/chaos-magic.md`)
-  - Paradigm engine as meta-framework for multi-map selection
-  - Sigilization as intent compression into mechanical names
-  - Banishing as context hygiene / session reset
-  - Results metrics as eval gates
+- Hermes/OpenClaw coding-agent skill packaging made explicit across SKILL.md, manifest, README
+- Full 11-framework registry in manifest and skill contract
+- Enochian and Chaos Magic correspondence tables + CLI registration
 - Signal-forager example with working pipeline logic
-- OpenClaw packaging notes, `do project`, typed Python stubs, full primary corpus
+- Executable CLI: `do structure`, `do project`, `do list-frameworks`, `check`
+- Atomic installer for Hermes and OpenClaw targets
 
-### Previously
-- Initial design surface for v0.1.0
-- SKILL.md operating contract
-- Dual-naming, fail-closed, pragmatic projection rules
+### Changed
+- SKILL.md, orchestra.manifest.yaml, README.md aligned to dual-host coding-agent skill
+- DESIGN.md and OPENCLAW.md updated for 11 frameworks and host packaging
 
 ## [0.1.0] — 2026-08-04
 

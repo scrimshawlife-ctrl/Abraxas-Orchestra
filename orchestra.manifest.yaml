@@ -1,11 +1,10 @@
-# Abraxas Orchestra — Skill Manifest
-# Canonical metadata for Hermes / OpenClaw discovery and installation
-
 name: orchestra
-display_name: Abraxas Orchestra
 version: 0.1.0
+display_name: Abraxas Orchestra
+kind: hermes-openclaw-skill
+
 description: >
-  Hermes-native symbolic code architecture.
+  Hermes and OpenClaw coding-agent skill for symbolic code architecture.
   Structure modules, pipelines, interfaces, and agent systems according to
   traditional esoteric maps while remaining production-grade.
   Fail-closed on weak mappings. Dual-named skeletons with recoverable provenance.
@@ -17,6 +16,7 @@ repository: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
 # Skill discovery
 skill_entry: SKILL.md
 cli_entry: scripts/orchestra.py
+installer: install.sh
 
 # Supported host environments
 hosts:
@@ -38,10 +38,27 @@ frameworks:
   - elder-futhark
   - planetary-spheres
   - iching-hexagrams
+  - solomonic
+  - peircean-signs
+  - numogram
+  - sacred-geometry
+  - enochian
+  - chaos-magic
+
+# CLI intents
+intents:
+  - do list-frameworks
+  - do structure
+  - do project
+  - check
 
 # Schema contracts
 schemas:
   correspondence_table: schemas/correspondence-table.v1.schema.json
+
+# Examples
+examples:
+  - examples/signal-forager-skeleton/
 
 # Governance posture
 governance:
@@ -60,3 +77,4 @@ metadata:
   design_doc: docs/DESIGN.md
   openclaw_doc: docs/OPENCLAW.md
   min_python: "3.11"
+  skill_type: coding-agent
