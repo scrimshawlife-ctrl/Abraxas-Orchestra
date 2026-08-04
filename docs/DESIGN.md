@@ -1,6 +1,6 @@
 # Abraxas Orchestra — Design Specification
 
-**Status**: Design surface + primary corpus complete  
+**Status**: Hermes/OpenClaw coding-agent skill — design surface + executable CLI + open corpus  
 **Version target**: 0.1.0  
 **Date**: 2026-08-04  
 **Repo**: scrimshawlife-ctrl/Abraxas-Orchestra-Hermes  
@@ -11,7 +11,7 @@ This document is the authoritative design record for the first public surface of
 
 ## 1. Purpose
 
-Abraxas Orchestra is a Hermes-native skill that maps software architecture, module organization, interfaces, and data-flow stages onto traditional esoteric and symbolic systems. The resulting structure remains production-usable while carrying explicit symbolic coherence and recoverable provenance.
+Abraxas Orchestra is a Hermes and OpenClaw coding-agent skill that maps software architecture, module organization, interfaces, and data-flow stages onto traditional esoteric and symbolic systems. The resulting structure remains production-usable while carrying explicit symbolic coherence and recoverable provenance.
 
 The skill treats architecture as a correspondence system. Functional requirements are projected onto a chosen traditional framework. The code becomes a living diagram of that map.
 
@@ -33,6 +33,7 @@ Primary value for Abraxas-v2.0 and related systems:
 - Provenance annotations that recover the original symbolic rationale
 - Fail-closed behavior on weak or forced correspondences
 - Open corpus under `references/` for traditional systems
+- Hermes and OpenClaw install packaging
 
 **Explicitly out of scope for v0.1**
 - Full multi-agent orchestration runtime
@@ -46,25 +47,21 @@ Later versions may expand the Orchestra surface. The v0.1 contract stays stable.
 
 ## 3. Supported Frameworks (Current)
 
-1. **Tree of Life** (default primary)  
-   Sephirot as layers or modules · Paths as interfaces · Four Worlds as abstraction strata
-
-2. **Alchemical process**  
-   Nigredo → Albedo → Citrinitas → Rubedo as pipeline or refinement stages
-
-3. **Elder Futhark aettir**  
-   Three aettir as major subsystem boundaries · Individual runes for intent-bearing names
-
-4. **Planetary / elemental spheres**  
-   Domain separation by classical planetary ownership and elemental character
-
-5. **I Ching hexagrams (curated)**  
-   Discrete state machines and regime transitions (16 high-signal hexagrams)
-
-6. **Solomonic hierarchy** (in progress)  
-   Rank structure, functional categories, and sealed contracts drawn from the Solomonic grimoire tradition
+1. **Tree of Life** (default primary) — Sephirot, Paths, Four Worlds
+2. **Alchemical stages** — Nigredo → Rubedo pipelines
+3. **Elder Futhark** — aettir boundaries and rune intent names
+4. **Planetary / elemental spheres** — domain ownership
+5. **I Ching (curated)** — discrete state machines / regimes
+6. **Solomonic hierarchy** — ranks, offices, sealed contracts
+7. **Peircean signs** — Icon/Index/Symbol and related trichotomies
+8. **Numogram** — zones, syzygies, time-circuit, gates
+9. **Sacred geometry** — nesting limits, Platonic adjacency, self-similarity
+10. **Enochian** — Watchtowers, Aethyrs, Calls as invocation tokens
+11. **Chaos Magic** — meta-paradigm, sigilization, banishing, results gates
 
 The corpus remains deliberately open. Additional traditional systems continue to be researched and added under `references/` without requiring changes to the core operating contract.
+
+This repository is a **Hermes and OpenClaw coding-agent skill**. Install roots differ by host; the operating contract (`SKILL.md`) and CLI are shared.
 
 ---
 
@@ -113,12 +110,19 @@ Human operators retain final authority over whether a forced mapping is accepted
 - Can be invoked from Abraxas Orchestrator as a specialized structuring step
 - Output skeletons are valid input for Senior Python Architect and Hermes cracked-python flows
 - Correspondence tables become first-class provenance artifacts
+- Discoverable as an OpenClaw skill under `~/.openclaw/skills/orchestra`
 
 ---
 
 ## 8. OpenClaw Edition
 
 A permanent `openclaw` branch will carry an edition that installs under `~/.openclaw/skills/orchestra`. Mutable runtime state stays outside the skill package. The reference mappings and core contract remain aligned with the Hermes edition.
+
+Until the branch is cut, install from `main` with:
+
+```bash
+./install.sh --target ~/.openclaw/skills/orchestra
+```
 
 ---
 
