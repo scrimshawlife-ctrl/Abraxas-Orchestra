@@ -19,7 +19,7 @@ VERSION = "0.1.0"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 # ---------------------------------------------------------------------------
-# Framework registry (v0.1 — mirrors references/ and manifest)
+# Framework registry
 # ---------------------------------------------------------------------------
 
 FRAMEWORKS: dict[str, dict[str, Any]] = {
@@ -38,6 +38,7 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
             ("store", "yesod", "Foundation / substrate"),
             ("output", "malkuth", "Concrete manifestation"),
         ],
+        "core_collapse": ["intent", "synthesis", "output"],
     },
     "alchemical-stages": {
         "title": "Alchemical Stages",
@@ -48,6 +49,7 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
             ("illuminate", "citrinitas", "Insight / scoring"),
             ("coagulate", "rubedo", "Final stable emission"),
         ],
+        "core_collapse": ["raw_ingest", "illuminate", "coagulate"],
     },
     "elder-futhark": {
         "title": "Elder Futhark",
@@ -61,6 +63,7 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
             ("human_surface", "mannaz", "Human / community surface"),
             ("inherited_store", "othala", "Ancestral / inherited store"),
         ],
+        "core_collapse": ["signal_intake", "just_judgment", "human_surface"],
     },
     "planetary-spheres": {
         "title": "Planetary Spheres",
@@ -74,6 +77,7 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
             ("comms", "mercury", "Translation / messaging"),
             ("memory", "moon", "Memory / flux"),
         ],
+        "core_collapse": ["boundary", "core", "comms"],
     },
     "iching-hexagrams": {
         "title": "I Ching (curated)",
@@ -87,6 +91,7 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
             ("revolution", "ge_revolution", "Radical change"),
             ("completion", "jiji_completion", "Ordered completion"),
         ],
+        "core_collapse": ["init", "harmony", "completion"],
     },
     "solomonic": {
         "title": "Solomonic Hierarchy",
@@ -100,6 +105,7 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
             ("binding", "solomonic_bind", "Constraint / containment"),
             ("judgment", "solomonic_justice", "Truth / judgment"),
         ],
+        "core_collapse": ["sovereign", "executive", "task_agent"],
     },
     "peircean-signs": {
         "title": "Peircean Signs",
@@ -112,6 +118,7 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
             ("instance", "sinsign", "Concrete token / event"),
             ("inference", "argument", "Necessary consequence"),
         ],
+        "core_collapse": ["trace", "convention", "inference"],
     },
     "numogram": {
         "title": "Numogram",
@@ -124,6 +131,7 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
             ("feedback", "zone_6", "Resonance / amplify"),
             ("completion", "zone_9", "Return / final intensity"),
         ],
+        "core_collapse": ["init", "threshold", "completion"],
     },
     "sacred-geometry": {
         "title": "Sacred Geometry",
@@ -134,6 +142,7 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
             ("shared_zone", "vesica_interface", "Shared contract overlap"),
             ("fractal_layer", "self_similar", "Recursive repetition"),
         ],
+        "core_collapse": ["nested_core", "shared_zone"],
     },
 }
 
@@ -209,21 +218,78 @@ def _select_loci(
     return out
 
 
+def _apply_pragmatic_projection(
+    framework: str, loci: list[tuple[str, str, str]]
+) -> tuple[list[tuple[str, str, str]], str | None]:
+    """Collapse to core set when pure map is oversized or carries FORCED entries."""
+    forced = [x for x in loci if x[2].startswith("FORCED")]
+    clean = [x for x in loci if not x[2].startswith("FORCED")]
+
+    meta = FRAMEWORKS[framework]
+    core_names = set(meta.get("core_collapse") or [])
+
+    projection_note: str | None = None
+
+    if forced:
+        loci = clean
+        projection_note = (
+            f"Dropped {len(forced)} FORCED locus/loci; retained clean mappings only."
+        )
+
+    if len(loci) > 6 and core_names:
+        collapsed = [x for x in loci if x[0] in core_names]
+        if not collapsed:
+            collapsed = [loci[0], loci[len(loci) // 2], loci[-1]]
+        dropped = len(loci) - len(collapsed)
+        loci = collapsed
+        extra = f" Collapsed {dropped} non-core loci to framework core set."
+        projection_note = (projection_note or "") + extra
+
+    return loci, projection_note
+
+
 def _overlay_annotation(
     primary_loci: list[tuple[str, str, str]], overlay: str
 ) -> list[str]:
-    """Return short overlay notes paired by index (best-effort, not forced 1:1)."""
     if overlay not in FRAMEWORKS:
         return []
     o_loci = FRAMEWORKS[overlay]["default_loci"]
     notes: list[str] = []
-    for i, (mech, _, _) in enumerate(primary_loci):
+    for i, _ in enumerate(primary_loci):
         if i < len(o_loci):
-            o_mech, o_sym, o_note = o_loci[i]
+            _, o_sym, o_note = o_loci[i]
             notes.append(f"overlay:{overlay}/{o_sym} ({o_note})")
         else:
             notes.append(f"overlay:{overlay}/—")
     return notes
+
+
+def _module_stub_py(mech: str, sym: str, note: str, overlay_line: str | None) -> str:
+    overlay_doc = f"\n    Overlay: {overlay_line}" if overlay_line else ""
+    return f'''"""
+{mech} — dual-named module stub
+
+mechanical: {mech}
+symbolic:   {sym}
+locus:      {note}{overlay_doc}
+
+Generated by Abraxas Orchestra {VERSION}.
+Replace this stub with production implementation.
+"""
+
+from __future__ import annotations
+
+from typing import Any
+
+
+def placeholder() -> dict[str, Any]:
+    """Minimal typed placeholder. Operator replaces with real logic."""
+    return {{
+        "mechanical": "{mech}",
+        "symbolic": "{sym}",
+        "status": "STUB",
+    }}
+'''
 
 
 def _write_skeleton(
@@ -233,79 +299,66 @@ def _write_skeleton(
     loci: list[tuple[str, str, str]],
     table: dict[str, Any],
     overlay_notes: list[str],
+    *,
+    python_stubs: bool = True,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    # correspondence table
     table_path = out_dir / "correspondence-table.json"
     table_path.write_text(json.dumps(table, indent=2) + "\n", encoding="utf-8")
 
-    # skeleton README
     lines = [
         f"# Skeleton — {framework} ({meta['title']})",
-        f"",
+        "",
         f"Status: {table['status']}",
         f"Generated: {table['provenance']['timestamp']}",
         f"Skill: Orchestra {VERSION}",
-        f"",
-        f"## Dual-named modules",
-        f"",
     ]
+    if table.get("pragmatic_projection"):
+        lines.append(f"Projection: {table['pragmatic_projection']}")
+    lines += ["", "## Dual-named modules", ""]
+
     for i, (mech, sym, note) in enumerate(loci):
         lines.append(f"### `{mech}/`")
         lines.append(f"- mechanical: `{mech}`")
         lines.append(f"- symbolic: `{sym}`")
         lines.append(f"- locus: {note}")
-        if overlay_notes and i < len(overlay_notes):
-            lines.append(f"- {overlay_notes[i]}")
+        ov = overlay_notes[i] if overlay_notes and i < len(overlay_notes) else None
+        if ov:
+            lines.append(f"- {ov}")
         lines.append("")
-        # create the directory with a stub README
+
         mod_dir = out_dir / mech
         mod_dir.mkdir(parents=True, exist_ok=True)
-        stub = mod_dir / "README.md"
-        stub_body = [
-            f"# {mech}",
-            f"",
-            f"mechanical: `{mech}`",
-            f"symbolic: `{sym}`",
-            f"locus: {note}",
-            f"",
-        ]
-        if overlay_notes and i < len(overlay_notes):
-            stub_body.append(overlay_notes[i])
-            stub_body.append("")
-        stub.write_text("\n".join(stub_body), encoding="utf-8")
+
+        if python_stubs:
+            (mod_dir / "__init__.py").write_text(
+                _module_stub_py(mech, sym, note, ov), encoding="utf-8"
+            )
+        else:
+            stub_body = [
+                f"# {mech}",
+                "",
+                f"mechanical: `{mech}`",
+                f"symbolic: `{sym}`",
+                f"locus: {note}",
+                "",
+            ]
+            if ov:
+                stub_body.append(ov)
+                stub_body.append("")
+            (mod_dir / "README.md").write_text("\n".join(stub_body), encoding="utf-8")
 
     (out_dir / "SKELETON.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def cmd_structure(args: argparse.Namespace) -> int:
-    framework = args.framework
-    if framework not in FRAMEWORKS:
-        print(f"NOT_COMPUTABLE — unknown framework: {framework}", file=sys.stderr)
-        print(f"Known: {', '.join(FRAMEWORKS)}", file=sys.stderr)
-        return 2
-
-    overlay = args.overlay
-    if overlay and overlay not in FRAMEWORKS:
-        print(f"NOT_COMPUTABLE — unknown overlay: {overlay}", file=sys.stderr)
-        print(f"Known: {', '.join(FRAMEWORKS)}", file=sys.stderr)
-        return 2
-    if overlay and overlay == framework:
-        print(
-            "NOT_COMPUTABLE — overlay must differ from primary framework",
-            file=sys.stderr,
-        )
-        return 2
-
-    concerns = None
-    if args.concerns:
-        concerns = [c.strip() for c in args.concerns.split(",") if c.strip()]
-
-    loci = _select_loci(framework, concerns)
-    meta = FRAMEWORKS[framework]
-    overlay_notes = _overlay_annotation(loci, overlay) if overlay else []
-
+def _build_table(
+    framework: str,
+    overlay: str | None,
+    loci: list[tuple[str, str, str]],
+    overlay_notes: list[str],
+    projection: str | None,
+) -> dict[str, Any]:
     mappings = []
     forced = 0
     for i, (mech, sym, note) in enumerate(loci):
@@ -325,12 +378,12 @@ def cmd_structure(args: argparse.Namespace) -> int:
         mappings.append(entry)
 
     status = "FORCED_CORRESPONDENCE" if forced else "CLEAN"
-    table = {
+    return {
         "framework": framework,
         "secondary_overlay": overlay,
         "status": status,
         "mappings": mappings,
-        "pragmatic_projection": None,
+        "pragmatic_projection": projection,
         "provenance": {
             "operator": "orchestra-cli",
             "timestamp": _utc_now(),
@@ -338,12 +391,54 @@ def cmd_structure(args: argparse.Namespace) -> int:
         },
     }
 
-    # stdout emission
-    print(f"# Abraxas Orchestra — structure skeleton")
+
+def _emit_structure(
+    framework: str,
+    overlay: str | None,
+    concerns: list[str] | None,
+    out: str | None,
+    *,
+    project: bool = False,
+) -> int:
+    if framework not in FRAMEWORKS:
+        print(f"NOT_COMPUTABLE — unknown framework: {framework}", file=sys.stderr)
+        print(f"Known: {', '.join(FRAMEWORKS)}", file=sys.stderr)
+        return 2
+
+    if overlay and overlay not in FRAMEWORKS:
+        print(f"NOT_COMPUTABLE — unknown overlay: {overlay}", file=sys.stderr)
+        return 2
+    if overlay and overlay == framework:
+        print(
+            "NOT_COMPUTABLE — overlay must differ from primary framework",
+            file=sys.stderr,
+        )
+        return 2
+
+    loci = _select_loci(framework, concerns)
+    projection: str | None = None
+    if project:
+        loci, projection = _apply_pragmatic_projection(framework, loci)
+        if not loci:
+            print(
+                "NOT_COMPUTABLE — pragmatic projection removed all loci",
+                file=sys.stderr,
+            )
+            return 2
+
+    meta = FRAMEWORKS[framework]
+    overlay_notes = _overlay_annotation(loci, overlay) if overlay else []
+    table = _build_table(framework, overlay, loci, overlay_notes, projection)
+
+    print("# Abraxas Orchestra — structure skeleton")
     print(f"# framework : {framework} ({meta['title']})")
     if overlay:
         print(f"# overlay   : {overlay} ({FRAMEWORKS[overlay]['title']})")
-    print(f"# status    : {status}")
+    if project:
+        print("# mode      : project (pragmatic projection applied)")
+    print(f"# status    : {table['status']}")
+    if projection:
+        print(f"# projection: {projection.strip()}")
     print(f"# generated : {table['provenance']['timestamp']}")
     print()
     print("## Dual-named skeleton")
@@ -362,18 +457,19 @@ def cmd_structure(args: argparse.Namespace) -> int:
     print(json.dumps(table, indent=2))
     print()
 
-    # optional disk write
-    if args.out:
-        out_dir = Path(args.out).expanduser().resolve()
-        _write_skeleton(out_dir, framework, meta, loci, table, overlay_notes)
+    if out:
+        out_dir = Path(out).expanduser().resolve()
+        _write_skeleton(
+            out_dir, framework, meta, loci, table, overlay_notes, python_stubs=True
+        )
         print(f"# wrote skeleton → {out_dir}")
-        print(f"#   SKELETON.md")
-        print(f"#   correspondence-table.json")
+        print("#   SKELETON.md")
+        print("#   correspondence-table.json")
         for mech, _, _ in loci:
-            print(f"#   {mech}/README.md")
+            print(f"#   {mech}/__init__.py")
         print()
 
-    if status == "FORCED_CORRESPONDENCE":
+    if table["status"] == "FORCED_CORRESPONDENCE":
         print(
             "# WARNING: one or more concerns had no clean locus. "
             "Review FORCED mappings before accepting.",
@@ -381,6 +477,24 @@ def cmd_structure(args: argparse.Namespace) -> int:
         )
         return 1
     return 0
+
+
+def cmd_structure(args: argparse.Namespace) -> int:
+    concerns = None
+    if args.concerns:
+        concerns = [c.strip() for c in args.concerns.split(",") if c.strip()]
+    return _emit_structure(
+        args.framework, args.overlay, concerns, args.out, project=False
+    )
+
+
+def cmd_project(args: argparse.Namespace) -> int:
+    concerns = None
+    if args.concerns:
+        concerns = [c.strip() for c in args.concerns.split(",") if c.strip()]
+    return _emit_structure(
+        args.framework, args.overlay, concerns, args.out, project=True
+    )
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -394,33 +508,30 @@ def build_parser() -> argparse.ArgumentParser:
     do_p = sub.add_parser("do", help="Execute an intent")
     do_sub = do_p.add_subparsers(dest="intent", required=True)
 
+    def add_structure_args(sp: argparse.ArgumentParser) -> None:
+        sp.add_argument(
+            "--framework", "-f", required=True, help="Primary framework key"
+        )
+        sp.add_argument("--overlay", "-o", default=None, help="Secondary overlay")
+        sp.add_argument(
+            "--concerns", "-c", default=None, help="Comma-separated concerns"
+        )
+        sp.add_argument(
+            "--out", default=None, help="Write skeleton + JSON to DIR"
+        )
+
     struct_p = do_sub.add_parser(
         "structure", help="Emit dual-named skeleton + correspondence table"
     )
-    struct_p.add_argument(
-        "--framework",
-        "-f",
-        required=True,
-        help="Primary framework key (see: do list-frameworks)",
-    )
-    struct_p.add_argument(
-        "--overlay",
-        "-o",
-        default=None,
-        help="Secondary overlay framework (optional)",
-    )
-    struct_p.add_argument(
-        "--concerns",
-        "-c",
-        default=None,
-        help="Comma-separated functional concerns to map (optional)",
-    )
-    struct_p.add_argument(
-        "--out",
-        default=None,
-        help="Write skeleton directories + correspondence-table.json to DIR",
-    )
+    add_structure_args(struct_p)
     struct_p.set_defaults(func=cmd_structure)
+
+    project_p = do_sub.add_parser(
+        "project",
+        help="Emit skeleton with pragmatic projection (collapse oversized / forced maps)",
+    )
+    add_structure_args(project_p)
+    project_p.set_defaults(func=cmd_project)
 
     list_p = do_sub.add_parser("list-frameworks", help="List available frameworks")
     list_p.set_defaults(func=cmd_list_frameworks)
