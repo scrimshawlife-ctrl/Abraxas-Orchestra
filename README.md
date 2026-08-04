@@ -2,7 +2,7 @@
 
 **Hermes + OpenClaw coding-agent skill** for symbolic code architecture.
 
-Version **0.1.1** · Skill name: `orchestra` · Python ≥ 3.11 · Network: not required
+Version **0.1.2** · Skill name: `orchestra` · Python ≥ 3.11 · Network: not required
 
 Maps software structure onto traditional correspondence systems (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic) and emits **dual-named skeletons** with recoverable provenance.
 
@@ -12,10 +12,13 @@ Fail-closed on weak mappings. Human sovereignty over forced maps. Corpus open fo
 
 ## Quick start
 
+**Deploy to Hermes/OpenClaw:** follow [`docs/DEPLOY.md`](docs/DEPLOY.md) (validate → dry-run → install → verify → wire host).
+
 ```bash
 git clone https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
 cd Abraxas-Orchestra-Hermes
 
+bash scripts/smoke.sh
 python3 scripts/orchestra.py check
 python3 scripts/orchestra.py do list-frameworks
 python3 scripts/orchestra.py do structure -f tree-of-life -c "intent,synthesis,output"
@@ -38,6 +41,7 @@ bash install.sh --target ~/.openclaw/skills/orchestra    # OpenClaw
 | Goal | Command |
 |------|---------|
 | Validate install | `python3 scripts/orchestra.py check` |
+| Full smoke | `bash scripts/smoke.sh` |
 | See frameworks | `python3 scripts/orchestra.py do list-frameworks` |
 | Emit skeleton (stdout) | `python3 scripts/orchestra.py do structure -f <framework>` |
 | Emit + write disk | `… do structure -f <framework> --out ./my-skeleton` |
@@ -49,22 +53,20 @@ bash install.sh --target ~/.openclaw/skills/orchestra    # OpenClaw
 
 ### For agents
 
-1. **Discover** — Frontmatter `name` + `description` in `SKILL.md` (load only when the task matches architecture / dual-name / correspondence work).
-2. **Activate** — Follow the mandatory sequence in `SKILL.md` (intent → framework → table → skeleton → projection → fail-closed → provenance).
-3. **Deepen on demand** — Open only the needed file under `references/` (do not preload the full corpus).
-4. **Execute** — Prefer `scripts/orchestra.py` over inventing directory layouts by hand.
-5. **Build code** — Apply `references/agent-posture.md` (layered growth, current requirements only, gated compatibility).
+1. **Discover** — Frontmatter `name` + `description` in `SKILL.md`.
+2. **Activate** — Mandatory sequence in `SKILL.md`.
+3. **Deepen on demand** — Open only needed `references/` files.
+4. **Execute** — Prefer `scripts/orchestra.py`.
+5. **Build code** — Apply `references/agent-posture.md`.
 
 Do **not** invent symbolic loci to satisfy a map. Return `NOT_COMPUTABLE` or mark `FORCED` and stop.
 
 ### Definition of done
 
-A successful run produces:
-
 - Dual-named module list (mechanical primary, symbolic secondary)
 - Correspondence table JSON matching `schemas/correspondence-table.v1.schema.json`
 - Status `CLEAN`, or explicit `FORCED_CORRESPONDENCE` / pragmatic projection note
-- No silent collapse; no occult names as the sole public API unless the operator asked
+- No silent collapse; no occult names as sole public API unless requested
 
 ---
 
@@ -85,33 +87,14 @@ A successful run produces:
 SKILL.md                 # Agent contract (frontmatter + procedure)
 orchestra.manifest.yaml  # Install / discovery metadata
 scripts/orchestra.py     # CLI (structure, project, check)
+scripts/smoke.sh         # Production smoke
 references/              # Framework tables + agent-posture (load on demand)
 schemas/                 # correspondence-table.v1
 examples/                # signal-forager; enochian-chaos
-docs/                    # DESIGN, OPENCLAW, COMMUNITY
-install.sh               # Atomic installer (--dry-run, --rollback, --target)
+tests/                   # stdlib unittest
+docs/                    # DESIGN, OPENCLAW, COMMUNITY, DEPLOY, ROADMAP
+install.sh               # Atomic installer
 ```
-
-Progressive disclosure: keep `SKILL.md` in context; open `references/*` only for the active framework.
-
----
-
-## Examples
-
-| Path | What it shows |
-|------|----------------|
-| `examples/signal-forager-skeleton/` | Tree of Life + alchemy; runnable forage pipeline |
-| `examples/enochian-chaos-skeleton/` | Enochian primary + Chaos overlay; Mermaid map |
-
----
-
-## Safety and requirements
-
-- **Runtime:** Python 3.11+ standard library only for the CLI (no pip deps)
-- **Network:** Not required for `check` / `structure` / `project`
-- **State:** Skill package is read-mostly; mutable state stays outside the install root
-- **Destructive ops:** Installer can replace a target skill dir after backup; use `--dry-run` first
-- **License:** Proprietary evaluation terms — see `LICENSE` (community registry notes in `docs/COMMUNITY.md`)
 
 ---
 
@@ -121,6 +104,8 @@ Progressive disclosure: keep `SKILL.md` in context; open `references/*` only for
 |-----|----------|
 | `SKILL.md` | Agents (procedure + invariants) |
 | `README.md` | Humans + agents (this file) |
+| `docs/DEPLOY.md` | Ordered deployment next steps |
+| `docs/ROADMAP.md` | Done / deferred / production bar |
 | `docs/DESIGN.md` | Design rationale |
 | `docs/OPENCLAW.md` | OpenClaw packaging |
 | `docs/COMMUNITY.md` | Community-skills compliance checklist |
@@ -129,22 +114,17 @@ Progressive disclosure: keep `SKILL.md` in context; open `references/*` only for
 
 ---
 
-## Contributing / corpus expansion
+## Safety and requirements
 
-New frameworks must update **together**:
-
-1. `references/<name>.md`
-2. `FRAMEWORKS` in `scripts/orchestra.py`
-3. Schema enum in `schemas/correspondence-table.v1.schema.json`
-4. `orchestra.manifest.yaml` frameworks list
-5. `install.sh` reference list
-6. `SKILL.md` framework table
-
-Then run `python3 scripts/orchestra.py check`.
+- **Runtime:** Python 3.11+ standard library only for the CLI
+- **Network:** Not required for `check` / `structure` / `project`
+- **State:** Mutable state stays outside the install root
+- **Destructive ops:** Installer replaces target after backup; use `--dry-run` first
+- **License:** Proprietary evaluation terms — see `LICENSE`
 
 ---
 
 ## Links
 
 - Repo: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
-- Version: see `VERSION`
+- Deploy: [`docs/DEPLOY.md`](docs/DEPLOY.md)
