@@ -6,7 +6,7 @@ description: >
   Solomonic, Peircean, Numogram, geometry, Enochian, Chaos Magic). Use when
   designing architecture, emitting skeletons, correspondence tables, or
   paradigm overlays. Fail-closed on weak mappings. Hermes and OpenClaw.
-version: 0.1.1
+version: 0.1.2
 license: LicenseRef-Proprietary
 compatibility: Requires Python 3.11+; no network required for CLI
 metadata:

@@ -131,6 +131,7 @@ atomic_install() {
   run "cp -a '${SCRIPT_DIR}/schemas' '${staging}/'"
   run "cp -a '${SCRIPT_DIR}/docs' '${staging}/'" 2>/dev/null || true
   run "cp -a '${SCRIPT_DIR}/examples' '${staging}/'" 2>/dev/null || true
+  run "cp -a '${SCRIPT_DIR}/assets' '${staging}/'" 2>/dev/null || true
   run "cp -a '${SCRIPT_DIR}/tests' '${staging}/'" 2>/dev/null || true
   run "cp -a '${SCRIPT_DIR}/install.sh' '${staging}/'" 2>/dev/null || true
 
