@@ -182,7 +182,6 @@ class TestExamples(unittest.TestCase):
         self.assertIn("provenance", data)
 
     def test_demo_report_shape(self) -> None:
-        """Run demo and assert report artifact keys (smoke-adjacent)."""
         demo = ROOT / "examples" / "signal-forager-skeleton" / "run_demo.py"
         r = subprocess.run(
             [PYTHON, str(demo)],
@@ -192,7 +191,7 @@ class TestExamples(unittest.TestCase):
         )
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         report = demo.parent / "_demo_out" / "report.json"
-        self.assertTrue(report.exists(), "demo should write _demo_out/report.json")
+        self.assertTrue(report.exists())
         data = json.loads(report.read_text())
         for key in ("summary", "provenance"):
             self.assertIn(key, data)
@@ -257,6 +256,34 @@ class TestExamples(unittest.TestCase):
                     "output",
                 ):
                     _sys.modules.pop(name, None)
+
+
+class TestInstaller(unittest.TestCase):
+    def test_install_refuses_system_path(self) -> None:
+        r = subprocess.run(
+            ["bash", str(ROOT / "install.sh"), "--dry-run", "--target", "/etc/orchestra"],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(r.returncode, 0)
+        blob = (r.stderr + r.stdout).lower()
+        self.assertTrue("refus" in blob or "outside" in blob or "error" in blob)
+
+    def test_install_refuses_outside_home(self) -> None:
+        r = subprocess.run(
+            [
+                "bash",
+                str(ROOT / "install.sh"),
+                "--dry-run",
+                "--target",
+                "/tmp/orchestra-should-fail",
+            ],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+        )
+        self.assertNotEqual(r.returncode, 0)
 
 
 if __name__ == "__main__":

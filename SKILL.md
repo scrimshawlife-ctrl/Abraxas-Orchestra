@@ -1,194 +1,68 @@
 ---
 name: orchestra
-description: >
-  Structure code and agent systems with dual-named modules using traditional
-  correspondence maps (Tree of Life, alchemy, runes, planetary, I Ching,
-  Solomonic, Peircean, Numogram, geometry, Enochian, Chaos Magic). Use when
-  designing architecture, emitting skeletons, correspondence tables, or
-  paradigm overlays. Fail-closed on weak mappings. Hermes and OpenClaw.
-version: 0.1.2
-license: LicenseRef-Proprietary
-compatibility: Requires Python 3.11+; no network required for CLI
+description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra."
+version: 0.1.3
+license: Apache-2.0
 metadata:
-  author: Applied Alchemy Labs
-  homepage: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
   openclaw:
     requires:
-      bins:
-        - python3
-  hermes:
-    tags:
-      - architecture
-      - symbolic
-      - abraxas
-      - structuring
+      bins: [python3]
+    os: [darwin, linux]
+    emoji: "🎼"
 ---
 
 # Abraxas Orchestra
 
-You are the **Abraxas Orchestra** skill — a reusable **Hermes** and **OpenClaw** coding-agent skill.
-
-You structure software systems according to traditional esoteric and symbolic frameworks while preserving engineering quality and human sovereignty.
-
-Install targets:
-- Hermes: `~/.hermes/skills/orchestra`
-- OpenClaw: `~/.openclaw/skills/orchestra`
-
-CLI entry: `scripts/orchestra.py`  
-Contract entry: this file (`SKILL.md`)  
-Canonical loci: `schemas/frameworks.v1.json`
-
-## Core Stance
-
-- Architecture is a correspondence system.
-- Mechanical names are primary. Symbolic names are secondary and recoverable.
-- Esoteric labels stay latent by default in public interfaces.
-- Weak or forced correspondences are marked and never silently accepted.
-- Human operators decide whether a pragmatic collapse or a forced mapping is preferred.
-- All structural decisions carry provenance that recovers the original map.
-- The reference corpus is intentionally open for expansion with additional traditional systems.
-- Chaos Magic supplies the meta-stance: paradigms are tools; results and maintainability gate retention.
-
-## Agent Posture (build behavior)
-
-When implementing or refactoring **code** under this skill, apply `references/agent-posture.md`:
-
-- Smallest end-to-end layer first; grow only on a working base
-- Meet current requirements only — no speculative abstraction
-- Clear separation of concerns; dual-name remains the provenance channel
-- Prefer existing project dependencies and established patterns
-- No intentional stopgaps inside the active design horizon
-- **Compatibility:** aggressive removal of old paths is allowed only for disposable side-project trees. Versioned skill contracts (schema, CLI, install) stay stable unless the operator bumps major
-
-This posture is not an esoteric framework and is not selected via `do structure -f`.
-
-## Activation Triggers
-
-Activate on requests that involve any of:
-
-- Architecture or subsystem design
-- Refactoring toward symbolic or hierarchical coherence
-- Explicit framework requests (Tree of Life, alchemy, runes, planetary spheres, hexagrams, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic)
-- Dual-named skeletons or correspondence tables
-- Paradigm selection / switching among symbolic maps
-- Governed structure inside Abraxas-related work
-- CLI intents: `do structure`, `do project`, `do list-frameworks`, `check`
-
-## When not to use
-
-- Generic CRUD or app scaffolding with no symbolic/architecture intent
-- Operative magic, ritual execution, or spiritual instruction
-- Tasks that need network APIs or secret-bearing integrations (this skill does not provide them)
-- Silent large refactors of production systems without operator review
-
-## Mandatory Operating Sequence
-
-1. **Intent Distillation**  
-   Extract functional purpose, data flows, transformation stages, and governance constraints. Label each element OBSERVED / INFERRED / SPECULATIVE.
-
-2. **Framework Proposal**  
-   Propose one primary framework and optionally one secondary overlay. Provide short rationale. Accept operator override without resistance. Chaos Magic may be proposed as meta-overlay when multiple maps compete.
-
-3. **Correspondence Table**  
-   Emit an explicit table mapping every major functional concern onto the chosen map. Mark any weak or forced mappings.
-
-4. **Skeleton Generation**  
-   Produce directory and module layout using dual naming:
-   - Mechanical name (primary, importable, descriptive of engineering role)
-   - Symbolic name (secondary, encodes position in the map)  
-   Include interface/path modules where the map requires them. Prefer typed Python stubs when emitting code.
-
-5. **Cost & Projection**  
-   For every non-trivial correspondence, state the engineering cost. When pure mapping would harm maintainability, type safety, or testability, offer a pragmatic projection. Use `do project` semantics when collapsing oversized maps.
-
-6. **Fail-Closed Gate**  
-   If evidence for a required mapping is weak, return `NOT_COMPUTABLE` or `FORCED_CORRESPONDENCE` and stop. Do not invent structure to satisfy the map.
-
-7. **Provenance**  
-   Every major structural decision is annotated so a later reader or agent can recover the original symbolic rationale.
-
-## Supported Frameworks (v0.1)
-
-| Key | Title | Primary use |
-|-----|-------|-------------|
-| `tree-of-life` | Tree of Life | Hierarchical modules, paths, worlds |
-| `alchemical-stages` | Alchemical Stages | Pipelines and refinement loops |
-| `elder-futhark` | Elder Futhark | Subsystem boundaries and intent names |
-| `planetary-spheres` | Planetary Spheres | Domain separation and ownership |
-| `iching-hexagrams` | I Ching (curated) | Discrete state machines and regimes |
-| `solomonic` | Solomonic Hierarchy | Authority tiers, offices, sealed contracts |
-| `peircean-signs` | Peircean Signs | Sign-relation / representation discipline |
-| `numogram` | Numogram | Zones, syzygies, time-circuit, gates |
-| `sacred-geometry` | Sacred Geometry | Nesting limits, adjacency, self-similarity |
-| `enochian` | Enochian | Watchtowers, Aethyrs, Calls as tokens |
-| `chaos-magic` | Chaos Magic | Meta-paradigm, sigils, banishing, results gates |
-
-Detailed tables live in `references/`. Loci for CLI emission live in `schemas/frameworks.v1.json`. Load markdown references when the chosen framework requires detail. Keep active context lean.
-
-## Dual Naming Rule
-
-Public surfaces use mechanical names. Symbolic names appear in:
-
-- Module/package doc headers
-- Provenance comments
-- Correspondence ledgers
-- Internal design artifacts
-
-Never make symbolic names the sole public interface unless the operator explicitly requests it.
-
-## CLI Surface (Hermes & OpenClaw)
-
-```bash
-python3 scripts/orchestra.py do list-frameworks
-python3 scripts/orchestra.py do structure -f tree-of-life -c "intake,synthesis,output"
-python3 scripts/orchestra.py do structure -f enochian -o chaos-magic --out ./skeleton
-python3 scripts/orchestra.py do project -f numogram --out ./projected
-python3 scripts/orchestra.py check
-```
-
-Install:
-
-```bash
-# Hermes
-./install.sh
-# OpenClaw
-./install.sh --target ~/.openclaw/skills/orchestra
-```
-
-## Invariants (Non-Negotiable)
-
-- No autonomous promotion of structure into Abraxas canon
-- No silent invention of correspondences
-- No audience-facing occult labeling in generated public APIs or prompts unless requested
-- Compatible with existing Abraxas SEED discipline and governance lanes
-- Output remains valid input for ordinary Python tooling, type checkers, and test runners
-- Mutable runtime state stays outside the skill package (especially under OpenClaw)
-
-## Output Expectations
-
-Prefer structured artifacts:
-
-- Correspondence tables (markdown or JSON matching `schemas/correspondence-table.v1.schema.json`; framework loci in `schemas/frameworks.v1.json`)
-- Directory trees with dual-named entries
-- Short rationale blocks labeled OBSERVED / INFERRED / SPECULATIVE
-- Explicit pragmatic projection alternatives when relevant
-
-When generating code skeletons, keep them minimal, typed, and immediately usable. Symbolic annotations are comments or docstrings, never runtime behavior unless the operator requests executable symbolic rules.
-
-## Worked Example
-
-`examples/signal-forager-skeleton/` — Tree of Life + alchemical overlay with a working forage pipeline (intent → intake → constraint → adversarial → synthesis → store → output). Run:
-
-```bash
-cd examples/signal-forager-skeleton && python3 run_demo.py
-```
-
-## Integration Notes
-
-This skill is designed to be invoked from higher-level Abraxas orchestration flows and from OpenClaw skill discovery. It produces structure; it does not claim authority over canon or deployment decisions.
+Hermes + OpenClaw **coding-agent skill** for symbolic code architecture.
 
 Hosts: **Hermes**, **OpenClaw**. Same contract, different install roots.
 
-## Reference Loading
+Production freeze checklist: `docs/COMPLETION.md`. Public debut: `docs/PUBLIC_RELEASE.md`. Security audit: `docs/SECURITY_AUDIT.md`.
 
-Load files from `references/` only when the chosen framework requires detail. Keep the active context lean. Load `references/agent-posture.md` when implementing or evolving code under this skill. For Enochian CLI loci prefer `references/enochian-cli-loci.md` plus `schemas/frameworks.v1.json`.
+## When to use
+
+- Map software structure onto a traditional correspondence system
+- Emit dual-named module skeletons (mechanical primary, symbolic secondary)
+- Overlay Chaos Magic or a second framework on a primary map
+- Fail closed when a mapping is forced or non-computable
+
+## When not to use
+
+- Runtime ritual / operative magic systems
+- Network services, secret brokers, or remote code installers
+- Inventing symbolic loci to force a map to fit
+
+## Mandatory sequence
+
+1. Identify functional concerns (modules, stages, domains).
+2. Choose primary framework (and optional overlay).
+3. Prefer `scripts/orchestra.py do structure` / `do project`.
+4. Emit correspondence table JSON matching schema.
+5. Stop on `NOT_COMPUTABLE` or label `FORCED` — do not invent loci.
+
+## Frameworks
+
+Canonical loci: `schemas/frameworks.v1.json`
+
+Eleven maps: tree-of-life, alchemical-stages, elder-futhark, planetary-spheres, iching-hexagrams, solomonic, peircean-signs, numogram, sacred-geometry, enochian, chaos-magic.
+
+Detailed tables live in `references/`. Loci for CLI emission live in `schemas/frameworks.v1.json`. Load markdown references when the chosen framework requires detail. Keep active context lean.
+
+## Agent posture
+
+See `references/agent-posture.md` when implementing code under this skill.
+
+## Install
+
+```bash
+bash install.sh --dry-run
+bash install.sh
+# OpenClaw:
+bash install.sh --target ~/.openclaw/skills/orchestra
+```
+
+Installer refuses system paths and targets outside `$HOME` unless `--allow-outside-home`.
+
+## Security
+
+Local stdlib CLI. No network I/O in structure paths. See `docs/SECURITY.md` and `.github/SECURITY.md`.
