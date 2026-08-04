@@ -65,3 +65,23 @@ The full I Ching contains 64 hexagrams. For architectural use a curated high-sig
 - When combining with other frameworks, a hexagram can sit inside a planetary domain or a Sephira without conflict; record the dual mapping in the correspondence table.
 
 Load this file when I Ching hexagrams are selected as primary or secondary framework for discrete state work.
+
+## CLI default loci (mechanical → symbolic)
+
+| Mechanical | Symbolic | Regime |
+|------------|----------|--------|
+| init | qian_creative | Pure start |
+| wait | xu_waiting | Accumulate |
+| conflict | song_conflict | Open polarity |
+| harmony | tai_peace | Balanced flow |
+| return | fu_return | Cyclic renewal |
+| revolution | ge_revolution | Regime change |
+| completion | jiji_completion | Ordered finish |
+
+Core collapse: **init, harmony, completion**.
+
+Curated set only — not the full 64. Expand the reference when a regime outside this list is required; mark SPECULATIVE until tabled.
+
+## Related
+
+- Projection: `references/pragmatic-projections.md`
