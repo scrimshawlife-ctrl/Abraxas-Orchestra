@@ -1,7 +1,7 @@
 # Plan: Repo analyze → map → optimize
 
-Status: **Phase A+B shipped in 0.2.0** · Phase C deferred · Target skill: Abraxas Orchestra · Hosts: Hermes, OpenClaw  
-Parent version baseline: `0.2.0` · Implementation owner: Cursor / local agent  
+Status: **Phase A+B+C shipped (0.2.0 / 0.3.0)** · Target skill: Abraxas Orchestra · Hosts: Hermes, OpenClaw  
+Parent version baseline: `0.3.0` · Implementation owner: Cursor / local agent  
 Emit-only `structure`/`diagram` contract preserved; `analyze`/`optimize` are additive commands.
 
 ---
@@ -149,12 +149,10 @@ python3 scripts/orchestra.py optimize \
 
 **Acceptance (Phase C)**
 
-- [ ] Path jail identical to install policy
-- [ ] Backup + restore path documented
-- [ ] Tests use temp dirs only
-- [ ] SECURITY.md / SECURITY_AUDIT note updated for write surface
-
-**Defer Phase C** until A+B are stable on real Abraxas/Holler trees.
+- [x] Path jail identical to install policy (analyzed root + system prefix deny)
+- [x] Backup + restore path documented (`RESTORE.md`, `docs/SECURITY.md`)
+- [x] Tests use temp dirs only
+- [x] SECURITY.md note updated for write surface
 
 ---
 

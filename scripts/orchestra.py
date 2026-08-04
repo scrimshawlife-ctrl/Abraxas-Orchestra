@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.2.0"
+VERSION = "0.3.1"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:
@@ -504,15 +504,8 @@ def cmd_optimize(args: argparse.Namespace) -> int:
     scripts_dir = str(Path(__file__).resolve().parent)
     if scripts_dir not in sys.path:
         sys.path.insert(0, scripts_dir)
+    from optimize_apply import apply_optimize_plan
     from optimize_plan import build_optimize_plan, load_analysis, write_plan_artifacts
-
-    if getattr(args, "apply", False):
-        print(
-            "NOT_COMPUTABLE — optimize --apply (Phase C) is not enabled in 0.2.x; "
-            "emit a plan only (omit --apply).",
-            file=sys.stderr,
-        )
-        return 2
 
     try:
         analysis = load_analysis(args.from_analysis)
@@ -537,11 +530,44 @@ def cmd_optimize(args: argparse.Namespace) -> int:
         print(f"# wrote optimize plan → {out_dir}")
         print("#   optimize-plan.json")
         print("#   OPTIMIZE.md")
-    else:
+    elif not getattr(args, "apply", False):
         print(json.dumps(plan, indent=2))
 
-    if not plan.get("steps"):
+    if not plan.get("steps") and not getattr(args, "apply", False):
         print("# empty plan — nothing met strength threshold", file=sys.stderr)
+
+    if getattr(args, "apply", False):
+        confirm = bool(getattr(args, "confirm", False))
+        refresh = bool(getattr(args, "refresh", False))
+        report, code = apply_optimize_plan(
+            analysis,
+            plan,
+            confirm=confirm,
+            backup_dir=getattr(args, "backup_dir", None),
+            version=VERSION,
+            refresh=refresh,
+            frameworks=FRAMEWORKS,
+        )
+        print(json.dumps(report, indent=2))
+        if report.get("status") == "NOT_COMPUTABLE":
+            print(f"NOT_COMPUTABLE — {report.get('error')}", file=sys.stderr)
+        elif report.get("dry_run"):
+            print(
+                "# dry-run only — re-run with --apply --confirm to write "
+                "(safe_apply renames + backup)",
+                file=sys.stderr,
+            )
+        else:
+            print(
+                f"# applied → backup {report.get('backup_dir')}",
+                file=sys.stderr,
+            )
+            if report.get("refresh") and report["refresh"].get("out"):
+                print(
+                    f"# refreshed analysis → {report['refresh']['out']}",
+                    file=sys.stderr,
+                )
+        return code
     return 0
 
 
@@ -620,7 +646,22 @@ def build_parser() -> argparse.ArgumentParser:
     opt_p.add_argument(
         "--apply",
         action="store_true",
-        help="Phase C (disabled in 0.2.x) — refused fail-closed",
+        help="Apply safe_apply steps (dry-run unless --confirm)",
+    )
+    opt_p.add_argument(
+        "--confirm",
+        action="store_true",
+        help="Required with --apply to perform writes (backup first)",
+    )
+    opt_p.add_argument(
+        "--backup-dir",
+        default=None,
+        help="Backup directory for --apply --confirm (default under analyzed root)",
+    )
+    opt_p.add_argument(
+        "--refresh",
+        action="store_true",
+        help="After --apply --confirm, re-analyze the tree and write analysis.json beside the backup",
     )
     opt_p.set_defaults(func=cmd_optimize)
     return p

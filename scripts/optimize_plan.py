@@ -1,6 +1,6 @@
-"""Optimize plan synthesis from Orchestra analysis artifacts (Phase B).
+"""Optimize plan synthesis from Orchestra analysis artifacts (Phase B/C).
 
-Plan-only: never mutates the analyzed repository. Phase C apply is deferred.
+Default: plan-only (no tree writes). Phase C apply lives in optimize_apply.py.
 """
 
 from __future__ import annotations
@@ -133,7 +133,7 @@ def build_optimize_plan(
             ),
         })
 
-    return {
+    plan = {
         "schema": "orchestra-optimize-plan.v1",
         "from_analysis": from_analysis,
         "min_strength": min_strength,
@@ -148,6 +148,13 @@ def build_optimize_plan(
             "analysis_path": analysis.get("path"),
         },
     }
+    # Annotate concrete mechanical renames as safe_apply when eligible (Phase C).
+    try:
+        from optimize_apply import enrich_safe_renames
+        plan = enrich_safe_renames(plan, analysis)
+    except Exception:
+        pass
+    return plan
 
 
 def plan_to_markdown(plan: dict[str, Any]) -> str:
@@ -190,8 +197,10 @@ def plan_to_markdown(plan: dict[str, Any]) -> str:
     lines += [
         "## Notes",
         "",
-        "- This plan does **not** modify the analyzed repository.",
-        "- `optimize --apply` (Phase C) is deferred; all `safe_apply` flags are false in v0.2.",
+        "- Plan-only by default — the analyzed repository is not modified.",
+        "- `optimize --apply` is dry-run; `optimize --apply --confirm` writes "
+        "only `safe_apply: true` mechanical renames (with backup).",
+        "- `suggest_boundary` / `suggest_extract` stay advisory (`safe_apply: false`).",
         "",
     ]
     return "\n".join(lines)

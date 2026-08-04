@@ -15,18 +15,19 @@ Repo **analyze → map → optimize** (Cursor-ready): [`ANALYZE_OPTIMIZE_PLAN.md
 - Apache-2.0 public packaging + security audit docs
 - Runnable examples (signal-forager, enochian-chaos)
 
-## Shipped in 0.2.0
+## Shipped
 
-| Phase | Command | Scope |
-|-------|---------|-------|
-| A | `analyze` | Read-only repo graph + optional framework map |
-| B | `optimize` | Plan only from analysis artifact |
+| Phase | Version | Command | Scope |
+|-------|---------|---------|-------|
+| A | 0.2.0 | `analyze` | Read-only repo graph + optional framework map |
+| B | 0.2.0 | `optimize` | Plan only from analysis artifact |
+| C | 0.3.0 | `optimize --apply --confirm` | Gated mechanical renames + backup |
+| C+ | 0.3.1 | `--refresh` + apply hardening | Post-apply re-analyze; collision/vacate ordering |
 
 ## Next
 
-| Phase | Command | Scope |
-|-------|---------|-------|
-| C | `optimize --apply --confirm` | Gated mutation + backup → `0.3.0` |
+- Multi-language analyze (see Deferred)
+- Broader safe_apply actions beyond mechanical rename (explicit operator request)
 
 ## Deferred
 

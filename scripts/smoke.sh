@@ -21,6 +21,21 @@ python3 scripts/orchestra.py optimize --from "$ANALYZE_OUT/analysis.json" --out 
 test -f "$ANALYZE_OUT/plan/optimize-plan.json"
 rm -rf "$ANALYZE_OUT"
 
+echo "==> analyze scripts/ (real tree) + optimize dry-run"
+SELF_OUT="$(mktemp -d "${TMPDIR:-/tmp}/orchestra-self.XXXXXX")"
+# Allow exit 1 (WEAK_MAPPINGS) — analysis still succeeded
+set +e
+python3 scripts/orchestra.py analyze \
+  --path scripts \
+  -f alchemical-stages \
+  --out "$SELF_OUT" >/dev/null
+acode=$?
+set -e
+test "$acode" -eq 0 -o "$acode" -eq 1
+test -f "$SELF_OUT/analysis.json"
+python3 scripts/orchestra.py optimize --from "$SELF_OUT/analysis.json" --apply >/dev/null
+rm -rf "$SELF_OUT"
+
 echo "==> signal-forager demo"
 python3 examples/signal-forager-skeleton/run_demo.py >/dev/null
 
