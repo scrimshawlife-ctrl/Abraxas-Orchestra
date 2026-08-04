@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-VERSION="0.1.0"
+VERSION="0.1.1"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_TARGET="${HOME}/.hermes/skills/orchestra"
 BACKUP_ROOT="${HOME}/.hermes/receipts/orchestra-backups"
@@ -64,7 +64,6 @@ validate_source() {
     [[ -f "${SCRIPT_DIR}/${f}" ]] || die "missing required file: ${f}"
   done
 
-  # All declared framework references must exist
   local refs=(
     "references/tree-of-life-mappings.md"
     "references/alchemical-stages.md"
@@ -82,10 +81,7 @@ validate_source() {
     [[ -f "${SCRIPT_DIR}/${f}" ]] || die "missing framework reference: ${f}"
   done
 
-  # CLI must be importable / runnable
   if ! python3 "${SCRIPT_DIR}/scripts/orchestra.py" check >/dev/null 2>&1; then
-    # Allow check to fail only on missing optional refs during partial installs;
-    # still require the script itself to execute.
     python3 -c "import ast; ast.parse(open('${SCRIPT_DIR}/scripts/orchestra.py').read())" \
       || die "scripts/orchestra.py failed syntax check"
   fi
@@ -124,7 +120,6 @@ atomic_install() {
   staging="$(mktemp -d "${TMPDIR:-/tmp}/orchestra-install.XXXXXX")"
   log "Staging into ${staging}"
 
-  # Copy skill surface
   run "cp -a '${SCRIPT_DIR}/SKILL.md' '${staging}/'"
   run "cp -a '${SCRIPT_DIR}/orchestra.manifest.yaml' '${staging}/'"
   run "cp -a '${SCRIPT_DIR}/VERSION' '${staging}/'"
@@ -138,10 +133,8 @@ atomic_install() {
   run "cp -a '${SCRIPT_DIR}/examples' '${staging}/'" 2>/dev/null || true
   run "cp -a '${SCRIPT_DIR}/install.sh' '${staging}/'" 2>/dev/null || true
 
-  # Make CLI executable
   run "chmod +x '${staging}/scripts/orchestra.py'"
 
-  # Atomic swap
   log "Activating at ${TARGET}"
   if [[ $DRY_RUN -eq 1 ]]; then
     printf '[dry-run] mkdir -p %s && rm -rf %s && mv %s %s\n' \
@@ -153,10 +146,6 @@ atomic_install() {
     mv "$staging" "$TARGET"
   fi
 }
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 if [[ $ROLLBACK -eq 1 ]]; then
   do_rollback
