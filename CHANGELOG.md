@@ -6,6 +6,12 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.1.4] — 2026-08-04
+
+### Changed
+- CLI simplified: top-level `check` | `list` | `structure` | `project` (no nested `do` required)
+- Legacy `do <cmd>` still accepted with a one-line note on stderr
+
 ## [0.1.3] — 2026-08-04
 
 ### Security
@@ -29,17 +35,10 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - Structured pipeline errors on both examples
 - Canonical `schemas/frameworks.v1.json`
 
-### Fixed
-- Enochian-chaos placeholders replaced with session logic
-- Version alignment to 0.1.2
-
 ## [0.1.1] — 2026-08-04
 
 ### Fixed
 - Schema enum expanded to all 11 frameworks + `composite`
-
-### Added
-- Hermes/OpenClaw packaging surface
 
 ## [0.1.0] — 2026-08-04
 

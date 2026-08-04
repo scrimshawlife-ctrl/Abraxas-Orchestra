@@ -2,6 +2,19 @@
 
 Narrative notes for operators and agents. Machine changelog: [`CHANGELOG.md`](../CHANGELOG.md).
 
+## 0.1.4 — 2026-08-04
+
+Simplified command structure.
+
+```text
+orchestra check
+orchestra list
+orchestra structure -f <framework> [-c concerns] [-o overlay] [--out DIR]
+orchestra project   -f <framework> [-c concerns] [-o overlay] [--out DIR]
+```
+
+Legacy `orchestra do <command> …` still works.
+
 ## 0.1.3 — 2026-08-04
 
 **Public debut packaging** with security hardening.
@@ -22,28 +35,7 @@ Eligible under Apache-2.0. Follow `docs/PUBLIC_RELEASE.md` and `docs/COMMUNITY.m
 
 ## 0.1.2 — 2026-08-04
 
-Private Hermes/OpenClaw **production bar** for skill packaging.
-
-### Highlights
-
-| Theme | What landed |
-|-------|-------------|
-| Single source of truth | `schemas/frameworks.v1.json` drives CLI loci |
-| Packaging | Smoke script, unit tests, CI 3.11/3.12, atomic install |
-| Deploy | Ordered path in `docs/DEPLOY.md` |
-| Freeze checklist | `docs/COMPLETION.md` |
-| Examples | Signal-forager + Enochian/Chaos runnable pipelines |
-
-### Examples
-
-- Signal-forager: full Tree/alchemical pipeline with `ValidationError` / `StageError`
-- Enochian + Chaos: session pipeline (seal → call → edge → inverse → bus → results gate)
-- Soft-fail helpers: `run_forage_safe` / `run_session_safe`
-
-### Operator residuals (0.1.2)
-
-- Default README hero is `assets/hero.svg`
-- Annotated tag optional
+Private Hermes/OpenClaw production bar for skill packaging.
 
 ## 0.1.1 — 2026-08-04
 
