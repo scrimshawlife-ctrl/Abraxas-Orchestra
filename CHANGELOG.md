@@ -7,6 +7,7 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [0.1.2] — 2026-08-04
 
 ### Added
+- `docs/DEPLOY.md` — explicit ordered deployment next steps (Hermes/OpenClaw)
 - `tests/test_orchestra.py` — stdlib unittest suite (check, structure, fail-closed, disk emit, schema enum)
 - `scripts/smoke.sh` — check + tests + demo + install dry-run
 - `.github/workflows/ci.yml` — Python 3.11/3.12 CI

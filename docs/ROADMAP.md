@@ -15,6 +15,7 @@
 | **Automated tests** | `tests/test_orchestra.py` (unittest) |
 | **Smoke script** | `scripts/smoke.sh` |
 | **CI** | `.github/workflows/ci.yml` |
+| **Deploy guide** | `docs/DEPLOY.md` |
 
 ## Explicitly deferred
 
@@ -38,3 +39,19 @@ A release is production-ready for **private Hermes/OpenClaw install** when:
 5. Installer `--dry-run` succeeds  
 
 Public registry listing additionally requires license compatibility (`docs/COMMUNITY.md`).
+
+---
+
+## Next steps for deployment
+
+Follow **`docs/DEPLOY.md`** in order:
+
+0. Preconditions (Python 3.11+, smoke green)
+1. Local validation
+2. Choose Hermes vs OpenClaw target
+3. Dry-run → install
+4. Post-install `check` / smoke on the installed copy
+5. Wire host skill discovery and reload session
+6. First real structure emission with human review of FORCED maps
+7. Upgrade path: pull → smoke → reinstall
+8. Optional: relicense / public hub (not required for private deploy)
