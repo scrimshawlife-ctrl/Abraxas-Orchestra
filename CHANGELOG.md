@@ -7,6 +7,8 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
+- Curated I Ching hexagram set for state machines (`references/iching-hexagrams.md`)
+- 16 high-signal hexagrams with architectural state roles and dual-naming
 - Planetary & Elemental spheres domain separation mapping (`references/planetary-spheres.md`)
 - Seven classical planetary domains with architectural ownership roles
 - Four/five elemental character overlay
