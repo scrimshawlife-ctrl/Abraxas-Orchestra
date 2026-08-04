@@ -6,6 +6,17 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.3.0] — 2026-08-04
+
+### Added
+- `optimize --apply` dry-run; `--apply --confirm` performs gated mechanical renames with backup
+- Import lines rewritten with `as <old>` aliases so call sites stay valid
+- `RESTORE.md` + `apply-report.json` written under `--backup-dir`
+- Fixture `tests/fixtures/rename_pkg/` for apply tests
+
+### Security
+- Apply path jail under analyzed root; refuse FORCED analysis; system backup-dir denied
+
 ## [0.2.0] — 2026-08-04
 
 ### Added
@@ -15,7 +26,6 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - Fixture `tests/fixtures/mini_pkg/` + analyze/optimize unit tests
 
 ### Notes
-- `optimize --apply` (Phase C) is refused fail-closed until a later release
 - Analyze refuses system path prefixes (`/etc`, `/usr`, …) unless `--allow-system`
 
 ## [0.1.6] — 2026-08-04

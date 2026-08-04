@@ -4,16 +4,25 @@ Abraxas Orchestra is a **local** Hermes/OpenClaw skill package.
 
 Public debut audit: [`SECURITY_AUDIT.md`](SECURITY_AUDIT.md) · Policy: [`.github/SECURITY.md`](../.github/SECURITY.md)
 
-## Threat model (v0.2.0)
+## Threat model (v0.3.0)
 
 | Surface | Behavior |
 |---------|----------|
-| CLI | Stdlib only; no network I/O in `check` / `structure` / `project` / `analyze` / `optimize` (plan) |
+| CLI | Stdlib only; no network I/O in `check` / `structure` / `project` / `analyze` / `optimize` |
 | Analyze | Read-only on `--path`; writes only under `--out`; refuses system prefixes unless `--allow-system` |
-| Optimize | Plan-only in 0.2.x; `--apply` refused (Phase C deferred) |
+| Optimize plan | No writes to analyzed tree |
+| Optimize apply | `--apply` dry-run; `--apply --confirm` renames only `safe_apply` steps under analyzed root; backup first; FORCED blocks apply |
 | Installer | Local copy only; **path jail** under `$HOME` unless `--allow-outside-home` |
 | Schema / JSON | Loaded from skill root on disk only |
 | Examples | Local demos; no credentials required |
+
+### Optimize apply write surface
+
+1. Destinations must resolve under the analyzed `path` from `analysis.json`
+2. Backups refuse system prefixes (`/etc`, `/usr`, …)
+3. Only mechanical renames/moves marked `safe_apply: true` — no content invention
+4. Prefer dry-run (`--apply` without `--confirm`) before first confirm
+5. Use `RESTORE.md` in the backup dir if a rename must be undone
 
 ## Installer guarantees (0.1.3)
 

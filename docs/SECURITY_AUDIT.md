@@ -80,3 +80,16 @@ Ship **0.1.3** as the first public-tagged release after:
 5. Annotated tag `v0.1.3`  
 
 See `docs/PUBLIC_RELEASE.md`.
+
+## Addendum — 0.3.0 optimize apply
+
+| Check | Result |
+|-------|--------|
+| Network in apply path | **None** |
+| Writes without `--confirm` | **None** (`--apply` is dry-run) |
+| Path jail | Destinations under analyzed `path`; system backup-dir denied |
+| FORCED mappings | **Refuse** apply |
+| Content invention | **None** — mechanical rename/move + import-line alias rewrite only |
+| Backup / restore | `apply-report.json` + `RESTORE.md` under `--backup-dir` |
+
+Details: `docs/SECURITY.md` (optimize apply write surface).
