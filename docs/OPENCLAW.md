@@ -1,6 +1,6 @@
 # OpenClaw Edition — Abraxas Orchestra
 
-This document describes the OpenClaw-specific packaging and install path for the Orchestra skill.
+**Orchestra is a Hermes/OpenClaw coding-agent skill.** This document describes the OpenClaw-specific packaging and install path.
 
 ## Relationship to Hermes Edition
 
