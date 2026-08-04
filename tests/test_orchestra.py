@@ -118,6 +118,13 @@ class TestSchemaFile(unittest.TestCase):
         for key in data["frameworks"]:
             self.assertIn(key, r.stdout)
 
+    def test_framework_refs_exist(self) -> None:
+        data = json.loads((ROOT / "schemas" / "frameworks.v1.json").read_text())
+        for key, meta in data["frameworks"].items():
+            ref = ROOT / meta["reference"]
+            self.assertTrue(ref.exists(), f"missing ref for {key}: {meta['reference']}")
+        self.assertTrue((ROOT / "references" / "enochian-cli-loci.md").exists())
+
 
 class TestExamples(unittest.TestCase):
     def test_signal_forager_files(self) -> None:
