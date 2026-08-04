@@ -33,11 +33,7 @@ Syzygies are the five zone-pairs that sum to 9. They form the primary polarities
 | 3 ↔ 6    | 3 / 6 | Triad ↔ Resonance                          | Mediation ↔ amplified feedback                                   |
 | 4 ↔ 5    | 4 / 5 | Structure ↔ Threshold                       | Stable order ↔ tipping / intensive peak                          |
 
-These pairs are the natural homes for balanced dual modules, opposing services, or polar interfaces. They parallel Chesed–Geburah, Netzach–Hod, and other traditional polarities while remaining decimal and non-hierarchical.
-
 ## Time-Circuit → Directed Process Cycle
-
-The primary time-circuit traces a directed path through the zones. A simplified architectural reading treats it as a cyclic process pipeline:
 
 ```
 1 (init) → 2 (dual tension) → 3 (mediate) → 4 (structure)
@@ -45,19 +41,11 @@ The primary time-circuit traces a directed path through the zones. A simplified 
 9 (return) ← 8 (consolidate) ← 7 (excess) ← 6 (feedback) ← 5 (threshold)
 ```
 
-(Exact circuit topology follows CCRU diagram conventions; the above is a practical projection for pipeline design.)
-
 Use the time-circuit when a system needs an explicit cyclic regime rather than a linear alchemical stage sequence.
 
 ## Gates → Explicit Interfaces / Currents
 
-Gates are the connections between zones. In architecture they become:
-
-- Explicit interface modules between polar or sequential domains
-- Typed transformation currents
-- Authorized crossings that preserve zone discipline
-
-A gate should declare both its source zone and destination zone. Unauthorized or untyped crossings are treated as leakage.
+Gates become explicit interface modules between polar or sequential domains. A gate should declare both its source zone and destination zone.
 
 ## Dual-Naming Pattern
 
@@ -66,28 +54,25 @@ A gate should declare both its source zone and destination zone. Unauthorized or
 # symbolic:   zone_5_threshold  (Numogram — Zone 5)
 ```
 
-```
-# mechanical: polar_pair_structure_threshold
-# symbolic:   syzygy_4_5  (Numogram — 4↔5)
-```
-
-```
-# mechanical: cyclic_return
-# symbolic:   zone_9_completion  (Numogram — Zone 9)
-```
-
-```
-# mechanical: zone_crossing
-# symbolic:   numogram_gate  (Numogram — Gate)
-```
-
 ## Practical Projection Notes
 
-- The syzygies are the highest-leverage architectural extract. They give five clean polar pairs that can replace or overlay traditional polarities (Chesed–Geburah, etc.).
-- Zones 0 and 9 form a special continuum pair useful for “open potential ↔ final intensity” designs.
-- The time-circuit supplies a cyclic alternative to the linear alchemical stages (Nigredo→Rubedo). Use it when the process is expected to recur rather than complete once.
-- Gates enforce zone discipline the same way Paths enforce Sephirotic directionality or Solomonic seals enforce rank.
-- Numogram structure is non-hierarchical; it complements rather than replaces Tree of Life or Solomonic rank ladders. Record dual mappings when both are in use.
-- Hyperstitional and forecasting systems gain particular value from Zone 5 (threshold / tipping) and the 4↔5 syzygy.
+- The syzygies are the highest-leverage architectural extract.
+- Zones 0 and 9 form a continuum pair useful for open potential ↔ final intensity.
+- Numogram structure is non-hierarchical; it complements Tree of Life or Solomonic rank ladders.
 
 Load this file when Numogram zones, syzygies, time-circuits, or gates are selected as primary or secondary framework.
+
+## CLI default loci (mechanical → symbolic)
+
+| Mechanical | Symbolic | Note |
+|------------|----------|------|
+| `potential` | `zone_0` | Void / pure potential |
+| `init` | `zone_1` | First differentiation |
+| `structure` | `zone_4` | Stable order |
+| `threshold` | `zone_5` | Tipping / intensive peak |
+| `feedback` | `zone_6` | Resonance / amplify |
+| `completion` | `zone_9` | Return / final intensity |
+
+Core collapse for `do project`: **`init`, `threshold`, `completion`**.
+
+Canonical machine table: `schemas/frameworks.v1.json`.
