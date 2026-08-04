@@ -19,7 +19,7 @@ Projections are always recorded. Never silent.
 1. Drop loci whose notes start with `FORCED`
 2. If remaining count > 6 and the framework defines `core_collapse`, keep only those mechanical names
 3. Write the projection note into `correspondence-table.json` → `pragmatic_projection`
-4. Status stays `CLEAN` if only clean loci remain after drop; otherwise prior forced status may already have failed `do structure`
+4. Status stays `CLEAN` if only clean loci remain after drop
 
 ## Core collapse sets (aligned with CLI)
 
@@ -41,33 +41,16 @@ Projections are always recorded. Never silent.
 
 Projection **must not** invent new symbolic loci. It only selects or drops existing rows.
 
-```text
-# BEFORE (oversized Tree map)
-intent, intake, constraint, expand, adversarial, synthesis, persist, analyze, store, output
-
-# AFTER do project (core collapse)
-intent / kether
-synthesis / tiphareth
-output / malkuth
-# projection note: Collapsed N non-core loci to framework core set.
-```
-
 ## Operator sovereignty
 
 - Accept projection when maintainability wins
-- Reject and expand core set only by editing `FRAMEWORKS` + this table + schema together
+- Reject and expand core set only by editing `schemas/frameworks.v1.json` + this table + schema together
 - Never treat projection as auto-canon into Abraxas
-
-## Strength after projection
-
-| Strength | Meaning post-project |
-|----------|----------------------|
-| STRONG / ADEQUATE | Retained clean locus |
-| FORCED | Should have been dropped by `do project`; if still present, operator must review |
-| WEAK | Prefer explicit human acceptance before implement |
 
 ## Related
 
 - CLI: `scripts/orchestra.py` → `_apply_pragmatic_projection`
 - Schema: `schemas/correspondence-table.v1.schema.json` field `pragmatic_projection`
 - Agent posture: `references/agent-posture.md` (smallest working layer first)
+
+Canonical core-collapse sets also live in `schemas/frameworks.v1.json` (source of truth for the CLI).

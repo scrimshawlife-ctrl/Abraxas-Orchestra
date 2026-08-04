@@ -12,10 +12,13 @@
 | Enochian + Chaos example | Structure + Mermaid |
 | Agent posture | Non-framework build rules |
 | Human/agent docs | README, COMMUNITY, SKILL frontmatter |
-| **Automated tests** | `tests/test_orchestra.py` (12 tests) |
+| **Automated tests** | `tests/test_orchestra.py` (13 tests) |
 | **Smoke script** | `scripts/smoke.sh` |
 | **CI** | `.github/workflows/ci.yml` |
 | **Deploy guide** | `docs/DEPLOY.md` |
+| **Release notes** | `docs/RELEASE_NOTES.md` |
+| **Security notes** | `docs/SECURITY.md` |
+| **Canonical loci JSON** | `schemas/frameworks.v1.json` (CLI loads at startup) |
 
 ## Explicitly deferred
 
@@ -26,7 +29,6 @@
 | pytest / coverage gates | Stdlib unittest is enough for v0.1 |
 | Runtime ritual / network integrations | Out of skill scope |
 | Multi-agent orchestration product | Separate Abraxas systems |
-| CLI loci loaded from references | Dual-source drift risk accepted for v0.1 |
 
 ## Production readiness bar (skill package)
 
@@ -40,37 +42,19 @@ A release is production-ready for **private Hermes/OpenClaw install** when:
 
 Public registry listing additionally requires license compatibility (`docs/COMMUNITY.md`).
 
-## Closed in follow-up (post-0.1.2 hygiene)
+## Closed gap pass (docs + loci parity)
 
 | Item | Notes |
 |------|--------|
-| SKILL.md version → 0.1.2 | Frontmatter aligned |
-| DESIGN.md version → 0.1.2 | Target strings aligned |
-| Enochian-chaos module stubs | Dual-named `__init__.py` regenerated |
-| Installer stages `assets/` | Best-effort copy |
-| CONTRIBUTING.md | Local smoke + framework checklist |
+| CLI loads `schemas/frameworks.v1.json` | No embedded FRAMEWORKS dict |
+| CLI default loci on framework refs | Aligned with JSON |
+| `docs/RELEASE_NOTES.md` | Narrative 0.1.2 notes |
+| `docs/SECURITY.md` | Local threat model |
 
-Still operator-local: **`assets/hero.jpg` binary push**, optional `v0.1.2` tag (see `docs/DEPLOY.md`).
-
-## Closed in depth pass (continue-as-recommended)
-
-| Item | Notes |
-|------|--------|
-| Pragmatic projections expanded | Core collapse table aligned with CLI |
-| Alchemy / Tree / Planetary / I Ching depth | CLI loci tables + failure modes / Four Worlds |
-| Example unit tests | signal-forager files, enochian stubs, demo report shape |
-| Deploy tag instructions | Optional `v0.1.2` pin |
+Still operator-local: **hero binary** (`assets/hero.jpg`), optional `v0.1.2` tag.
 
 ## Next steps for deployment
 
-Follow **`docs/DEPLOY.md`** in order:
+Follow **`docs/DEPLOY.md`** in order.
 
-0. Preconditions (Python 3.11+, smoke green)
-1. Local validation
-2. Choose Hermes vs OpenClaw target
-3. Dry-run → install
-4. Post-install `check` / smoke on the installed copy
-5. Wire host skill discovery and reload session
-6. First real structure emission with human review of FORCED maps
-7. Upgrade path: pull → smoke → reinstall
-8. Optional: relicense / public hub (not required for private deploy)
+See also: [`RELEASE_NOTES.md`](RELEASE_NOTES.md) · [`CHANGELOG.md`](../CHANGELOG.md) · [`SECURITY.md`](SECURITY.md).
