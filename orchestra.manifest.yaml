@@ -1,5 +1,5 @@
 name: orchestra
-version: 0.1.2
+version: 0.1.3
 display_name: Abraxas Orchestra
 kind: hermes-openclaw-skill
 
@@ -27,6 +27,7 @@ install:
   atomic: true
   supports_dry_run: true
   supports_rollback: true
+  path_jail_home: true
 
 frameworks:
   - tree-of-life
@@ -62,7 +63,7 @@ governance:
   observed_first: true
   corpus_open: true
 
-license: proprietary
+license: Apache-2.0
 
 metadata:
   abraxas_family: true
@@ -72,5 +73,7 @@ metadata:
   release_notes: docs/RELEASE_NOTES.md
   security_doc: docs/SECURITY.md
   completion_doc: docs/COMPLETION.md
+  public_release_doc: docs/PUBLIC_RELEASE.md
+  security_audit: docs/SECURITY_AUDIT.md
   min_python: "3.11"
   skill_type: coding-agent

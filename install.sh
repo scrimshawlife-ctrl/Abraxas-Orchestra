@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
-# Abraxas Orchestra — atomic installer (v0.1)
-# Installs to ~/.hermes/skills/orchestra by default.
-# Supports --dry-run, --rollback, --target DIR.
+# Abraxas Orchestra — atomic installer (v0.1.3)
+# Default: ~/.hermes/skills/orchestra
+# Supports --dry-run, --rollback, --target DIR, --allow-outside-home
 
 set -euo pipefail
 
-VERSION="0.1.2"
+VERSION="0.1.3"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_TARGET="${HOME}/.hermes/skills/orchestra"
 BACKUP_ROOT="${HOME}/.hermes/receipts/orchestra-backups"
 
 DRY_RUN=0
 ROLLBACK=0
+ALLOW_OUTSIDE_HOME=0
 TARGET="$DEFAULT_TARGET"
 
 usage() {
@@ -21,10 +22,16 @@ Abraxas Orchestra installer v${VERSION}
 Usage: ./install.sh [options]
 
 Options:
-  --dry-run          Show actions without writing
-  --target DIR       Install to DIR (default: ${DEFAULT_TARGET})
-  --rollback         Restore most recent backup for target
-  -h, --help         Show this help
+  --dry-run               Show actions without writing
+  --target DIR            Install to DIR (default: ${DEFAULT_TARGET})
+  --rollback              Restore most recent backup for this target family
+  --allow-outside-home    Permit --target outside \$HOME (dangerous; explicit)
+  -h, --help              Show this help
+
+Security:
+  Target must resolve under \$HOME unless --allow-outside-home is set.
+  Refuses system roots (/, /etc, /usr, /bin, /System, …).
+  Always prefer --dry-run before first install.
 
 EOF
 }
@@ -35,19 +42,82 @@ die()  { printf 'ERROR: %s\n' "$*" >&2; exit 1; }
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --dry-run)   DRY_RUN=1; shift ;;
-    --target)    TARGET="$2"; shift 2 ;;
-    --rollback)  ROLLBACK=1; shift ;;
-    -h|--help)   usage; exit 0 ;;
-    *)           die "unknown option: $1" ;;
+    --dry-run)              DRY_RUN=1; shift ;;
+    --target)
+      [[ $# -ge 2 ]] || die "--target requires a directory argument"
+      TARGET="$2"; shift 2
+      ;;
+    --rollback)             ROLLBACK=1; shift ;;
+    --allow-outside-home)   ALLOW_OUTSIDE_HOME=1; shift ;;
+    -h|--help)              usage; exit 0 ;;
+    *)                      die "unknown option: $1" ;;
   esac
 done
 
-run() {
-  if [[ $DRY_RUN -eq 1 ]]; then
-    printf '[dry-run] %s\n' "$*"
+resolve_path() {
+  local p="$1"
+  if command -v realpath >/dev/null 2>&1; then
+    realpath -m "$p" 2>/dev/null && return 0
+  fi
+  p="${p/#\~/$HOME}"
+  if [[ "$p" != /* ]]; then
+    p="$(pwd)/$p"
+  fi
+  python3 -c 'import os,sys; print(os.path.abspath(sys.argv[1]))' "$p"
+}
+
+is_forbidden_prefix() {
+  local t="$1"
+  local bad=( "/" "/etc" "/usr" "/bin" "/sbin" "/boot" "/dev" "/proc" "/sys" "/lib" "/lib64" "/var/run" "/var/lib" "/System" "/Windows" "/root" )
+  local b
+  for b in "${bad[@]}"; do
+    if [[ "$t" == "$b" || "$t" == "$b"/* ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+validate_target() {
+  local resolved home_resolved
+  resolved="$(resolve_path "$TARGET")"
+  TARGET="$resolved"
+
+  if [[ "$TARGET" == "$SCRIPT_DIR" || "$TARGET" == "$SCRIPT_DIR"/* ]]; then
+    warn "target is inside source tree: ${TARGET}"
+  fi
+
+  if [[ "$TARGET" == "/" ]]; then
+    die "refusing to install to filesystem root"
+  fi
+
+  if [[ "$TARGET" == "$HOME" ]]; then
+    die "refusing to install to \$HOME itself (choose a skills subdirectory)"
+  fi
+
+  home_resolved="$(resolve_path "$HOME")"
+  if [[ "$TARGET" == "$home_resolved" || "$TARGET" == "$home_resolved"/* ]]; then
+    :
   else
-    eval "$@"
+    if is_forbidden_prefix "$TARGET"; then
+      die "refusing system path target: ${TARGET}"
+    fi
+    if [[ $ALLOW_OUTSIDE_HOME -ne 1 ]]; then
+      die "target is outside \$HOME (${TARGET}). Re-run with --allow-outside-home if intentional."
+    fi
+    warn "installing outside \$HOME: ${TARGET}"
+  fi
+
+  [[ -n "$TARGET" ]] || die "empty target"
+}
+
+run_cmd() {
+  if [[ $DRY_RUN -eq 1 ]]; then
+    printf '[dry-run]'
+    printf ' %q' "$@"
+    printf '\n'
+  else
+    "$@"
   fi
 }
 
@@ -61,6 +131,7 @@ validate_source() {
     "schemas/correspondence-table.v1.schema.json"
     "schemas/frameworks.v1.json"
   )
+  local f
   for f in "${required[@]}"; do
     [[ -f "${SCRIPT_DIR}/${f}" ]] || die "missing required file: ${f}"
   done
@@ -84,19 +155,21 @@ validate_source() {
   done
 
   if ! python3 "${SCRIPT_DIR}/scripts/orchestra.py" check >/dev/null 2>&1; then
-    python3 -c "import ast; ast.parse(open('${SCRIPT_DIR}/scripts/orchestra.py').read())" \
+    python3 -c "import ast, pathlib; ast.parse(pathlib.Path('${SCRIPT_DIR}/scripts/orchestra.py').read_text())" \
       || die "scripts/orchestra.py failed syntax check"
   fi
   log "Source validation OK"
 }
 
 do_rollback() {
+  validate_target
   local latest
   latest="$(ls -1dt "${BACKUP_ROOT}"/*/ 2>/dev/null | head -1 || true)"
   [[ -n "$latest" ]] || die "no backups found under ${BACKUP_ROOT}"
   log "Rolling back from ${latest}"
   if [[ $DRY_RUN -eq 1 ]]; then
-    printf '[dry-run] rm -rf %s && cp -a %s %s\n' "$TARGET" "$latest" "$TARGET"
+    printf '[dry-run] rm -rf %q && mkdir -p %q && cp -a %q %q\n' \
+      "$TARGET" "$(dirname "$TARGET")" "$latest" "$TARGET"
   else
     rm -rf "$TARGET"
     mkdir -p "$(dirname "$TARGET")"
@@ -109,47 +182,52 @@ backup_existing() {
   if [[ ! -d "$TARGET" ]]; then
     return 0
   fi
-  local stamp
+  local stamp dest
   stamp="$(date -u +%Y%m%dT%H%M%SZ)"
-  local dest="${BACKUP_ROOT}/${stamp}"
+  dest="${BACKUP_ROOT}/${stamp}"
   log "Backing up existing install to ${dest}"
-  run "mkdir -p '${BACKUP_ROOT}'"
-  run "cp -a '${TARGET}' '${dest}'"
+  run_cmd mkdir -p "${BACKUP_ROOT}"
+  run_cmd cp -a "${TARGET}" "${dest}"
 }
 
 atomic_install() {
   local staging
   staging="$(mktemp -d "${TMPDIR:-/tmp}/orchestra-install.XXXXXX")"
+  trap 'rm -rf "$staging"' EXIT
+
   log "Staging into ${staging}"
 
-  run "cp -a '${SCRIPT_DIR}/SKILL.md' '${staging}/'"
-  run "cp -a '${SCRIPT_DIR}/orchestra.manifest.yaml' '${staging}/'"
-  run "cp -a '${SCRIPT_DIR}/VERSION' '${staging}/'"
-  run "cp -a '${SCRIPT_DIR}/README.md' '${staging}/'" 2>/dev/null || true
-  run "cp -a '${SCRIPT_DIR}/CHANGELOG.md' '${staging}/'" 2>/dev/null || true
-  run "cp -a '${SCRIPT_DIR}/LICENSE' '${staging}/'" 2>/dev/null || true
-  run "cp -a '${SCRIPT_DIR}/scripts' '${staging}/'"
-  run "cp -a '${SCRIPT_DIR}/references' '${staging}/'"
-  run "cp -a '${SCRIPT_DIR}/schemas' '${staging}/'"
-  run "cp -a '${SCRIPT_DIR}/docs' '${staging}/'" 2>/dev/null || true
-  run "cp -a '${SCRIPT_DIR}/examples' '${staging}/'" 2>/dev/null || true
-  run "cp -a '${SCRIPT_DIR}/assets' '${staging}/'" 2>/dev/null || true
-  run "cp -a '${SCRIPT_DIR}/tests' '${staging}/'" 2>/dev/null || true
-  run "cp -a '${SCRIPT_DIR}/install.sh' '${staging}/'" 2>/dev/null || true
+  run_cmd cp -a "${SCRIPT_DIR}/SKILL.md" "${staging}/"
+  run_cmd cp -a "${SCRIPT_DIR}/orchestra.manifest.yaml" "${staging}/"
+  run_cmd cp -a "${SCRIPT_DIR}/VERSION" "${staging}/"
+  run_cmd cp -a "${SCRIPT_DIR}/README.md" "${staging}/" 2>/dev/null || true
+  run_cmd cp -a "${SCRIPT_DIR}/CHANGELOG.md" "${staging}/" 2>/dev/null || true
+  run_cmd cp -a "${SCRIPT_DIR}/LICENSE" "${staging}/" 2>/dev/null || true
+  run_cmd cp -a "${SCRIPT_DIR}/NOTICE" "${staging}/" 2>/dev/null || true
+  run_cmd cp -a "${SCRIPT_DIR}/scripts" "${staging}/"
+  run_cmd cp -a "${SCRIPT_DIR}/references" "${staging}/"
+  run_cmd cp -a "${SCRIPT_DIR}/schemas" "${staging}/"
+  run_cmd cp -a "${SCRIPT_DIR}/docs" "${staging}/" 2>/dev/null || true
+  run_cmd cp -a "${SCRIPT_DIR}/examples" "${staging}/" 2>/dev/null || true
+  run_cmd cp -a "${SCRIPT_DIR}/assets" "${staging}/" 2>/dev/null || true
+  run_cmd cp -a "${SCRIPT_DIR}/tests" "${staging}/" 2>/dev/null || true
+  run_cmd cp -a "${SCRIPT_DIR}/install.sh" "${staging}/" 2>/dev/null || true
 
-  run "chmod +x '${staging}/scripts/orchestra.py'"
-  run "chmod +x '${staging}/scripts/smoke.sh'" 2>/dev/null || true
-  run "chmod +x '${staging}/install.sh'" 2>/dev/null || true
+  run_cmd chmod +x "${staging}/scripts/orchestra.py"
+  run_cmd chmod +x "${staging}/scripts/smoke.sh" 2>/dev/null || true
+  run_cmd chmod +x "${staging}/install.sh" 2>/dev/null || true
 
   log "Activating at ${TARGET}"
   if [[ $DRY_RUN -eq 1 ]]; then
-    printf '[dry-run] mkdir -p %s && rm -rf %s && mv %s %s\n' \
+    printf '[dry-run] mkdir -p %q && rm -rf %q && mv %q %q\n' \
       "$(dirname "$TARGET")" "$TARGET" "$staging" "$TARGET"
     rm -rf "$staging"
+    trap - EXIT
   else
     mkdir -p "$(dirname "$TARGET")"
     rm -rf "$TARGET"
     mv "$staging" "$TARGET"
+    trap - EXIT
   fi
 }
 
@@ -158,12 +236,12 @@ if [[ $ROLLBACK -eq 1 ]]; then
   exit 0
 fi
 
+validate_target
 validate_source
 backup_existing
 atomic_install
 
 log "Installed Abraxas Orchestra ${VERSION} → ${TARGET}"
 log "Try: python3 ${TARGET}/scripts/orchestra.py do list-frameworks"
-log "     python3 ${TARGET}/scripts/orchestra.py do structure -f tree-of-life"
 log "     python3 ${TARGET}/scripts/orchestra.py check"
 log "     bash ${TARGET}/scripts/smoke.sh"
