@@ -7,14 +7,16 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
+- Solomonic hierarchy & functional correspondence (`references/solomonic.md`)
+- Rank ladder (King → Knight) as authority / privilege tiers
+- Functional office categories (knowledge, treasure, warfare, relation, travel, transformation, binding, judgment)
+- Sealed contract (pentacle) model for capability tokens and fail-closed authorization
 - Curated I Ching hexagram set for state machines (`references/iching-hexagrams.md`)
-- 16 high-signal hexagrams with architectural state roles and dual-naming
 - Planetary & Elemental spheres domain separation mapping (`references/planetary-spheres.md`)
-- Seven classical planetary domains with architectural ownership roles
-- Four/five elemental character overlay
 - Elder Futhark full aettir + individual rune intent mapping (`references/elder-futhark.md`)
-- Three-aett subsystem boundary model
-- 24-rune architectural role table with dual-naming examples
+
+### Changed
+- README and DESIGN.md updated to reflect completed five primary frameworks + Solomonic expansion
 
 ### Previously
 - Initial design surface for v0.1.0

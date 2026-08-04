@@ -1,7 +1,7 @@
 # Abraxas Orchestra
 
 **Hermes-native symbolic code architecture**  
-*0.1.0 — Design surface*
+*0.1.0 — Design surface + open corpus*
 
 Structure modules, pipelines, interfaces, and agent systems according to traditional esoteric maps while remaining production-grade.
 
@@ -15,30 +15,30 @@ Corpus open for expansion.
 
 ## What this is
 
-Abraxas Orchestra is a self-contained Hermes skill (with planned OpenClaw edition) that treats software architecture as a correspondence system. Functional requirements are mapped onto established traditional frameworks — Tree of Life, alchemical stages, runic aettir, planetary spheres, or I Ching hexagrams. The resulting structure carries explicit symbolic coherence and full provenance while staying usable by ordinary engineering tools.
+Abraxas Orchestra is a self-contained Hermes skill (with planned OpenClaw edition) that treats software architecture as a correspondence system. Functional requirements are mapped onto established traditional frameworks. The resulting structure carries explicit symbolic coherence and full provenance while staying usable by ordinary engineering tools.
 
 Esoteric names remain latent by default. Public interfaces use clear mechanical names. Symbolic annotations live in documentation headers and provenance records.
 
-The reference corpus under `references/` is intentionally open. Additional traditional systems will be researched and added without breaking the core contract.
+The reference corpus under `references/` is intentionally open. Additional traditional systems are added without breaking the core contract.
 
 ## Current Status
 
-**v0.1.0 design surface merged.**  
-No executable behavior beyond a design stub. The repository holds the operating contract, primary reference mappings, manifest, schema, and design specification.
+**v0.1.0 design surface + five primary frameworks complete.**  
+No executable behavior beyond a design stub. The repository holds the operating contract, full primary reference mappings, manifest, schema, and design specification.
 
 See [`docs/DESIGN.md`](docs/DESIGN.md) for the full design record.
 
-## Supported Frameworks (v0.1)
+## Supported Frameworks
 
-| Priority | Framework              | Primary use                          |
-|----------|------------------------|--------------------------------------|
-| 1        | Tree of Life           | Hierarchical modules, paths, worlds  |
-| 2        | Alchemical stages      | Pipelines and refinement loops       |
-| 3        | Elder Futhark aettir   | Subsystem boundaries and intent names|
-| 4        | Planetary spheres      | Domain separation                    |
-| 5        | I Ching hexagrams      | Discrete state machines              |
+| Priority | Framework              | Primary use                              | Status   |
+|----------|------------------------|------------------------------------------|----------|
+| 1        | Tree of Life           | Hierarchical modules, paths, worlds      | Complete |
+| 2        | Alchemical stages      | Pipelines and refinement loops           | Complete |
+| 3        | Elder Futhark          | Subsystem boundaries and intent names    | Complete |
+| 4        | Planetary spheres      | Domain separation and ownership          | Complete |
+| 5        | I Ching (curated)      | Discrete state machines and regimes      | Complete |
 
-Additional systems will be added after research.
+Additional systems (Solomonic hierarchy, Peircean signs, sacred geometry, etc.) continue to be researched and added under the open corpus policy.
 
 ## Core Rules
 

@@ -1,6 +1,6 @@
 # Abraxas Orchestra — Design Specification
 
-**Status**: Design accepted for initial merge  
+**Status**: Design surface + primary corpus complete  
 **Version target**: 0.1.0  
 **Date**: 2026-08-04  
 **Repo**: scrimshawlife-ctrl/Abraxas-Orchestra-Hermes  
@@ -32,7 +32,7 @@ Primary value for Abraxas-v2.0 and related systems:
 - Pragmatic projection / collapse when pure mapping harms engineering quality
 - Provenance annotations that recover the original symbolic rationale
 - Fail-closed behavior on weak or forced correspondences
-- Open corpus under `references/` for future traditional systems
+- Open corpus under `references/` for traditional systems
 
 **Explicitly out of scope for v0.1**
 - Full multi-agent orchestration runtime
@@ -44,27 +44,27 @@ Later versions may expand the Orchestra surface. The v0.1 contract stays stable.
 
 ---
 
-## 3. Supported Frameworks (Priority Order)
+## 3. Supported Frameworks (Current)
 
 1. **Tree of Life** (default primary)  
-   Sephirot as layers or modules  
-   Paths as interfaces and dependency directions  
-   Four Worlds as abstraction strata (Atziluth → Briah → Yetzirah → Assiah)
+   Sephirot as layers or modules · Paths as interfaces · Four Worlds as abstraction strata
 
-2. **Alchemical process** (first secondary overlay)  
+2. **Alchemical process**  
    Nigredo → Albedo → Citrinitas → Rubedo as pipeline or refinement stages
 
 3. **Elder Futhark aettir**  
-   Three aettir as major subsystem boundaries  
-   Individual runes for intent-bearing names or comment sigils
+   Three aettir as major subsystem boundaries · Individual runes for intent-bearing names
 
 4. **Planetary / elemental spheres**  
-   Domain separation by classical correspondence
+   Domain separation by classical planetary ownership and elemental character
 
-5. **I Ching hexagrams**  
-   Discrete state machines and transition rules
+5. **I Ching hexagrams (curated)**  
+   Discrete state machines and regime transitions (16 high-signal hexagrams)
 
-The corpus remains deliberately open. Additional traditional systems will be researched and added under `references/` without requiring changes to the core operating contract.
+6. **Solomonic hierarchy** (in progress)  
+   Rank structure, functional categories, and sealed contracts drawn from the Solomonic grimoire tradition
+
+The corpus remains deliberately open. Additional traditional systems continue to be researched and added under `references/` without requiring changes to the core operating contract.
 
 ---
 
@@ -90,13 +90,6 @@ Every public module, package, or interface carries:
 - An optional symbolic name that encodes its place in the chosen map
 
 Mechanical names are the primary interface used by imports, type checkers, and operators. Symbolic names appear in documentation headers, provenance comments, and internal ledgers.
-
-Example pattern:
-
-```
-# mechanical: signal_intake
-# symbolic:   chokmah_force_intake  (Tree of Life — Chokmah)
-```
 
 ---
 
@@ -143,7 +136,7 @@ A permanent `openclaw` branch will carry an edition that installs under `~/.open
 The `references/` directory is intentionally open. New traditional systems may be added after research and operator review. Each new system receives:
 
 - A dedicated markdown mapping file
-- An entry in the manifest frameworks list
+- An entry in the manifest frameworks list (when stable)
 - A short note in CHANGELOG.md under the appropriate version
 
 No change to SKILL.md operating sequence is required for pure additive expansion.
