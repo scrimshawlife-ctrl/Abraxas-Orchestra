@@ -18,11 +18,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.1.5"
+VERSION = "0.1.6"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:
-    """Load canonical framework tables from schemas/frameworks.v1.json."""
     path = SKILL_ROOT / "schemas" / "frameworks.v1.json"
     if not path.exists():
         raise SystemExit(f"MISSING frameworks schema: {path}")
@@ -31,13 +30,7 @@ def _load_frameworks() -> dict[str, dict[str, Any]]:
     for key, meta in raw.get("frameworks", {}).items():
         loci = []
         for row in meta.get("default_loci", []):
-            loci.append(
-                (
-                    row["mechanical"],
-                    row["symbolic"],
-                    row.get("note") or "",
-                )
-            )
+            loci.append((row["mechanical"], row["symbolic"], row.get("note") or ""))
         frameworks[key] = {
             "title": meta["title"],
             "reference": meta["reference"],
@@ -82,21 +75,17 @@ def _validate_table_against_schema(table: dict[str, Any]) -> list[str]:
         "framework", "secondary_overlay", "status", "mappings",
         "pragmatic_projection", "provenance",
     }
-
     for k in table:
         if k not in allowed_top:
             errors.append(f"unknown top-level key: {k}")
-
     if "framework" not in table:
         errors.append("missing required: framework")
     elif table["framework"] not in allowed_fw:
         errors.append(f"framework not in schema enum: {table['framework']}")
-
     if "status" not in table:
         errors.append("missing required: status")
     elif table["status"] not in allowed_status:
         errors.append(f"status not in schema enum: {table['status']}")
-
     if "mappings" not in table:
         errors.append("missing required: mappings")
     elif not isinstance(table["mappings"], list):
@@ -114,7 +103,6 @@ def _validate_table_against_schema(table: dict[str, Any]) -> list[str]:
                     errors.append(f"mappings[{i}] missing required: {req}")
             if "strength" in m and m["strength"] not in allowed_strength:
                 errors.append(f"mappings[{i}] bad strength: {m['strength']}")
-
     return errors
 
 
@@ -128,31 +116,26 @@ def cmd_check(_: argparse.Namespace) -> int:
     for rel in required:
         if not (SKILL_ROOT / rel).exists():
             errors.append(f"missing required file: {rel}")
-
     for key, meta in FRAMEWORKS.items():
         ref = SKILL_ROOT / meta["reference"]
         if not ref.exists():
             errors.append(f"missing reference for {key}: {meta['reference']}")
-
     for key in FRAMEWORKS:
         loci = _select_loci(key, None)[:3]
         table = _build_table(key, None, loci, [], None)
         for e in _validate_table_against_schema(table):
             errors.append(f"{key}: {e}")
-
     if "tree-of-life" in FRAMEWORKS and "chaos-magic" in FRAMEWORKS:
         loci = _select_loci("tree-of-life", ["intent", "output"])
         ov_notes = _overlay_annotation(loci, "chaos-magic")
         table = _build_table("tree-of-life", "chaos-magic", loci, ov_notes, None)
         for e in _validate_table_against_schema(table):
             errors.append(f"overlay-sample: {e}")
-
     if errors:
         print("CHECK FAILED")
         for e in errors:
             print(f"  - {e}")
         return 1
-
     print(f"CHECK OK — Orchestra {VERSION}")
     print(f"  skill root : {SKILL_ROOT}")
     print(f"  frameworks : {len(FRAMEWORKS)}")
@@ -160,14 +143,11 @@ def cmd_check(_: argparse.Namespace) -> int:
     return 0
 
 
-def _select_loci(
-    framework: str, concerns: list[str] | None
-) -> list[tuple[str, str, str]]:
+def _select_loci(framework: str, concerns: list[str] | None) -> list[tuple[str, str, str]]:
     meta = FRAMEWORKS[framework]
     defaults = meta["default_loci"]
     if not concerns:
         return list(defaults)
-
     selected: list[tuple[str, str, str]] = []
     for concern in concerns:
         c = concern.strip().lower()
@@ -195,13 +175,9 @@ def _apply_pragmatic_projection(
     meta = FRAMEWORKS[framework]
     core_names = set(meta.get("core_collapse") or [])
     projection_note: str | None = None
-
     if forced:
         loci = clean
-        projection_note = (
-            f"Dropped {len(forced)} FORCED locus/loci; retained clean mappings only."
-        )
-
+        projection_note = f"Dropped {len(forced)} FORCED locus/loci; retained clean mappings only."
     if len(loci) > 6 and core_names:
         collapsed = [x for x in loci if x[0] in core_names]
         if not collapsed:
@@ -210,13 +186,10 @@ def _apply_pragmatic_projection(
         loci = collapsed
         extra = f" Collapsed {dropped} non-core loci to framework core set."
         projection_note = (projection_note or "") + extra
-
     return loci, projection_note
 
 
-def _overlay_annotation(
-    primary_loci: list[tuple[str, str, str]], overlay: str
-) -> list[str]:
+def _overlay_annotation(primary_loci: list[tuple[str, str, str]], overlay: str) -> list[str]:
     if overlay not in FRAMEWORKS:
         return []
     o_loci = FRAMEWORKS[overlay]["default_loci"]
@@ -269,9 +242,9 @@ def _write_skeleton(
     python_stubs: bool = True,
 ) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
-    table_path = out_dir / "correspondence-table.json"
-    table_path.write_text(json.dumps(table, indent=2) + "\n", encoding="utf-8")
-
+    (out_dir / "correspondence-table.json").write_text(
+        json.dumps(table, indent=2) + "\n", encoding="utf-8"
+    )
     lines = [
         f"# Skeleton — {framework} ({meta['title']})",
         "",
@@ -282,7 +255,6 @@ def _write_skeleton(
     if table.get("pragmatic_projection"):
         lines.append(f"Projection: {table['pragmatic_projection']}")
     lines += ["", "## Dual-named modules", ""]
-
     for i, (mech, sym, note) in enumerate(loci):
         lines.append(f"### `{mech}/`")
         lines.append(f"- mechanical: `{mech}`")
@@ -292,10 +264,8 @@ def _write_skeleton(
         if ov:
             lines.append(f"- {ov}")
         lines.append("")
-
         mod_dir = out_dir / mech
         mod_dir.mkdir(parents=True, exist_ok=True)
-
         if python_stubs:
             (mod_dir / "__init__.py").write_text(
                 _module_stub_py(mech, sym, note, ov), encoding="utf-8"
@@ -304,9 +274,7 @@ def _write_skeleton(
             stub_body = [f"# {mech}", "", f"mechanical: `{mech}`", f"symbolic: `{sym}`", f"locus: {note}", ""]
             if ov:
                 stub_body.append(ov)
-                stub_body.append("")
             (mod_dir / "README.md").write_text("\n".join(stub_body), encoding="utf-8")
-
     (out_dir / "SKELETON.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -334,7 +302,6 @@ def _build_table(
         if overlay_notes and i < len(overlay_notes):
             entry["overlay_note"] = overlay_notes[i]
         mappings.append(entry)
-
     status = "FORCED_CORRESPONDENCE" if forced else "CLEAN"
     return {
         "framework": framework,
@@ -362,14 +329,12 @@ def _emit_structure(
         print(f"NOT_COMPUTABLE — unknown framework: {framework}", file=sys.stderr)
         print(f"Known: {', '.join(FRAMEWORKS)}", file=sys.stderr)
         return 2
-
     if overlay and overlay not in FRAMEWORKS:
         print(f"NOT_COMPUTABLE — unknown overlay: {overlay}", file=sys.stderr)
         return 2
     if overlay and overlay == framework:
         print("NOT_COMPUTABLE — overlay must differ from primary framework", file=sys.stderr)
         return 2
-
     loci = _select_loci(framework, concerns)
     projection: str | None = None
     if project:
@@ -377,11 +342,9 @@ def _emit_structure(
         if not loci:
             print("NOT_COMPUTABLE — pragmatic projection removed all loci", file=sys.stderr)
             return 2
-
     meta = FRAMEWORKS[framework]
     overlay_notes = _overlay_annotation(loci, overlay) if overlay else []
     table = _build_table(framework, overlay, loci, overlay_notes, projection)
-
     print("# Abraxas Orchestra — structure skeleton")
     print(f"# framework : {framework} ({meta['title']})")
     if overlay:
@@ -403,12 +366,10 @@ def _emit_structure(
         if overlay_notes and i < len(overlay_notes):
             print(f"  # {overlay_notes[i]}")
         print()
-
     print("## Correspondence table (JSON)")
     print()
     print(json.dumps(table, indent=2))
     print()
-
     if out:
         out_dir = Path(out).expanduser().resolve()
         _write_skeleton(out_dir, framework, meta, loci, table, overlay_notes, python_stubs=True)
@@ -417,8 +378,21 @@ def _emit_structure(
         print("#   correspondence-table.json")
         for mech, _, _ in loci:
             print(f"#   {mech}/__init__.py")
+        scripts_dir = str(Path(__file__).resolve().parent)
+        if scripts_dir not in sys.path:
+            sys.path.insert(0, scripts_dir)
+        from diagram_emit import emit_diagram_bundle
+        emit_diagram_bundle(
+            version=VERSION,
+            frameworks=FRAMEWORKS,
+            framework=framework,
+            overlay=overlay,
+            loci=loci,
+            overlay_notes=overlay_notes,
+            out_dir=out_dir,
+            quiet=False,
+        )
         print()
-
     if table["status"] == "FORCED_CORRESPONDENCE":
         print(
             "# WARNING: one or more concerns had no clean locus. "
@@ -444,12 +418,10 @@ def cmd_project(args: argparse.Namespace) -> int:
 
 
 def cmd_diagram(args: argparse.Namespace) -> int:
-    """Emit interactive HTML + agent JSON graph for a framework."""
     scripts_dir = str(Path(__file__).resolve().parent)
     if scripts_dir not in sys.path:
         sys.path.insert(0, scripts_dir)
     from diagram_emit import run_diagram, set_context
-
     set_context(VERSION, FRAMEWORKS)
     framework = args.framework
     overlay = args.overlay
@@ -462,7 +434,6 @@ def cmd_diagram(args: argparse.Namespace) -> int:
     if overlay and overlay == framework:
         print("NOT_COMPUTABLE — overlay must differ from primary framework", file=sys.stderr)
         return 2
-
     concerns = None
     if args.concerns:
         concerns = [c.strip() for c in args.concerns.split(",") if c.strip()]
@@ -473,13 +444,14 @@ def cmd_diagram(args: argparse.Namespace) -> int:
             print("NOT_COMPUTABLE — pragmatic projection removed all loci", file=sys.stderr)
             return 2
     overlay_notes = _overlay_annotation(loci, overlay) if overlay else []
-    return run_diagram(
+    run_diagram(
         framework=framework,
         overlay=overlay,
         loci=loci,
         overlay_notes=overlay_notes,
         out=args.out,
     )
+    return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -495,50 +467,37 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--framework", "-f", required=True, help="Primary framework key")
         sp.add_argument("--overlay", "-o", default=None, help="Secondary overlay framework")
         sp.add_argument("--concerns", "-c", default=None, help="Comma-separated concerns")
-        sp.add_argument("--out", default=None, help="Write skeleton + JSON to DIR")
+        sp.add_argument("--out", default=None, help="Write skeleton + JSON + diagrams to DIR")
 
     check_p = sub.add_parser("check", help="Validate skill integrity")
     check_p.set_defaults(func=cmd_check)
-
     list_p = sub.add_parser("list", help="List available frameworks", aliases=["list-frameworks"])
     list_p.set_defaults(func=cmd_list_frameworks)
-
     struct_p = sub.add_parser("structure", help="Emit dual-named skeleton + correspondence table")
     add_structure_args(struct_p)
     struct_p.set_defaults(func=cmd_structure)
-
     project_p = sub.add_parser(
         "project",
         help="Emit skeleton with pragmatic projection (collapse oversized / forced maps)",
     )
     add_structure_args(project_p)
     project_p.set_defaults(func=cmd_project)
-
     diag_p = sub.add_parser(
         "diagram",
         aliases=["diagrammit"],
-        help="Emit interactive HTML + agent JSON architecture graph",
+        help="Emit interactive HTML + agent JSON + Mermaid architecture graph",
     )
     add_structure_args(diag_p)
-    diag_p.add_argument(
-        "--project",
-        action="store_true",
-        help="Apply pragmatic projection before graphing",
-    )
+    diag_p.add_argument("--project", action="store_true", help="Apply pragmatic projection before graphing")
     diag_p.set_defaults(func=cmd_diagram)
-
     return p
 
 
 def _normalize_argv(argv: list[str] | None) -> list[str] | None:
-    """Accept legacy `do <cmd>` by stripping the `do` token."""
     if argv is None:
         return None
     if len(argv) >= 2 and argv[0] == "do":
-        print(
-            "note: `do` is optional — use `orchestra <command>` directly",
-            file=sys.stderr,
-        )
+        print("note: `do` is optional — use `orchestra <command>` directly", file=sys.stderr)
         return argv[1:]
     return argv
 
