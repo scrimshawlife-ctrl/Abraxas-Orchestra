@@ -54,3 +54,52 @@ Nigredo (ingest + chaos)
 - Rubedo modules produce the stable external surface; they should be the only place where side-effects that leave the system boundary are allowed (unless the operator explicitly permits otherwise).
 
 When used as a secondary overlay on Tree of Life, map stages onto vertical movement through the Worlds or onto specific Path sequences. Record the dual mapping in the correspondence table.
+
+## Extended dual-naming table (CLI-aligned)
+
+| Mechanical | Symbolic | Stage | Architectural intent |
+|------------|----------|-------|----------------------|
+| `raw_ingest` | `nigredo` | Nigredo | Chaos intake; untyped feeds; high-entropy buffers |
+| `purify` | `albedo` | Albedo | Schema wash; separation; reject malformed |
+| `illuminate` | `citrinitas` | Citrinitas | Scoring; pattern recognition; insight artifacts |
+| `coagulate` | `rubedo` | Rubedo | Stable emission; sealed report; production form |
+
+## Sub-stage refinements (optional, not in CLI default)
+
+| Sub-label | Parent | Use when |
+|-----------|--------|----------|
+| `calcination` | Nigredo | Aggressive reduction of source volume |
+| `dissolution` | Nigredo | Soften rigid schemas before re-form |
+| `separation` | Albedo | Split signal vs noise streams |
+| `conjunction` | Albedo→Citrinitas | Recombine cleaned streams |
+| `fermentation` | Citrinitas | Iterative improvement / agent loops |
+| `distillation` | Citrinitas | Extract high-value scores only |
+| `coagulation` | Rubedo | Final fixed product |
+
+Use sub-labels only in docs or secondary overlays. Default CLI emission stays the four classical stages.
+
+## Pipeline mapping (signal forager)
+
+```text
+intent     → (contract; often Tree Kether, not alchemical)
+intake     → nigredo / raw_ingest
+constraint → albedo / purify
+synthesis  → citrinitas / illuminate
+output     → rubedo / coagulate
+```
+
+Adversarial and store stages often stay on the **primary** map (Tree Geburah / Yesod) while alchemy overlays the refine arc.
+
+## Failure modes by stage
+
+| Stage | Software smell | Mitigation |
+|-------|----------------|------------|
+| Nigredo | Unbounded ingest, no provenance | Hard size/time budgets; SEED labels |
+| Albedo | Schema that deletes signal | Keep reject ledger; never silent drop |
+| Citrinitas | Score without evidence | Require OBSERVED/INFERRED tags |
+| Rubedo | Ship unstable artifact | Gate on tests + operator accept |
+
+## Related
+
+- Primary hierarchical alternative: `references/tree-of-life-mappings.md`
+- Projection rules: `references/pragmatic-projections.md`
