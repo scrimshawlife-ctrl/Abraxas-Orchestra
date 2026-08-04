@@ -10,8 +10,8 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
 ### Added
 - `docs/DEPLOY.md` — explicit ordered deployment next steps (Hermes/OpenClaw)
-- `tests/test_orchestra.py` — stdlib unittest suite (14 tests)
-- `scripts/smoke.sh` — check + tests + demo + install dry-run
+- `tests/test_orchestra.py` — stdlib unittest suite (15 tests)
+- `scripts/smoke.sh` — check + tests + demos + install dry-run
 - `.github/workflows/ci.yml` — Python 3.11/3.12 CI
 - `docs/ROADMAP.md` — done vs deferred production bar
 - `CONTRIBUTING.md` — smoke gate + framework-add checklist
@@ -20,15 +20,17 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - `docs/SECURITY.md` — local threat model
 - `references/enochian-cli-loci.md` — Enochian CLI table companion
 - `assets/hero.svg` — text-safe README hero (JPEG remains optional)
+- Enochian-chaos example: runnable session pipeline (no placeholder stubs)
 
 ### Fixed
-- Enochian-chaos example regenerated with dual-named module stubs on disk
+- Enochian-chaos modules replaced `placeholder()` stubs with real seal/call/edge/bus/inverse/gate logic
 - SKILL.md / DESIGN.md version aligned to 0.1.2
 - Installer best-effort stage of `assets/`
 
 ### Changed
 - Reference depth pass across frameworks + CLI loci tables
 - CLI loads `schemas/frameworks.v1.json` at startup (no embedded FRAMEWORKS dict)
+- CLI structure emission uses `scaffold()` / `SCAFFOLD` instead of `placeholder()` / `STUB`
 - Installer requires `schemas/frameworks.v1.json` and `references/enochian-cli-loci.md`
 - Manifest lists frameworks schema path
 
