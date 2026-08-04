@@ -8,11 +8,12 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 ### Added
 - `docs/DEPLOY.md` — explicit ordered deployment next steps (Hermes/OpenClaw)
-- `tests/test_orchestra.py` — stdlib unittest suite (check, structure, fail-closed, disk emit, schema enum)
+- `tests/test_orchestra.py` — stdlib unittest suite
 - `scripts/smoke.sh` — check + tests + demo + install dry-run
 - `.github/workflows/ci.yml` — Python 3.11/3.12 CI
 - `docs/ROADMAP.md` — done vs deferred production bar
 - `CONTRIBUTING.md` — smoke gate + framework-add checklist
+- `schemas/frameworks.v1.json` — canonical framework loci (single source of truth)
 
 ### Fixed
 - Enochian-chaos example regenerated with dual-named module stubs on disk
@@ -20,28 +21,20 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 - Installer best-effort stage of `assets/`
 
 ### Changed
-- Reference depth pass: pragmatic-projections, alchemy, tree-of-life, planetary, iching
-- Tests: example skeleton presence + demo report shape (12 tests)
+- Reference depth pass across frameworks + CLI loci tables
+- Tests: example skeletons + demo report shape + frameworks JSON parity (13 tests)
 - Deploy: optional release-tag instructions
+- CONTRIBUTING: edit `frameworks.v1.json` when adding frameworks
 
 ## [0.1.1] — 2026-08-04
 
 ### Fixed
 - Correspondence schema enum expanded to all 11 frameworks + `composite`
-- Schema allows `overlay_note` on mappings (matches CLI emission)
-- `orchestra check` emits sample tables and validates against schema for every framework
-- Installer requires all framework reference files (not only Tree/Alchemy)
-- Installer stages `LICENSE`, `examples`, and itself
+- Schema allows `overlay_note` on mappings
+- Installer requires all framework reference files
 
 ### Added
-- README rewritten: How to use (humans + agents), definition of done, safety
-- `docs/COMMUNITY.md` — community-skills compliance checklist and license gap
-- SKILL.md frontmatter: version, license, openclaw/hermes metadata, when-not-to-use
-- `references/agent-posture.md` — coding-agent build rules
-- Proprietary `LICENSE` and `.gitignore`
-- Example: `examples/enochian-chaos-skeleton/`
-- Mermaid diagrams for Enochian + Chaos overlay
-- Hermes/OpenClaw coding-agent packaging surface
+- Hermes/OpenClaw packaging surface, agent posture, examples
 
 ## [0.1.0] — 2026-08-04
 

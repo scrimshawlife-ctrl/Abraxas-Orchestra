@@ -109,6 +109,15 @@ class TestSchemaFile(unittest.TestCase):
         ):
             self.assertIn(key, enum)
 
+    def test_frameworks_json_matches_cli(self) -> None:
+        data = json.loads((ROOT / "schemas" / "frameworks.v1.json").read_text())
+        self.assertEqual(data.get("schema"), "frameworks.v1")
+        self.assertEqual(len(data["frameworks"]), 11)
+        r = run_cli("do", "list-frameworks")
+        self.assertEqual(r.returncode, 0)
+        for key in data["frameworks"]:
+            self.assertIn(key, r.stdout)
+
 
 class TestExamples(unittest.TestCase):
     def test_signal_forager_files(self) -> None:

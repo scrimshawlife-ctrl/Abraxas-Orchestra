@@ -15,12 +15,13 @@ Must exit 0.
 Update **together** (single commit preferred):
 
 1. `references/<key>.md` — dual-naming table + architectural intent  
-2. `scripts/orchestra.py` — `FRAMEWORKS` entry  
-3. `schemas/correspondence-table.v1.schema.json` — framework enum  
-4. `orchestra.manifest.yaml` — frameworks list  
-5. `install.sh` — required refs list  
-6. `SKILL.md` — supported frameworks section  
-7. `CHANGELOG.md`
+2. `schemas/frameworks.v1.json` — canonical loci + core_collapse  
+3. `scripts/orchestra.py` — FRAMEWORKS entry (must match JSON)  
+4. `schemas/correspondence-table.v1.schema.json` — framework enum  
+5. `orchestra.manifest.yaml` — frameworks list  
+6. `install.sh` — required refs list  
+7. `SKILL.md` — supported frameworks section  
+8. `CHANGELOG.md`
 
 Then: `python3 scripts/orchestra.py check` and `bash scripts/smoke.sh`.
 
