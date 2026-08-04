@@ -14,6 +14,9 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 - Installer stages `LICENSE`, `examples`, and itself
 
 ### Added
+- README rewritten: How to use (humans + agents), definition of done, safety
+- `docs/COMMUNITY.md` — community-skills compliance checklist and license gap
+- SKILL.md frontmatter: version, license, openclaw/hermes metadata, when-not-to-use
 - `references/agent-posture.md` — coding-agent build rules (layered growth, current-req only, gated compatibility)
 - SKILL.md / DESIGN pointers to agent posture (not a framework enum entry)
 - Proprietary `LICENSE` and `.gitignore`
