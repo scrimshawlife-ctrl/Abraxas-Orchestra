@@ -146,6 +146,147 @@ def run_session(
         domain_list = _coerce_domains(domains)
     except ValidationError:
         raise
-    except Exception as exc:  # noqa: BLE001
-        raise ValidationError("input", str(exc)) from exp  # type: ignore[name-defined]
-EOF
+    except Exception as exc:
+        raise ValidationError("input", str(exc)) from exc
+
+    try:
+        contract = make_contract(
+            intent_id,
+            statement,
+            max_items=max_items,
+            allowed_domains=domain_list,
+            min_density=float(min_density),
+        )
+    except Exception as exc:
+        raise StageError("sovereign_intent", f"contract failed: {exc}") from exc
+
+    try:
+        seal = issue_seal(session_id, operator)
+        clear = banishing_clear(seal)
+    except Exception as exc:
+        raise StageError("root_truth_seal", f"seal failed: {exc}") from exc
+
+    if not seal.valid:
+        log.warning("session refused: %s", seal.reason)
+        report = SessionReport(
+            session_id=session_id,
+            intent_id=intent_id,
+            seal_valid=False,
+            accepted_calls=0,
+            edge_count=0,
+            bus_count=0,
+            kept=[],
+            rejected_count=len(items),
+            summary=f"Session refused: {seal.reason}",
+            provenance=Provenance("pipeline", "run_session", _utc()),
+            meta={
+                "banishing": clear,
+                "results_gate": results_gate(contract, 0, len(items)),
+                "error": None,
+            },
+        )
+        _maybe_write(report, report_path)
+        return report
+
+    try:
+        token = open_domains(
+            seal, contract.allowed_domains, call_id=f"call-{intent_id}"
+        )
+    except Exception as exp:
+        raise StageError("domain_entry", f"open_domains failed: {exp}") from exp
+
+    try:
+        accepted, edge_rejected = ingest_edge(token, items, source="demo_edge")
+    except Exception as exp:
+        raise StageError("edge_intake", f"ingest failed: {exp}") from exp
+
+    try:
+        findings = mirror(accepted, min_density=contract.min_density)
+    except Exception as exp:
+        raise StageError("inverse_capability", f"mirror failed: {exp}") from exp
+
+    kept_ids = {f.item_id for f in findings if f.kept}
+    kept_items = [i for i in accepted if i.id in kept_ids][: contract.max_items]
+    rejected_count = len(edge_rejected) + sum(1 for f in findings if not f.kept)
+
+    try:
+        bus = route(kept_items)
+    except Exception as exp:
+        raise StageError("cross_domain_bus", f"route failed: {exp}") from exp
+
+    try:
+        gate = results_gate(contract, len(kept_items), rejected_count)
+    except Exception as exp:
+        raise StageError("sovereign_intent", f"results_gate failed: {exp}") from exp
+
+    kept_payload = [
+        {
+            "id": i.id,
+            "domain": i.domain.value,
+            "density": i.density,
+            "payload": i.payload,
+            "source": i.source,
+        }
+        for i in kept_items
+    ]
+
+    report = SessionReport(
+        session_id=seal.session_id,
+        intent_id=contract.intent_id,
+        seal_valid=True,
+        accepted_calls=1 if token.accepted else 0,
+        edge_count=len(accepted),
+        bus_count=len(bus),
+        kept=kept_payload,
+        rejected_count=rejected_count,
+        summary=(
+            f"Session {seal.session_id}: kept {len(kept_items)}, "
+            f"rejected {rejected_count}, bus {len(bus)}; "
+            f"gate={'pass' if gate['pass'] else 'fail'}"
+        ),
+        provenance=Provenance("pipeline", "run_session", _utc()),
+        meta={
+            "seal_reason": seal.reason,
+            "token_reason": token.reason,
+            "domains": [d.value for d in token.domains],
+            "bus": [
+                {
+                    "id": m.id,
+                    "from": m.from_domain.value,
+                    "to": m.to_domain.value if m.to_domain else None,
+                    "weight": m.weight,
+                    "body": m.body,
+                }
+                for m in bus
+            ],
+            "inverse": [
+                {
+                    "item_id": f.item_id,
+                    "kept": f.kept,
+                    "reason": f.reason,
+                    "label": f.label.value,
+                }
+                for f in findings
+            ],
+            "results_gate": gate,
+            "edge_rejected": edge_rejected,
+            "error": None,
+        },
+    )
+    _maybe_write(report, report_path)
+    return report
+
+
+def run_session_safe(
+    **kwargs: Any,
+) -> tuple[SessionReport | None, PipelineError | None]:
+    """
+    Soft-fail wrapper: returns (report, None) or (None, error).
+
+    Prefer ``run_session`` when the caller wants exceptions.
+    """
+    try:
+        return run_session(**kwargs), None
+    except PipelineError as exp:
+        log.error("pipeline failed at %s: %s", exp.stage, exp)
+        return None, exp
