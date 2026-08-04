@@ -65,3 +65,22 @@ Elemental character can be applied as a secondary overlay on planetary domains o
 - When combining with Tree of Life, planetary spheres often map onto specific Sephirot or Paths (Saturn near Binah / Geburah, Sun at Tiphareth, Moon near Yesod, etc.). Record the dual mapping in the correspondence table.
 
 Load this file when Planetary or Elemental spheres are selected as primary or secondary framework.
+
+## CLI default loci (mechanical → symbolic)
+
+| Mechanical | Symbolic | Domain emphasis |
+|------------|----------|-----------------|
+| boundary | saturn | Limits, retention, timeboxes |
+| governance | jupiter | Policy, expansion rules |
+| adversarial | mars | Conflict, severity, stress |
+| core | sun | Sovereignty, synthesis center |
+| relation | venus | Value, preference, affinity |
+| comms | mercury | Translation, messaging, APIs |
+| memory | moon | Flux, cache, short-term state |
+
+Core collapse: **boundary, core, comms**.
+
+## Related
+
+- Authority ranks: `references/solomonic.md`
+- Projection: `references/pragmatic-projections.md`
