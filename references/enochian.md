@@ -2,7 +2,7 @@
 
 Tenth framework for Abraxas Orchestra (v0.1 corpus expansion).
 
-These mappings are design references. They guide hierarchical depth, elemental domain separation, invocation interfaces, jurisdiction maps, and provenance annotation. They are not runtime rules and do not implement operative magical practice.
+These mappings are design references. They guide hierarchical depth, elemental domain separation, invocation interfaces, jurisdiction maps, seal taxonomy, and provenance annotation. They are not runtime rules and do not implement operative magical practice.
 
 ## Two streams (read first)
 
@@ -145,6 +145,76 @@ Counting note: Dee material yields **48 Angelical Keys**; modern practice often 
 
 ---
 
+## Sigils and Seals → Authority Markers
+
+Enochian “sigils” are not Chaos Magic intent-glyphs. They are **seals of authority, placement, and name-extraction**. Keep them separate from Spare-style sigilization (see `chaos-magic.md`).
+
+### Taxonomy
+
+| Class | Traditional object | Architectural expression |
+|-------|--------------------|--------------------------|
+| **Root seal** | *Sigillum Dei Aemeth* (Seal of God’s Truth) | Session / system truth-authority seal; validates ordered government of the working surface |
+| **Planetary office seals** | Heptarchic king/prince characters; Seven Ensigns of Creation | Planetary capability badges; temporal office leases |
+| **Domain seals** | Four Watchtower / Watchmen seals | Domain-entry certificates (one per quarter / element) |
+| **Jurisdiction characters** | 91 governor symmetrical characters (Parts of the Earth) | Placement sigils: where a jurisdiction sits on the global table |
+| **Derived path-sigils** | Golden Dawn Enochian Rose letter-path glyphs | Optional neo-Enochian talisman paths from already-extracted names |
+
+### Sigillum Dei Aemeth
+
+Wax seal under the scrying stone; four smaller copies under the Holy Table legs. Geometry is heptarchic (outer ring of letter/number pairs, heptagons/heptagram, pentagram). Outer-ring numbers orient toward gematria of *Aemeth* (truth). Seven capital letters seed seven angel names by directed counting.
+
+**Orchestra use:** root **truth seal** for a session or system — not an elemental Watchtower object. Pair with Heptarchia and `planetary-spheres`. Do not treat it as a free-form intent compressor.
+
+### Governor characters (Parts of the Earth)
+
+Each Part has a seven-letter governor name and a **symmetrical character** (path diagram). Those paths both:
+
+1. Encode how the name letters sit on the unlettered Great Table  
+2. Act as the visual seal of that jurisdiction  
+
+When the Great Table was lettered, the paths spelled the previously given governor names — an internal consistency check of the system.
+
+**Orchestra use:** multi-tenant / multi-region **placement tokens**. Collapse to jurisdictions the product actually serves; do not instantiate 91 characters by default.
+
+### Watchtower seals
+
+Four seals for the four Houses / Watchtowers — domain overseer certificates. Natural pair with `domain_entry` / Call-tokens: the seal marks *which* domain; the Call is the protocol that opens it.
+
+### Distinction from Chaos Magic sigils
+
+| Enochian seals | Chaos Magic sigils |
+|----------------|--------------------|
+| Received, extracted, or path-traced from fixed tables | Compressed from a statement of intent |
+| Authority, domain, jurisdiction | Desire / outcome focus |
+| Stable across sessions | Often fire-and-forget |
+| Dual-name recovers table locus | Dual-name recovers original intent string |
+
+Dual-naming in Orchestra is closer to mild chaos sigilization (mechanical name as working glyph). Enochian seals are **capability certificates** and **domain markers**. Record both in correspondence tables when both frameworks are active; do not collapse one into the other.
+
+### Dual-naming examples (seals)
+
+```
+# mechanical: root_truth_seal
+# symbolic:   sigillum_dei_aemeth  (Enochian — Seal of Truth)
+```
+
+```
+# mechanical: domain_seal_east
+# symbolic:   watchtower_seal_air  (Enochian — Watchman seal)
+```
+
+```
+# mechanical: jurisdiction_token
+# symbolic:   governor_character  (Enochian — Part of the Earth path)
+```
+
+```
+# mechanical: planetary_office_badge
+# symbolic:   heptarchic_ensign  (Enochian — Ensign of Creation)
+```
+
+---
+
 ## Dual-Naming Pattern
 
 ```
@@ -190,5 +260,7 @@ Counting note: Dee material yields **48 Angelical Keys**; modern practice often 
 - When combining with Tree of Life, Watchtowers can sit under the Four Worlds or map onto elemental attributions of the Sephirot; record dual mappings and which Enochian stream is in use.
 - When combining with Solomonic material, use Enochian for elemental/directional structure and Solomonic for rank/office hierarchy; Seniors ≈ mid-tier officers, Kings ≈ domain sovereigns.
 - Chaos Magic (see `chaos-magic.md`) treats Enochian as one paradigm among many; banishing clears residual Watchtower assumptions when switching maps.
+- Enochian seals are authority markers, not intent-compression sigils; keep them distinct from Chaos Magic sigilization in correspondence tables.
+- Prefer one root truth seal per session; do not multiply Sigillum-class objects without a clear governance need.
 
-Load this file when Enochian Watchtowers, Aethyrs, Calls, Parts of the Earth, Heptarchia, or tablet-names are selected as primary or secondary framework.
+Load this file when Enochian Watchtowers, Aethyrs, Calls, Parts of the Earth, Heptarchia, tablet-names, or seals/sigils are selected as primary or secondary framework.
