@@ -150,6 +150,8 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
             ("water_memory", "watchtower_west", "Water domain — memory / flux"),
             ("earth_persist", "watchtower_north", "Earth domain — persistence"),
             ("domain_entry", "enochian_call", "Invocation / domain-entry token"),
+            ("cross_domain_bus", "tablet_of_union", "Spirit bus / Black Cross coordination"),
+            ("inverse_capability", "cacodemon_mirror", "Inverse / adversarial fail-mode surface"),
             ("sovereign_intent", "aethyr_lil", "Apex intent / pure contract"),
         ],
         "core_collapse": ["edge_intake", "domain_entry", "sovereign_intent"],
