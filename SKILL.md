@@ -1,7 +1,7 @@
 ---
 name: orchestra
-description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, diagrammatic HTML/JSON graphs, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra."
-version: 0.1.5
+description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, automatic Mermaid/HTML/JSON diagrams, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra."
+version: 0.1.6
 license: Apache-2.0
 metadata:
   openclaw:
@@ -17,8 +17,6 @@ Hermes + OpenClaw **coding-agent skill** for symbolic code architecture.
 
 Hosts: **Hermes**, **OpenClaw**. Same contract, different install roots.
 
-Production freeze checklist: `docs/COMPLETION.md`. Public debut: `docs/PUBLIC_RELEASE.md`. Security audit: `docs/SECURITY_AUDIT.md`.
-
 ## Commands
 
 ```text
@@ -29,30 +27,25 @@ python3 scripts/orchestra.py project   -f <framework> [-c concerns] [-o overlay]
 python3 scripts/orchestra.py diagram   -f <framework> [-c concerns] [-o overlay] [--out DIR]
 ```
 
-`diagram` (alias `diagrammit`) writes `architecture.html` + `architecture.json` (`{nodes, edges, flows}`).
+## Automatic diagrammatic emission
 
-Legacy `do <command>` is still accepted.
+Whenever this skill emits architecture structure **or** the operator/agent needs a diagram (Mermaid, module graph, pipeline map):
 
-## When to use
+1. Prefer `structure` / `project` with `--out DIR` — diagrams write **automatically** beside the skeleton:
+   - `architecture.html` — interactive
+   - `architecture.json` — agent graph (`orchestra-diagram.v1`)
+   - `architecture.mmd` — Mermaid flowchart (paste into docs/PRs)
+2. Or call `diagram` / `diagrammit` explicitly for graph-only emission.
+3. Do **not** invent a separate ad-hoc Mermaid sketch when Orchestra can emit from loci.
 
-- Map software structure onto a traditional correspondence system
-- Emit dual-named module skeletons (mechanical primary, symbolic secondary)
-- Emit interactive architecture diagrams + agent graphs
-- Overlay Chaos Magic or a second framework on a primary map
-- Fail closed when a mapping is forced or non-computable
-
-## When not to use
-
-- Runtime ritual / operative magic systems
-- Network services, secret brokers, or remote code installers
-- Inventing symbolic loci to force a map to fit
+Agents: if you would write a Mermaid block for Orchestra-mapped code, run diagram emission first and use `architecture.mmd` (or embed its content).
 
 ## Mandatory sequence
 
 1. Identify functional concerns (modules, stages, domains).
 2. Choose primary framework (and optional overlay).
-3. Prefer `scripts/orchestra.py structure` / `project` / `diagram`.
-4. Emit correspondence table JSON matching schema (or diagram graph).
+3. Prefer `scripts/orchestra.py structure` / `project` with `--out` (auto-diagram) or `diagram`.
+4. Emit correspondence table JSON matching schema; diagrams auto-write on `--out`.
 5. Stop on `NOT_COMPUTABLE` or label `FORCED` — do not invent loci.
 
 ## Frameworks
@@ -64,12 +57,9 @@ Eleven maps: tree-of-life, alchemical-stages, elder-futhark, planetary-spheres, 
 ## Install
 
 ```bash
-bash install.sh --dry-run
-bash install.sh
+bash install.sh --dry-run && bash install.sh
 ```
-
-Installer refuses system paths and targets outside `$HOME` unless `--allow-outside-home`.
 
 ## Security
 
-Local stdlib CLI. No network I/O in structure paths. See `docs/SECURITY.md` and `.github/SECURITY.md`.
+Local stdlib CLI. No network I/O in structure paths.
