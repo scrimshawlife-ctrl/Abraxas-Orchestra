@@ -7,14 +7,10 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
+- Sacred geometry & recursive proportion (`references/sacred-geometry.md`)
+- Golden-ratio nesting limits, Platonic adjacency, fractal self-similarity, vesica shared contracts
 - Numogram correspondence (`references/numogram.md`)
-- Ten zones as domain / state classes
-- Five syzygies as balanced polar pairs
-- Time-circuit as directed cyclic process
-- Gates as explicit interfaces / currents
 - Peircean sign trichotomies (`references/peircean-signs.md`)
-- Icon / Index / Symbol, Qualisign / Sinsign / Legisign, Rheme / Dicent / Argument
-- Selected high-value ten-class combinations
 - Solomonic hierarchy & functional correspondence (`references/solomonic.md`)
 - Curated I Ching hexagram set for state machines (`references/iching-hexagrams.md`)
 - Planetary & Elemental spheres domain separation mapping (`references/planetary-spheres.md`)
