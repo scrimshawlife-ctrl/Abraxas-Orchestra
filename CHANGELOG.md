@@ -7,6 +7,9 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
+- Planetary & Elemental spheres domain separation mapping (`references/planetary-spheres.md`)
+- Seven classical planetary domains with architectural ownership roles
+- Four/five elemental character overlay
 - Elder Futhark full aettir + individual rune intent mapping (`references/elder-futhark.md`)
 - Three-aett subsystem boundary model
 - 24-rune architectural role table with dual-naming examples
