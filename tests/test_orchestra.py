@@ -110,5 +110,55 @@ class TestSchemaFile(unittest.TestCase):
             self.assertIn(key, enum)
 
 
+class TestExamples(unittest.TestCase):
+    def test_signal_forager_files(self) -> None:
+        root = ROOT / "examples" / "signal-forager-skeleton"
+        self.assertTrue((root / "pipeline.py").exists())
+        self.assertTrue((root / "run_demo.py").exists())
+        self.assertTrue((root / "correspondence-table.json").exists())
+        for mod in (
+            "intent",
+            "intake",
+            "constraint",
+            "adversarial",
+            "synthesis",
+            "store",
+            "output",
+        ):
+            self.assertTrue((root / mod / "__init__.py").exists(), mod)
+
+    def test_enochian_chaos_stubs(self) -> None:
+        root = ROOT / "examples" / "enochian-chaos-skeleton"
+        self.assertTrue((root / "correspondence-table.json").exists())
+        for mod in (
+            "edge_intake",
+            "domain_entry",
+            "root_truth_seal",
+            "cross_domain_bus",
+            "inverse_capability",
+            "sovereign_intent",
+        ):
+            self.assertTrue((root / mod / "__init__.py").exists(), mod)
+        data = json.loads((root / "correspondence-table.json").read_text())
+        self.assertEqual(data.get("framework"), "enochian")
+        self.assertEqual(data.get("secondary_overlay"), "chaos-magic")
+
+    def test_demo_report_shape(self) -> None:
+        """Run demo and assert report artifact keys (smoke-adjacent)."""
+        demo = ROOT / "examples" / "signal-forager-skeleton" / "run_demo.py"
+        r = subprocess.run(
+            [PYTHON, str(demo)],
+            cwd=str(demo.parent),
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        report = demo.parent / "_demo_out" / "report.json"
+        self.assertTrue(report.exists(), "demo should write _demo_out/report.json")
+        data = json.loads(report.read_text())
+        for key in ("summary", "provenance"):
+            self.assertIn(key, data)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -19,6 +19,11 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 - SKILL.md / DESIGN.md version aligned to 0.1.2
 - Installer best-effort stage of `assets/`
 
+### Changed
+- Reference depth pass: pragmatic-projections, alchemy, tree-of-life, planetary, iching
+- Tests: example skeleton presence + demo report shape (12 tests)
+- Deploy: optional release-tag instructions
+
 ## [0.1.1] — 2026-08-04
 
 ### Fixed

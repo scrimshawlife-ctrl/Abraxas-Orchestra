@@ -12,7 +12,7 @@
 | Enochian + Chaos example | Structure + Mermaid |
 | Agent posture | Non-framework build rules |
 | Human/agent docs | README, COMMUNITY, SKILL frontmatter |
-| **Automated tests** | `tests/test_orchestra.py` (unittest) |
+| **Automated tests** | `tests/test_orchestra.py` (12 tests) |
 | **Smoke script** | `scripts/smoke.sh` |
 | **CI** | `.github/workflows/ci.yml` |
 | **Deploy guide** | `docs/DEPLOY.md` |
@@ -23,7 +23,6 @@
 |------|--------|
 | OSI relicense | Operator decision (blocks some public hubs) |
 | Dedicated `openclaw` git branch | Install path already works via `--target` |
-| Full depth parity on early framework refs | Corpus open; expand on demand |
 | pytest / coverage gates | Stdlib unittest is enough for v0.1 |
 | Runtime ritual / network integrations | Out of skill scope |
 | Multi-agent orchestration product | Separate Abraxas systems |
@@ -51,7 +50,16 @@ Public registry listing additionally requires license compatibility (`docs/COMMU
 | Installer stages `assets/` | Best-effort copy |
 | CONTRIBUTING.md | Local smoke + framework checklist |
 
-Still operator-local: **`assets/hero.jpg` binary push**, optional `v0.1.2` tag.
+Still operator-local: **`assets/hero.jpg` binary push**, optional `v0.1.2` tag (see `docs/DEPLOY.md`).
+
+## Closed in depth pass (continue-as-recommended)
+
+| Item | Notes |
+|------|--------|
+| Pragmatic projections expanded | Core collapse table aligned with CLI |
+| Alchemy / Tree / Planetary / I Ching depth | CLI loci tables + failure modes / Four Worlds |
+| Example unit tests | signal-forager files, enochian stubs, demo report shape |
+| Deploy tag instructions | Optional `v0.1.2` pin |
 
 ## Next steps for deployment
 
