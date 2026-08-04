@@ -26,7 +26,7 @@ Do not install if smoke fails.
 cd Abraxas-Orchestra-Hermes
 bash scripts/smoke.sh
 python3 scripts/orchestra.py check
-python3 scripts/orchestra.py do list-frameworks
+python3 scripts/orchestra.py list
 ```
 
 Expected: `SMOKE OK`, `CHECK OK — Orchestra <version>`, eleven frameworks listed.
@@ -58,8 +58,6 @@ Install directory **name** should remain `orchestra` so frontmatter `name` match
 ```bash
 bash install.sh --dry-run
 bash install.sh
-# OpenClaw:
-bash install.sh --dry-run --target ~/.openclaw/skills/orchestra
 bash install.sh --target ~/.openclaw/skills/orchestra
 ```
 
@@ -67,15 +65,13 @@ Installer behavior:
 
 1. Validates required files + all framework refs  
 2. **Path jail:** refuses system prefixes and targets outside `$HOME` (override: `--allow-outside-home`)  
-3. Backs up any existing target under `~/.hermes/receipts/orchestra-backups/` (Hermes default layout)  
+3. Backs up any existing target under `~/.hermes/receipts/orchestra-backups/`  
 4. Atomic stage → swap  
 
-Rollback if needed:
+Rollback:
 
 ```bash
 bash install.sh --rollback
-# or with same --target used at install
-bash install.sh --rollback --target ~/.openclaw/skills/orchestra
 ```
 
 ---
@@ -83,18 +79,10 @@ bash install.sh --rollback --target ~/.openclaw/skills/orchestra
 ## 4. Post-install verification
 
 ```bash
-# Hermes
 python3 ~/.hermes/skills/orchestra/scripts/orchestra.py check
 bash ~/.hermes/skills/orchestra/scripts/smoke.sh
 
-# OpenClaw
-python3 ~/.openclaw/skills/orchestra/scripts/orchestra.py check
-```
-
-Optional structure emission:
-
-```bash
-python3 ~/.hermes/skills/orchestra/scripts/orchestra.py do structure \
+python3 ~/.hermes/skills/orchestra/scripts/orchestra.py structure \
   -f tree-of-life -c "intent,synthesis,output" --out /tmp/orch-skel
 ```
 
@@ -110,17 +98,13 @@ python3 ~/.hermes/skills/orchestra/scripts/orchestra.py do structure \
 
 ## Optional: pin a release tag
 
-Public debut tag:
-
 ```bash
-git tag -a v0.1.3 -m "Orchestra 0.1.3 public debut — Apache-2.0 + installer path jail"
-git push origin v0.1.3
+git tag -a v0.1.4 -m "Orchestra 0.1.4 simplified CLI"
+git push origin v0.1.4
 ```
 
-Install from a tag when you need freeze:
-
 ```bash
-git clone --branch v0.1.3 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
+git clone --branch v0.1.4 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
 ```
 
 ---
@@ -130,7 +114,7 @@ git clone --branch v0.1.3 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestr
 | Symptom | Action |
 |---------|--------|
 | `CHECK FAILED` missing ref | Incomplete checkout; pull full `references/` |
-| Unknown framework | `do list-frameworks`; keys must match `schemas/frameworks.v1.json` |
+| Unknown framework | `list`; keys must match `schemas/frameworks.v1.json` |
 | Install denied (outside home) | Use a path under `$HOME`, or pass `--allow-outside-home` deliberately |
 | Install denied (system path) | Never target `/etc`, `/usr`, etc. |
 

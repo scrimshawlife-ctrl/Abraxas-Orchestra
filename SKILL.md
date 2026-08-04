@@ -1,7 +1,7 @@
 ---
 name: orchestra
 description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra."
-version: 0.1.3
+version: 0.1.4
 license: Apache-2.0
 metadata:
   openclaw:
@@ -18,6 +18,17 @@ Hermes + OpenClaw **coding-agent skill** for symbolic code architecture.
 Hosts: **Hermes**, **OpenClaw**. Same contract, different install roots.
 
 Production freeze checklist: `docs/COMPLETION.md`. Public debut: `docs/PUBLIC_RELEASE.md`. Security audit: `docs/SECURITY_AUDIT.md`.
+
+## Commands
+
+```text
+python3 scripts/orchestra.py check
+python3 scripts/orchestra.py list
+python3 scripts/orchestra.py structure -f <framework> [-c concerns] [-o overlay] [--out DIR]
+python3 scripts/orchestra.py project   -f <framework> [-c concerns] [-o overlay] [--out DIR]
+```
+
+Legacy `do <command>` is still accepted.
 
 ## When to use
 
@@ -36,7 +47,7 @@ Production freeze checklist: `docs/COMPLETION.md`. Public debut: `docs/PUBLIC_RE
 
 1. Identify functional concerns (modules, stages, domains).
 2. Choose primary framework (and optional overlay).
-3. Prefer `scripts/orchestra.py do structure` / `do project`.
+3. Prefer `scripts/orchestra.py structure` / `project`.
 4. Emit correspondence table JSON matching schema.
 5. Stop on `NOT_COMPUTABLE` or label `FORCED` — do not invent loci.
 
