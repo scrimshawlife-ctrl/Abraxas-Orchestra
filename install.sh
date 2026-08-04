@@ -76,6 +76,7 @@ validate_source() {
     "references/numogram.md"
     "references/sacred-geometry.md"
     "references/enochian.md"
+    "references/enochian-cli-loci.md"
     "references/chaos-magic.md"
   )
   for f in "${refs[@]}"; do
