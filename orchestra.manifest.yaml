@@ -49,6 +49,7 @@ intents:
 
 schemas:
   correspondence_table: schemas/correspondence-table.v1.schema.json
+  frameworks: schemas/frameworks.v1.json
 
 examples:
   - examples/signal-forager-skeleton/
@@ -68,5 +69,7 @@ metadata:
   design_doc: docs/DESIGN.md
   openclaw_doc: docs/OPENCLAW.md
   roadmap_doc: docs/ROADMAP.md
+  release_notes: docs/RELEASE_NOTES.md
+  security_doc: docs/SECURITY.md
   min_python: "3.11"
   skill_type: coding-agent
