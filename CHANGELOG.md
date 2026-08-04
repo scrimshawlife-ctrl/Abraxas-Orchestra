@@ -7,20 +7,20 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
+- Example: `examples/signal-forager-skeleton/` — end-to-end Tree of Life + alchemical overlay
+- OpenClaw packaging notes expanded (`docs/OPENCLAW.md`) — manual install via `--target`, state isolation, CLI parity
 - `do project` — pragmatic projection intent (collapse oversized maps; drop FORCED loci)
 - Per-framework `core_collapse` sets for stable reduced skeletons
 - Typed Python package stubs (`__init__.py` with dual-name provenance + placeholder)
-- CLI `--out DIR` — write dual-named skeleton directories + correspondence-table.json to disk
-- CLI `--overlay / -o` — secondary framework overlay annotations on primary loci
-- Executable surface: atomic installer (`install.sh`) and minimal CLI (`scripts/orchestra.py`)
-- `do list-frameworks`, `do structure`, `check`
-- Full open corpus: Tree of Life, Alchemical, Elder Futhark, Planetary, I Ching, Solomonic, Peircean, Numogram, Sacred Geometry
+- CLI `--out DIR`, `--overlay / -o`
+- Atomic installer (`install.sh`)
+- Full open corpus (9 frameworks)
 
 ### Previously
 - Initial design surface for v0.1.0
 - SKILL.md operating contract
 - Dual-naming, fail-closed, pragmatic projection rules
-- Manifest, OpenClaw contract, correspondence schema
+- Manifest, correspondence schema
 
 ## [0.1.0] — 2026-08-04
 
