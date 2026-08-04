@@ -27,6 +27,7 @@
 | pytest / coverage gates | Stdlib unittest is enough for v0.1 |
 | Runtime ritual / network integrations | Out of skill scope |
 | Multi-agent orchestration product | Separate Abraxas systems |
+| CLI loci loaded from references | Dual-source drift risk accepted for v0.1 |
 
 ## Production readiness bar (skill package)
 
@@ -40,7 +41,17 @@ A release is production-ready for **private Hermes/OpenClaw install** when:
 
 Public registry listing additionally requires license compatibility (`docs/COMMUNITY.md`).
 
----
+## Closed in follow-up (post-0.1.2 hygiene)
+
+| Item | Notes |
+|------|--------|
+| SKILL.md version → 0.1.2 | Frontmatter aligned |
+| DESIGN.md version → 0.1.2 | Target strings aligned |
+| Enochian-chaos module stubs | Dual-named `__init__.py` regenerated |
+| Installer stages `assets/` | Best-effort copy |
+| CONTRIBUTING.md | Local smoke + framework checklist |
+
+Still operator-local: **`assets/hero.jpg` binary push**, optional `v0.1.2` tag.
 
 ## Next steps for deployment
 

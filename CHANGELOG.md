@@ -12,9 +12,12 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 - `scripts/smoke.sh` — check + tests + demo + install dry-run
 - `.github/workflows/ci.yml` — Python 3.11/3.12 CI
 - `docs/ROADMAP.md` — done vs deferred production bar
+- `CONTRIBUTING.md` — smoke gate + framework-add checklist
 
 ### Fixed
 - Enochian-chaos example regenerated with dual-named module stubs on disk
+- SKILL.md / DESIGN.md version aligned to 0.1.2
+- Installer best-effort stage of `assets/`
 
 ## [0.1.1] — 2026-08-04
 
