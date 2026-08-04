@@ -1,1 +1,157 @@
-PLACEHOLDER
+{
+  "schema": "frameworks.v1",
+  "version": "0.1.2",
+  "frameworks": {
+    "tree-of-life": {
+      "title": "Tree of Life",
+      "reference": "references/tree-of-life-mappings.md",
+      "default_loci": [
+        {"mechanical": "intent", "symbolic": "kether", "note": "System intent / entry contract"},
+        {"mechanical": "intake", "symbolic": "chokmah", "note": "Raw force intake"},
+        {"mechanical": "constraint", "symbolic": "binah", "note": "Schema / form constraint"},
+        {"mechanical": "expand", "symbolic": "chesed", "note": "Generative expansion"},
+        {"mechanical": "adversarial", "symbolic": "geburah", "note": "Severity / filtering"},
+        {"mechanical": "synthesis", "symbolic": "tiphareth", "note": "Central judgment / scoring"},
+        {"mechanical": "persist", "symbolic": "netzach", "note": "Enduring pattern"},
+        {"mechanical": "analyze", "symbolic": "hod", "note": "Analytical decomposition"},
+        {"mechanical": "store", "symbolic": "yesod", "note": "Foundation / substrate"},
+        {"mechanical": "output", "symbolic": "malkuth", "note": "Concrete manifestation"}
+      ],
+      "core_collapse": ["intent", "synthesis", "output"]
+    },
+    "alchemical-stages": {
+      "title": "Alchemical Stages",
+      "reference": "references/alchemical-stages.md",
+      "default_loci": [
+        {"mechanical": "raw_ingest", "symbolic": "nigredo", "note": "Chaos / putrefaction intake"},
+        {"mechanical": "purify", "symbolic": "albedo", "note": "Separation / schema wash"},
+        {"mechanical": "illuminate", "symbolic": "citrinitas", "note": "Insight / scoring"},
+        {"mechanical": "coagulate", "symbolic": "rubedo", "note": "Final stable emission"}
+      ],
+      "core_collapse": ["raw_ingest", "illuminate", "coagulate"]
+    },
+    "elder-futhark": {
+      "title": "Elder Futhark",
+      "reference": "references/elder-futhark.md",
+      "default_loci": [
+        {"mechanical": "resource", "symbolic": "fehu", "note": "Resource / wealth pool"},
+        {"mechanical": "signal_intake", "symbolic": "ansuz", "note": "Inspired signal intake"},
+        {"mechanical": "hard_constraint", "symbolic": "nauthiz", "note": "Need-driven constraint"},
+        {"mechanical": "protection", "symbolic": "algiz", "note": "Guardian / protection layer"},
+        {"mechanical": "just_judgment", "symbolic": "tiwaz", "note": "Ordered judgment"},
+        {"mechanical": "human_surface", "symbolic": "mannaz", "note": "Human / community surface"},
+        {"mechanical": "inherited_store", "symbolic": "othala", "note": "Ancestral / inherited store"}
+      ],
+      "core_collapse": ["signal_intake", "just_judgment", "human_surface"]
+    },
+    "planetary-spheres": {
+      "title": "Planetary Spheres",
+      "reference": "references/planetary-spheres.md",
+      "default_loci": [
+        {"mechanical": "boundary", "symbolic": "saturn", "note": "Hard boundary / persistence"},
+        {"mechanical": "governance", "symbolic": "jupiter", "note": "Expansion policy / law"},
+        {"mechanical": "adversarial", "symbolic": "mars", "note": "Severity / conflict"},
+        {"mechanical": "core", "symbolic": "sun", "note": "Central synthesis / sovereignty"},
+        {"mechanical": "relation", "symbolic": "venus", "note": "Relation / value"},
+        {"mechanical": "comms", "symbolic": "mercury", "note": "Translation / messaging"},
+        {"mechanical": "memory", "symbolic": "moon", "note": "Memory / flux"}
+      ],
+      "core_collapse": ["boundary", "core", "comms"]
+    },
+    "iching-hexagrams": {
+      "title": "I Ching (curated)",
+      "reference": "references/iching-hexagrams.md",
+      "default_loci": [
+        {"mechanical": "init", "symbolic": "qian_creative", "note": "Pure initiation"},
+        {"mechanical": "wait", "symbolic": "xu_waiting", "note": "Deliberate accumulation"},
+        {"mechanical": "conflict", "symbolic": "song_conflict", "note": "Open polarity"},
+        {"mechanical": "harmony", "symbolic": "tai_peace", "note": "Balanced flow"},
+        {"mechanical": "return", "symbolic": "fu_return", "note": "Cyclic renewal"},
+        {"mechanical": "revolution", "symbolic": "ge_revolution", "note": "Radical change"},
+        {"mechanical": "completion", "symbolic": "jiji_completion", "note": "Ordered completion"}
+      ],
+      "core_collapse": ["init", "harmony", "completion"]
+    },
+    "solomonic": {
+      "title": "Solomonic Hierarchy",
+      "reference": "references/solomonic.md",
+      "default_loci": [
+        {"mechanical": "sovereign", "symbolic": "king_contract", "note": "Root authority"},
+        {"mechanical": "domain_owner", "symbolic": "duke_service", "note": "Major domain ownership"},
+        {"mechanical": "executive", "symbolic": "president_admin", "note": "Operational control"},
+        {"mechanical": "task_agent", "symbolic": "knight_worker", "note": "Task-scoped worker"},
+        {"mechanical": "knowledge", "symbolic": "solomonic_knowledge", "note": "Revelation / research"},
+        {"mechanical": "binding", "symbolic": "solomonic_bind", "note": "Constraint / containment"},
+        {"mechanical": "judgment", "symbolic": "solomonic_justice", "note": "Truth / judgment"}
+      ],
+      "core_collapse": ["sovereign", "executive", "task_agent"]
+    },
+    "peircean-signs": {
+      "title": "Peircean Signs",
+      "reference": "references/peircean-signs.md",
+      "default_loci": [
+        {"mechanical": "likeness", "symbolic": "icon", "note": "Similarity representation"},
+        {"mechanical": "trace", "symbolic": "index", "note": "Causal / contiguity link"},
+        {"mechanical": "convention", "symbolic": "symbol", "note": "Conventional code"},
+        {"mechanical": "type_schema", "symbolic": "legisign", "note": "General type / law"},
+        {"mechanical": "instance", "symbolic": "sinsign", "note": "Concrete token / event"},
+        {"mechanical": "inference", "symbolic": "argument", "note": "Necessary consequence"}
+      ],
+      "core_collapse": ["trace", "convention", "inference"]
+    },
+    "numogram": {
+      "title": "Numogram",
+      "reference": "references/numogram.md",
+      "default_loci": [
+        {"mechanical": "potential", "symbolic": "zone_0", "note": "Void / pure potential"},
+        {"mechanical": "init", "symbolic": "zone_1", "note": "First differentiation"},
+        {"mechanical": "structure", "symbolic": "zone_4", "note": "Stable order"},
+        {"mechanical": "threshold", "symbolic": "zone_5", "note": "Tipping / intensive peak"},
+        {"mechanical": "feedback", "symbolic": "zone_6", "note": "Resonance / amplify"},
+        {"mechanical": "completion", "symbolic": "zone_9", "note": "Return / final intensity"}
+      ],
+      "core_collapse": ["init", "threshold", "completion"]
+    },
+    "sacred-geometry": {
+      "title": "Sacred Geometry",
+      "reference": "references/sacred-geometry.md",
+      "default_loci": [
+        {"mechanical": "nested_core", "symbolic": "golden_depth", "note": "\u03c6-bounded nesting"},
+        {"mechanical": "coord_graph", "symbolic": "tetrahedral_core", "note": "Minimal coordination"},
+        {"mechanical": "shared_zone", "symbolic": "vesica_interface", "note": "Shared contract overlap"},
+        {"mechanical": "fractal_layer", "symbolic": "self_similar", "note": "Recursive repetition"}
+      ],
+      "core_collapse": ["nested_core", "shared_zone"]
+    },
+    "enochian": {
+      "title": "Enochian",
+      "reference": "references/enochian.md",
+      "default_loci": [
+        {"mechanical": "edge_intake", "symbolic": "aethyr_tex", "note": "Material gateway / edge intake"},
+        {"mechanical": "air_comms", "symbolic": "watchtower_east", "note": "Air domain \u2014 analysis / messaging"},
+        {"mechanical": "fire_transform", "symbolic": "watchtower_south", "note": "Fire domain \u2014 transformation"},
+        {"mechanical": "water_memory", "symbolic": "watchtower_west", "note": "Water domain \u2014 memory / flux"},
+        {"mechanical": "earth_persist", "symbolic": "watchtower_north", "note": "Earth domain \u2014 persistence"},
+        {"mechanical": "domain_entry", "symbolic": "enochian_call", "note": "Invocation / domain-entry token"},
+        {"mechanical": "root_truth_seal", "symbolic": "sigillum_dei_aemeth", "note": "Root truth / session authority seal"},
+        {"mechanical": "jurisdiction_token", "symbolic": "governor_character", "note": "Part-of-Earth placement sigil"},
+        {"mechanical": "cross_domain_bus", "symbolic": "tablet_of_union", "note": "Spirit bus / Black Cross coordination"},
+        {"mechanical": "inverse_capability", "symbolic": "cacodemon_mirror", "note": "Inverse / adversarial fail-mode surface"},
+        {"mechanical": "sovereign_intent", "symbolic": "aethyr_lil", "note": "Apex intent / pure contract"}
+      ],
+      "core_collapse": ["edge_intake", "domain_entry", "sovereign_intent"]
+    },
+    "chaos-magic": {
+      "title": "Chaos Magic",
+      "reference": "references/chaos-magic.md",
+      "default_loci": [
+        {"mechanical": "paradigm_switch", "symbolic": "chaos_shift", "note": "Paradigm engine / framework select"},
+        {"mechanical": "intent_token", "symbolic": "sigil_glyph", "note": "Compressed intent token"},
+        {"mechanical": "context_reset", "symbolic": "banishing_clear", "note": "Session / context banishing"},
+        {"mechanical": "outcome_gate", "symbolic": "results_metric", "note": "Results eval gate"},
+        {"mechanical": "custom_alphabet", "symbolic": "alphabet_desire", "note": "Project-local symbolic encoding"}
+      ],
+      "core_collapse": ["paradigm_switch", "intent_token", "outcome_gate"]
+    }
+  }
+}
