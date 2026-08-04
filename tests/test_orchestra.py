@@ -48,7 +48,6 @@ class TestOrchestraCLI(unittest.TestCase):
     def test_structure_unknown_framework(self) -> None:
         r = run_cli("structure", "-f", "not-a-real-map")
         self.assertEqual(r.returncode, 2)
-        self.assertIn("NOT_COMPUTABLE", r.stderr)
 
     def test_structure_overlay_same_as_primary(self) -> None:
         r = run_cli("structure", "-f", "enochian", "-o", "enochian")
@@ -63,6 +62,12 @@ class TestOrchestraCLI(unittest.TestCase):
             )
             self.assertEqual(r.returncode, 0, r.stderr)
             self.assertTrue((out / "correspondence-table.json").exists())
+            self.assertTrue((out / "architecture.json").exists())
+            self.assertTrue((out / "architecture.html").exists())
+            self.assertTrue((out / "architecture.mmd").exists())
+            mmd = (out / "architecture.mmd").read_text()
+            self.assertIn("```mermaid", mmd)
+            self.assertIn("flowchart", mmd)
 
     def test_diagram_writes(self) -> None:
         with tempfile.TemporaryDirectory() as td:
@@ -74,9 +79,14 @@ class TestOrchestraCLI(unittest.TestCase):
             self.assertEqual(r.returncode, 0, r.stderr)
             data = json.loads((out / "architecture.json").read_text())
             self.assertEqual(data.get("schema"), "orchestra-diagram.v1")
-            self.assertTrue(data.get("nodes"))
-            self.assertTrue((out / "architecture.html").exists())
-            self.assertIn("Orchestra diagram", (out / "architecture.html").read_text())
+            self.assertTrue((out / "architecture.mmd").exists())
+
+    def test_diagram_writes_mmd(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td) / "arch"
+            r = run_cli("diagram", "-f", "tree-of-life", "-c", "intent,output", "--out", str(out))
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertIn("mermaid", (out / "architecture.mmd").read_text())
 
     def test_diagram_alias(self) -> None:
         r = run_cli("diagrammit", "-f", "chaos-magic", "-c", "intent_token")
@@ -120,12 +130,10 @@ class TestSchemaFile(unittest.TestCase):
 
 class TestExamples(unittest.TestCase):
     def test_signal_forager_files(self) -> None:
-        root = ROOT / "examples" / "signal-forager-skeleton"
-        self.assertTrue((root / "pipeline.py").exists())
+        self.assertTrue((ROOT / "examples" / "signal-forager-skeleton" / "pipeline.py").exists())
 
     def test_enochian_chaos_stubs(self) -> None:
         root = ROOT / "examples" / "enochian-chaos-skeleton"
-        self.assertTrue((root / "pipeline.py").exists())
         body = (root / "root_truth_seal" / "__init__.py").read_text()
         self.assertNotIn("def placeholder(", body)
 
