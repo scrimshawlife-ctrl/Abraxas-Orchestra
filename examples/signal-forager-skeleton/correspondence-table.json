@@ -1,0 +1,73 @@
+{
+  "framework": "tree-of-life",
+  "secondary_overlay": "alchemical-stages",
+  "status": "CLEAN",
+  "mappings": [
+    {
+      "functional_concern": "System intent / entry contract",
+      "mechanical_name": "intent",
+      "symbolic_name": "kether",
+      "symbolic_locus": "kether",
+      "strength": "ADEQUATE",
+      "notes": "System intent / entry contract",
+      "overlay_note": "overlay:alchemical-stages/nigredo (Chaos / putrefaction intake)"
+    },
+    {
+      "functional_concern": "Raw force intake",
+      "mechanical_name": "intake",
+      "symbolic_name": "chokmah",
+      "symbolic_locus": "chokmah",
+      "strength": "ADEQUATE",
+      "notes": "Raw force intake",
+      "overlay_note": "overlay:alchemical-stages/albedo (Separation / schema wash)"
+    },
+    {
+      "functional_concern": "Schema / form constraint",
+      "mechanical_name": "constraint",
+      "symbolic_name": "binah",
+      "symbolic_locus": "binah",
+      "strength": "ADEQUATE",
+      "notes": "Schema / form constraint",
+      "overlay_note": "overlay:alchemical-stages/citrinitas (Insight / scoring)"
+    },
+    {
+      "functional_concern": "Severity / filtering",
+      "mechanical_name": "adversarial",
+      "symbolic_name": "geburah",
+      "symbolic_locus": "geburah",
+      "strength": "ADEQUATE",
+      "notes": "Severity / filtering",
+      "overlay_note": "overlay:alchemical-stages/rubedo (Final stable emission)"
+    },
+    {
+      "functional_concern": "Central judgment / scoring",
+      "mechanical_name": "synthesis",
+      "symbolic_name": "tiphareth",
+      "symbolic_locus": "tiphareth",
+      "strength": "ADEQUATE",
+      "notes": "Central judgment / scoring"
+    },
+    {
+      "functional_concern": "Foundation / substrate",
+      "mechanical_name": "store",
+      "symbolic_name": "yesod",
+      "symbolic_locus": "yesod",
+      "strength": "ADEQUATE",
+      "notes": "Foundation / substrate"
+    },
+    {
+      "functional_concern": "Concrete manifestation",
+      "mechanical_name": "output",
+      "symbolic_name": "malkuth",
+      "symbolic_locus": "malkuth",
+      "strength": "ADEQUATE",
+      "notes": "Concrete manifestation"
+    }
+  ],
+  "pragmatic_projection": null,
+  "provenance": {
+    "operator": "orchestra-cli",
+    "timestamp": "2026-08-04T19:13:45Z",
+    "skill_version": "0.1.0"
+  }
+}
