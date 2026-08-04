@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes/schemas/correspondence-table.v1.schema.json",
+  "title": "Orchestra Correspondence Table v1",
+  "description": "Explicit mapping of functional concerns onto a chosen esoteric framework. Used as provenance artifact.",
+  "type": "object",
+  "required": ["framework", "mappings", "status"],
+  "properties": {
+    "framework": {
+      "type": "string",
+      "enum": [
+        "tree-of-life",
+        "alchemical-stages",
+        "elder-futhark",
+        "planetary-spheres",
+        "iching-hexagrams",
+        "composite"
+      ]
+    },
+    "secondary_overlay": {
+      "type": ["string", "null"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["CLEAN", "WEAK_MAPPINGS", "FORCED_CORRESPONDENCE", "NOT_COMPUTABLE"]
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["functional_concern", "symbolic_locus", "strength"],
+        "properties": {
+          "functional_concern": { "type": "string" },
+          "mechanical_name": { "type": "string" },
+          "symbolic_name": { "type": "string" },
+          "symbolic_locus": { "type": "string" },
+          "strength": {
+            "type": "string",
+            "enum": ["STRONG", "ADEQUATE", "WEAK", "FORCED"]
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "pragmatic_projection": {
+      "type": ["string", "null"],
+      "description": "Description of any collapsed or conventional alternative offered"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "operator": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" },
+        "skill_version": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": false
+}

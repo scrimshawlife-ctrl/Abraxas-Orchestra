@@ -1,0 +1,62 @@
+# Abraxas Orchestra — Skill Manifest
+# Canonical metadata for Hermes / OpenClaw discovery and installation
+
+name: orchestra
+display_name: Abraxas Orchestra
+version: 0.1.0
+description: >
+  Hermes-native symbolic code architecture.
+  Structure modules, pipelines, interfaces, and agent systems according to
+  traditional esoteric maps while remaining production-grade.
+  Fail-closed on weak mappings. Dual-named skeletons with recoverable provenance.
+  Corpus remains open for expansion with additional traditional systems.
+
+homepage: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
+repository: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
+
+# Skill discovery
+skill_entry: SKILL.md
+cli_entry: scripts/orchestra.py
+
+# Supported host environments
+hosts:
+  - hermes
+  - openclaw
+
+# Install targets
+install:
+  hermes_path: ~/.hermes/skills/orchestra
+  openclaw_path: ~/.openclaw/skills/orchestra
+  atomic: true
+  supports_dry_run: true
+  supports_rollback: true
+
+# Frameworks exposed in v0.1 (corpus open for additive expansion)
+frameworks:
+  - tree-of-life
+  - alchemical-stages
+  - elder-futhark
+  - planetary-spheres
+  - iching-hexagrams
+
+# Schema contracts
+schemas:
+  correspondence_table: schemas/correspondence-table.v1.schema.json
+
+# Governance posture
+governance:
+  fail_closed: true
+  human_sovereignty: true
+  no_auto_canon_promotion: true
+  observed_first: true
+  corpus_open: true
+
+# License posture
+license: proprietary
+
+# Metadata
+metadata:
+  abraxas_family: true
+  design_doc: docs/DESIGN.md
+  openclaw_doc: docs/OPENCLAW.md
+  min_python: "3.11"
