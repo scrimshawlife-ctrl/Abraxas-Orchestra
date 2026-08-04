@@ -71,5 +71,6 @@ metadata:
   roadmap_doc: docs/ROADMAP.md
   release_notes: docs/RELEASE_NOTES.md
   security_doc: docs/SECURITY.md
+  completion_doc: docs/COMPLETION.md
   min_python: "3.11"
   skill_type: coding-agent

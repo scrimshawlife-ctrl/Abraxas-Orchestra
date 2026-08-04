@@ -20,6 +20,8 @@ Fail-closed on weak mappings. Human sovereignty over forced maps. Corpus open fo
 
 **Deploy to Hermes/OpenClaw:** follow [`docs/DEPLOY.md`](docs/DEPLOY.md) (validate → dry-run → install → verify → wire host).
 
+**Freeze checklist:** [`docs/COMPLETION.md`](docs/COMPLETION.md)
+
 ```bash
 git clone https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
 cd Abraxas-Orchestra-Hermes
@@ -47,9 +49,9 @@ bash install.sh --target ~/.openclaw/skills/orchestra    # OpenClaw
 | Theme | What landed |
 |-------|-------------|
 | Single source of truth | `schemas/frameworks.v1.json` drives CLI loci |
-| Packaging | Smoke script, 14 unit tests, CI 3.11/3.12, atomic install |
+| Packaging | Smoke script, 17 unit tests, CI 3.11/3.12, atomic install |
 | Deploy | Ordered path in `docs/DEPLOY.md` |
-| Examples | Signal-forager pipeline; Enochian + Chaos stubs |
+| Examples | Signal-forager pipeline; Enochian + Chaos session |
 
 Full narrative: **[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)** · Machine changelog: [`CHANGELOG.md`](CHANGELOG.md)
 
@@ -114,7 +116,7 @@ references/              # Framework tables + agent-posture
 schemas/                 # correspondence-table.v1 + frameworks.v1
 examples/                # signal-forager; enochian-chaos
 tests/                   # stdlib unittest
-docs/                    # DESIGN, DEPLOY, RELEASE_NOTES, ROADMAP, SECURITY
+docs/                    # DESIGN, DEPLOY, COMPLETION, RELEASE_NOTES, …
 install.sh               # Atomic installer
 ```
 
@@ -126,6 +128,7 @@ install.sh               # Atomic installer
 |-----|----------|
 | `SKILL.md` | Agents |
 | `README.md` | Humans + agents |
+| `docs/COMPLETION.md` | v0.1.2 freeze checklist |
 | `docs/RELEASE_NOTES.md` | Narrative release notes |
 | `docs/DEPLOY.md` | Ordered deployment next steps |
 | `docs/ROADMAP.md` | Done / deferred / production bar |
@@ -151,5 +154,6 @@ install.sh               # Atomic installer
 ## Links
 
 - Repo: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
+- Freeze checklist: [`docs/COMPLETION.md`](docs/COMPLETION.md)
 - Release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)
 - Deploy: [`docs/DEPLOY.md`](docs/DEPLOY.md)
