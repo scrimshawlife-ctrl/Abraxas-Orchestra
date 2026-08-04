@@ -36,6 +36,19 @@ Contract entry: this file (`SKILL.md`)
 - The reference corpus is intentionally open for expansion with additional traditional systems.
 - Chaos Magic supplies the meta-stance: paradigms are tools; results and maintainability gate retention.
 
+## Agent Posture (build behavior)
+
+When implementing or refactoring **code** under this skill, apply `references/agent-posture.md`:
+
+- Smallest end-to-end layer first; grow only on a working base
+- Meet current requirements only — no speculative abstraction
+- Clear separation of concerns; dual-name remains the provenance channel
+- Prefer existing project dependencies and established patterns
+- No intentional stopgaps inside the active design horizon
+- **Compatibility:** aggressive removal of old paths is allowed only for disposable side-project trees. Versioned skill contracts (schema, CLI, install) stay stable unless the operator bumps major
+
+This posture is not an esoteric framework and is not selected via `do structure -f`.
+
 ## Activation Triggers
 
 Activate on requests that involve any of:
@@ -158,4 +171,4 @@ Hosts: **Hermes**, **OpenClaw**. Same contract, different install roots.
 
 ## Reference Loading
 
-Load files from `references/` only when the chosen framework requires detail. Keep the active context lean.
+Load files from `references/` only when the chosen framework requires detail. Keep the active context lean. Load `references/agent-posture.md` when implementing or evolving code under this skill.
