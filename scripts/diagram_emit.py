@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.1.5"
+VERSION = "0.1.6"
 FRAMEWORKS: dict[str, dict[str, Any]] = {}
 
 
@@ -304,22 +304,43 @@ def run_diagram(
     loci: list[tuple[str, str, str]],
     overlay_notes: list[str],
     out: str | None,
-) -> int:
-    """Emit JSON (stdout or files) and optional HTML. Returns exit code."""
+    quiet: bool = False,
+) -> dict:
+    """Emit JSON (+ HTML/Mermaid when out set). Returns graph dict."""
+    from diagram_mermaid import write_diagram_files
+
     graph = _graph_from_loci(framework, overlay, loci, overlay_notes)
     if not out:
         print(json.dumps(graph, indent=2))
-        return 0
+        return graph
     out_dir = Path(out).expanduser().resolve()
-    out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "architecture.json").write_text(
-        json.dumps(graph, indent=2) + "\n", encoding="utf-8"
+    write_diagram_files(
+        out_dir,
+        graph,
+        html=_html_diagram(graph),
+        quiet=quiet,
     )
-    (out_dir / "architecture.html").write_text(_html_diagram(graph), encoding="utf-8")
-    print(f"# wrote diagram → {out_dir}")
-    print(
-        f"#   architecture.json  ({len(graph['nodes'])} nodes, "
-        f"{len(graph['edges'])} edges, {len(graph['flows'])} flows)"
+    return graph
+
+
+def emit_diagram_bundle(
+    *,
+    version: str,
+    frameworks: dict[str, dict[str, Any]],
+    framework: str,
+    overlay: str | None,
+    loci: list[tuple[str, str, str]],
+    overlay_notes: list[str],
+    out_dir: Path,
+    quiet: bool = True,
+) -> dict:
+    """Always-on diagram emission for structure/project --out paths."""
+    set_context(version, frameworks)
+    return run_diagram(
+        framework=framework,
+        overlay=overlay,
+        loci=loci,
+        overlay_notes=overlay_notes,
+        out=str(out_dir),
+        quiet=quiet,
     )
-    print("#   architecture.html")
-    return 0
