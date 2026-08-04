@@ -6,45 +6,40 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.1.3] — 2026-08-04
+
+### Security
+- Installer path jail: refuse system prefixes and targets outside `$HOME` (escape: `--allow-outside-home`)
+- Installer no longer uses `eval` for install operations (`run_cmd` argv form)
+- Public coordinated disclosure policy: `.github/SECURITY.md`
+- Audit record: `docs/SECURITY_AUDIT.md`
+
+### Changed
+- License: **Apache-2.0** (public hub eligibility) + `NOTICE`
+- Version alignment across VERSION / SKILL / manifest / CLI / installer
+
+### Added
+- `docs/PUBLIC_RELEASE.md` — public debut packaging checklist
+- Installer path-refusal unit tests
+
 ## [0.1.2] — 2026-08-04
 
 ### Added
-- `docs/DEPLOY.md` — explicit ordered deployment next steps (Hermes/OpenClaw)
-- `tests/test_orchestra.py` — stdlib unittest suite (17 tests)
-- `scripts/smoke.sh` — check + tests + demos + install dry-run
-- `.github/workflows/ci.yml` — Python 3.11/3.12 CI
-- `docs/ROADMAP.md` — done vs deferred production bar
-- `CONTRIBUTING.md` — smoke gate + framework-add checklist
-- `schemas/frameworks.v1.json` — canonical framework loci (single source of truth)
-- `docs/RELEASE_NOTES.md` — narrative release notes for operators and agents
-- `docs/SECURITY.md` — local threat model
-- `docs/COMPLETION.md` — v0.1.2 freeze checklist
-- `references/enochian-cli-loci.md` — Enochian CLI table companion
-- `assets/hero.svg` — text-safe README hero (JPEG remains optional)
-- Enochian-chaos example: runnable session pipeline (no placeholder stubs)
-- Structured pipeline errors (`ValidationError` / `StageError`) on both examples
+- Production packaging: smoke, tests, CI, DEPLOY, COMPLETION, runnable examples
+- Structured pipeline errors on both examples
+- Canonical `schemas/frameworks.v1.json`
 
 ### Fixed
-- Enochian-chaos modules replaced `placeholder()` stubs with real seal/call/edge/bus/inverse/gate logic
-- SKILL.md / DESIGN.md version aligned to 0.1.2
-- Installer best-effort stage of `assets/`
-
-### Changed
-- Reference depth pass across frameworks + CLI loci tables
-- CLI loads `schemas/frameworks.v1.json` at startup (no embedded FRAMEWORKS dict)
-- CLI structure emission uses `scaffold()` / `SCAFFOLD` instead of `placeholder()` / `STUB`
-- Installer requires `schemas/frameworks.v1.json` and `references/enochian-cli-loci.md`
-- Manifest lists frameworks schema path
+- Enochian-chaos placeholders replaced with session logic
+- Version alignment to 0.1.2
 
 ## [0.1.1] — 2026-08-04
 
 ### Fixed
-- Correspondence schema enum expanded to all 11 frameworks + `composite`
-- Schema allows `overlay_note` on mappings
-- Installer requires all framework reference files
+- Schema enum expanded to all 11 frameworks + `composite`
 
 ### Added
-- Hermes/OpenClaw packaging surface, agent posture, examples
+- Hermes/OpenClaw packaging surface
 
 ## [0.1.0] — 2026-08-04
 
