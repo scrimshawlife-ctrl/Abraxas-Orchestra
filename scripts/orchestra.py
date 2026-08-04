@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Abraxas Orchestra — CLI entrypoint (v0.1 executable surface)
+Abraxas Orchestra — CLI entrypoint (v0.2 executable surface)
 
-Minimal, fail-closed, dual-naming skeleton emitter.
+Minimal, fail-closed, dual-naming skeleton emitter + repo analyze/optimize plan.
 Stdlib only. No external dependencies.
 
-Commands: check | list | structure | project | diagram
+Commands: check | list | structure | project | diagram | analyze | optimize
 Legacy: do <command> still accepted.
 """
 
@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.1.6"
+VERSION = "0.2.0"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:
@@ -112,6 +112,8 @@ def cmd_check(_: argparse.Namespace) -> int:
         "SKILL.md", "orchestra.manifest.yaml", "VERSION",
         "schemas/correspondence-table.v1.schema.json",
         "schemas/frameworks.v1.json",
+        "schemas/analysis.v1.schema.json",
+        "schemas/optimize-plan.v1.schema.json",
     ]
     for rel in required:
         if not (SKILL_ROOT / rel).exists():
@@ -454,11 +456,100 @@ def cmd_diagram(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_analyze(args: argparse.Namespace) -> int:
+    scripts_dir = str(Path(__file__).resolve().parent)
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    from analyze_repo import analyze_path, write_analysis_artifacts
+
+    analysis, code = analyze_path(
+        args.path,
+        frameworks=FRAMEWORKS,
+        version=VERSION,
+        framework=args.framework,
+        overlay=args.overlay,
+        lang=args.lang,
+        max_depth=args.max_depth,
+        max_files=args.max_files,
+        allow_system=bool(getattr(args, "allow_system", False)),
+    )
+    if args.out:
+        out_dir = Path(args.out).expanduser().resolve()
+        write_analysis_artifacts(analysis, out_dir, version=VERSION)
+        print(f"# wrote analysis → {out_dir}")
+        print("#   analysis.json")
+        if (out_dir / "correspondence-table.json").exists():
+            print("#   correspondence-table.json")
+        print("#   architecture.json")
+        print("#   architecture.html")
+        print("#   architecture.mmd")
+    else:
+        print(json.dumps(analysis, indent=2))
+
+    status = analysis.get("status")
+    print(f"# status: {status}", file=sys.stderr)
+    if status == "NOT_COMPUTABLE":
+        err = (analysis.get("provenance") or {}).get("error")
+        if err:
+            print(f"NOT_COMPUTABLE — {err}", file=sys.stderr)
+    elif status in {"WEAK_MAPPINGS", "FORCED_CORRESPONDENCE"}:
+        print(
+            f"# WARNING: analysis status {status} — review before optimize.",
+            file=sys.stderr,
+        )
+    return code
+
+
+def cmd_optimize(args: argparse.Namespace) -> int:
+    scripts_dir = str(Path(__file__).resolve().parent)
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    from optimize_plan import build_optimize_plan, load_analysis, write_plan_artifacts
+
+    if getattr(args, "apply", False):
+        print(
+            "NOT_COMPUTABLE — optimize --apply (Phase C) is not enabled in 0.2.x; "
+            "emit a plan only (omit --apply).",
+            file=sys.stderr,
+        )
+        return 2
+
+    try:
+        analysis = load_analysis(args.from_analysis)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"NOT_COMPUTABLE — {exc}", file=sys.stderr)
+        return 2
+
+    if analysis.get("status") == "NOT_COMPUTABLE":
+        print("NOT_COMPUTABLE — source analysis is NOT_COMPUTABLE", file=sys.stderr)
+        return 2
+
+    plan = build_optimize_plan(
+        analysis,
+        from_analysis=str(Path(args.from_analysis).expanduser().resolve()),
+        min_strength=args.min_strength,
+        version=VERSION,
+    )
+
+    if args.out:
+        out_dir = Path(args.out).expanduser().resolve()
+        write_plan_artifacts(plan, out_dir)
+        print(f"# wrote optimize plan → {out_dir}")
+        print("#   optimize-plan.json")
+        print("#   OPTIMIZE.md")
+    else:
+        print(json.dumps(plan, indent=2))
+
+    if not plan.get("steps"):
+        print("# empty plan — nothing met strength threshold", file=sys.stderr)
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="orchestra",
         description="Abraxas Orchestra — symbolic code architecture CLI",
-        epilog="Commands: check | list | structure | project | diagram",
+        epilog="Commands: check | list | structure | project | diagram | analyze | optimize",
     )
     p.add_argument("--version", action="version", version=f"Orchestra {VERSION}")
     sub = p.add_subparsers(dest="command", required=True)
@@ -490,6 +581,48 @@ def build_parser() -> argparse.ArgumentParser:
     add_structure_args(diag_p)
     diag_p.add_argument("--project", action="store_true", help="Apply pragmatic projection before graphing")
     diag_p.set_defaults(func=cmd_diagram)
+
+    analyze_p = sub.add_parser(
+        "analyze",
+        help="Observe a local Python repo graph; optionally map onto a framework",
+    )
+    analyze_p.add_argument("--path", required=True, help="Local directory to analyze")
+    analyze_p.add_argument("--framework", "-f", default=None, help="Optional framework key for mapping")
+    analyze_p.add_argument("--overlay", "-o", default=None, help="Secondary overlay framework")
+    analyze_p.add_argument("--lang", default="python", help="Language (v1: python only)")
+    analyze_p.add_argument("--max-depth", type=int, default=None, help="Max directory depth")
+    analyze_p.add_argument("--max-files", type=int, default=2000, help="Cap files processed")
+    analyze_p.add_argument("--out", default=None, help="Write analysis + diagrams to DIR")
+    analyze_p.add_argument(
+        "--allow-system",
+        action="store_true",
+        help="Permit analyzing system prefixes (dangerous; explicit)",
+    )
+    analyze_p.set_defaults(func=cmd_analyze)
+
+    opt_p = sub.add_parser(
+        "optimize",
+        help="Emit refactor plan from analysis.json (plan-only; no tree writes)",
+    )
+    opt_p.add_argument(
+        "--from",
+        dest="from_analysis",
+        required=True,
+        help="Path to analysis.json from analyze",
+    )
+    opt_p.add_argument("--out", default=None, help="Write optimize-plan.json + OPTIMIZE.md")
+    opt_p.add_argument(
+        "--min-strength",
+        default="ADEQUATE",
+        choices=["STRONG", "ADEQUATE", "WEAK", "FORCED"],
+        help="Minimum mapping strength for plan steps (default ADEQUATE)",
+    )
+    opt_p.add_argument(
+        "--apply",
+        action="store_true",
+        help="Phase C (disabled in 0.2.x) — refused fail-closed",
+    )
+    opt_p.set_defaults(func=cmd_optimize)
     return p
 
 

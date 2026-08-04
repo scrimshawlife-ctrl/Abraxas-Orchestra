@@ -4,11 +4,13 @@ Abraxas Orchestra is a **local** Hermes/OpenClaw skill package.
 
 Public debut audit: [`SECURITY_AUDIT.md`](SECURITY_AUDIT.md) · Policy: [`.github/SECURITY.md`](../.github/SECURITY.md)
 
-## Threat model (v0.1.3)
+## Threat model (v0.2.0)
 
 | Surface | Behavior |
 |---------|----------|
-| CLI | Stdlib only; no network I/O in `check` / `structure` / `project` |
+| CLI | Stdlib only; no network I/O in `check` / `structure` / `project` / `analyze` / `optimize` (plan) |
+| Analyze | Read-only on `--path`; writes only under `--out`; refuses system prefixes unless `--allow-system` |
+| Optimize | Plan-only in 0.2.x; `--apply` refused (Phase C deferred) |
 | Installer | Local copy only; **path jail** under `$HOME` unless `--allow-outside-home` |
 | Schema / JSON | Loaded from skill root on disk only |
 | Examples | Local demos; no credentials required |
