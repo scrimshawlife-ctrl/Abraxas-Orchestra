@@ -8,6 +8,9 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
 ## [0.3.1] — 2026-08-04
 
+### Fixed
+- Packaging drift: `install.sh` VERSION aligned to 0.3.1; README quick-start flat CLI; COMPLETION checklist refreshed
+
 ### Added
 - `optimize --apply --confirm --refresh` re-analyzes the tree and writes refreshed `analysis.json` beside the backup
 - Vacate-first ordering when a rename destination is another rename’s source
@@ -31,10 +34,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - `analyze` — read-only Python repo import graph + optional fail-closed framework map
 - `optimize` — plan-only refactor suggestions from `analysis.json` (no tree writes)
 - Schemas: `analysis.v1`, `optimize-plan.v1`
-- Fixture `tests/fixtures/mini_pkg/` + analyze/optimize unit tests
-
-### Notes
-- Analyze refuses system path prefixes (`/etc`, `/usr`, …) unless `--allow-system`
+- Fixture `tests/fixtures/mini_pkg/`
 
 ## [0.1.6] — 2026-08-04
 
