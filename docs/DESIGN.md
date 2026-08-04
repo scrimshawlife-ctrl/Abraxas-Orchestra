@@ -76,3 +76,9 @@ See `docs/OPENCLAW.md`.
 - Current target: 0.1.1
 - Schema: `correspondence-table.v1` (enum covers all frameworks + composite)
 - Corpus remains open; additive frameworks do not break v0.1 CLI contracts when registered in `FRAMEWORKS`, schema enum, manifest, and installer refs together.
+
+---
+
+## Agent posture
+
+Coding-agent build rules live in `references/agent-posture.md`. They govern implementation style for emitted code (layered growth, current-requirements-only, deps-first). They are not correspondence frameworks and must not override skill versioning, schema stability, or fail-closed provenance.
