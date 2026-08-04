@@ -146,6 +146,9 @@ class TestExamples(unittest.TestCase):
     def test_enochian_chaos_stubs(self) -> None:
         root = ROOT / "examples" / "enochian-chaos-skeleton"
         self.assertTrue((root / "correspondence-table.json").exists())
+        self.assertTrue((root / "pipeline.py").exists())
+        self.assertTrue((root / "models.py").exists())
+        self.assertTrue((root / "run_demo.py").exists())
         for mod in (
             "edge_intake",
             "domain_entry",
@@ -154,10 +157,29 @@ class TestExamples(unittest.TestCase):
             "inverse_capability",
             "sovereign_intent",
         ):
+            body = (root / mod / "__init__.py").read_text()
             self.assertTrue((root / mod / "__init__.py").exists(), mod)
+            self.assertNotIn("def placeholder(", body)
+            self.assertNotIn('status": "STUB"', body)
         data = json.loads((root / "correspondence-table.json").read_text())
         self.assertEqual(data.get("framework"), "enochian")
         self.assertEqual(data.get("secondary_overlay"), "chaos-magic")
+
+    def test_enochian_chaos_demo_report(self) -> None:
+        demo = ROOT / "examples" / "enochian-chaos-skeleton" / "run_demo.py"
+        r = subprocess.run(
+            [PYTHON, str(demo)],
+            cwd=str(demo.parent),
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        report = demo.parent / "_demo_out" / "report.json"
+        self.assertTrue(report.exists())
+        data = json.loads(report.read_text())
+        self.assertTrue(data.get("seal_valid"))
+        self.assertIn("kept", data)
+        self.assertIn("provenance", data)
 
     def test_demo_report_shape(self) -> None:
         """Run demo and assert report artifact keys (smoke-adjacent)."""
