@@ -6,15 +6,26 @@ from pathlib import Path
 from typing import Any
 
 
+def _mermaid_id(raw: str) -> str:
+    """Sanitize node ids for Mermaid (dots/dashes → underscore)."""
+    return (
+        str(raw)
+        .replace("-", "_")
+        .replace(".", "_")
+        .replace("/", "_")
+        .replace(" ", "_")
+    )
+
+
 def mermaid_from_graph(graph: dict[str, Any]) -> str:
     lines = ["```mermaid", "flowchart LR"]
     for n in graph.get("nodes") or []:
-        nid = str(n["id"]).replace("-", "_")
+        nid = _mermaid_id(n["id"])
         label = f'{n.get("mechanical", n["id"])}<br/>{n.get("symbolic", "")}'.replace('"', "'")
         lines.append(f'  {nid}["{label}"]')
     for e in graph.get("edges") or []:
-        a = str(e["from"]).replace("-", "_")
-        b = str(e["to"]).replace("-", "_")
+        a = _mermaid_id(e["from"])
+        b = _mermaid_id(e["to"])
         lines.append(f"  {a} --> {b}")
     lines.append("```")
     flows = graph.get("flows") or []

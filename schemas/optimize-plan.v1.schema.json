@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes/schemas/optimize-plan.v1.schema.json",
+  "title": "Orchestra Optimize Plan v1",
+  "description": "Ordered refactor plan derived from an analysis artifact. Plan-only by default.",
+  "type": "object",
+  "required": ["schema", "from_analysis", "min_strength", "steps", "blocked"],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "orchestra-optimize-plan.v1"
+    },
+    "from_analysis": { "type": "string" },
+    "min_strength": {
+      "type": "string",
+      "enum": ["STRONG", "ADEQUATE", "WEAK", "FORCED"]
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "action", "targets", "strength", "safe_apply"],
+        "properties": {
+          "id": { "type": "string" },
+          "action": {
+            "type": "string",
+            "enum": ["suggest_boundary", "suggest_rename", "suggest_extract"]
+          },
+          "targets": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "locus": { "type": "string" },
+          "strength": {
+            "type": "string",
+            "enum": ["STRONG", "ADEQUATE", "WEAK", "FORCED"]
+          },
+          "safe_apply": { "type": "boolean" },
+          "notes": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "blocked": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "targets": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "reason": { "type": "string" },
+          "strength": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

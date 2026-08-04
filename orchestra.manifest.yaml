@@ -1,5 +1,5 @@
 name: orchestra
-version: 0.1.5
+version: 0.2.0
 display_name: Abraxas Orchestra
 kind: hermes-openclaw-skill
 
@@ -8,6 +8,7 @@ description: >
   Structure modules, pipelines, interfaces, and agent systems according to
   traditional esoteric maps while remaining production-grade.
   Fail-closed on weak mappings. Dual-named skeletons with recoverable provenance.
+  Analyze local Python trees and emit optimize plans without silent mutation.
   Corpus remains open for expansion with additional traditional systems.
 
 homepage: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
@@ -48,10 +49,14 @@ intents:
   - structure
   - project
   - diagram
+  - analyze
+  - optimize
 
 schemas:
   correspondence_table: schemas/correspondence-table.v1.schema.json
   frameworks: schemas/frameworks.v1.json
+  analysis: schemas/analysis.v1.schema.json
+  optimize_plan: schemas/optimize-plan.v1.schema.json
 
 examples:
   - examples/signal-forager-skeleton/

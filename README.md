@@ -8,7 +8,7 @@
   <strong>Hermes + OpenClaw coding-agent skill</strong> for symbolic code architecture
 </p>
 
-Version **0.1.3** · Skill name: `orchestra` · Python ≥ 3.11 · Network: not required · License: Apache-2.0
+Version **0.2.0** · Skill name: `orchestra` · Python ≥ 3.11 · Network: not required · License: Apache-2.0
 
 Maps software structure onto traditional correspondence systems (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic) and emits **dual-named skeletons** with recoverable provenance.
 
@@ -46,18 +46,16 @@ Installer refuses system paths and targets outside `$HOME` unless `--allow-outsi
 
 ## Release notes
 
-**Current: [0.1.3](docs/RELEASE_NOTES.md#013--2026-08-04)** (2026-08-04) — public debut (Apache-2.0) + installer path jail.
+**Current: [0.2.0](docs/RELEASE_NOTES.md#020--2026-08-04)** (2026-08-04) — analyze → map → optimize (plan).
 
 | Theme | What landed |
 |-------|-------------|
-| License | Apache-2.0 + NOTICE |
-| Security | Path jail installer, audit record, disclosure policy |
-| Single source of truth | `schemas/frameworks.v1.json` drives CLI loci |
-| Packaging | Smoke script, 19 unit tests, CI 3.11/3.12, atomic install |
-| Deploy | Ordered path in `docs/DEPLOY.md` |
-| Examples | Signal-forager pipeline; Enochian + Chaos session |
+| Analyze | `analyze --path` OBSERVED Python import graph + optional framework map |
+| Optimize | Plan-only `optimize --from analysis.json` (no tree writes; `--apply` deferred) |
+| Diagrams | Auto HTML/JSON/Mermaid on structure/project/analyze `--out` |
+| License / security | Apache-2.0; installer + analyze path jail |
 
-Full narrative: **[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)** · Machine changelog: [`CHANGELOG.md`](CHANGELOG.md) · Audit: [`docs/SECURITY_AUDIT.md`](docs/SECURITY_AUDIT.md)
+Full narrative: **[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)** · Machine changelog: [`CHANGELOG.md`](CHANGELOG.md) · Plan: [`docs/ANALYZE_OPTIMIZE_PLAN.md`](docs/ANALYZE_OPTIMIZE_PLAN.md)
 
 ---
 
@@ -69,11 +67,13 @@ Full narrative: **[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)** · Machine 
 |------|---------|
 | Validate install | `python3 scripts/orchestra.py check` |
 | Full smoke | `bash scripts/smoke.sh` |
-| See frameworks | `python3 scripts/orchestra.py do list-frameworks` |
-| Emit skeleton (stdout) | `python3 scripts/orchestra.py do structure -f <framework>` |
-| Emit + write disk | `… do structure -f <framework> --out ./my-skeleton` |
-| Overlay second map | `… do structure -f enochian -o chaos-magic` |
-| Collapse oversized map | `… do project -f tree-of-life --out ./projected` |
+| See frameworks | `python3 scripts/orchestra.py list` |
+| Emit skeleton (stdout) | `python3 scripts/orchestra.py structure -f <framework>` |
+| Emit + write disk | `… structure -f <framework> --out ./my-skeleton` |
+| Overlay second map | `… structure -f enochian -o chaos-magic` |
+| Collapse oversized map | `… project -f tree-of-life --out ./projected` |
+| Analyze a repo | `… analyze --path ./pkg -f tree-of-life --out ./analysis` |
+| Optimize plan | `… optimize --from ./analysis/analysis.json --out ./plan` |
 | Working pipeline demo | `cd examples/signal-forager-skeleton && python3 run_demo.py` |
 
 **Framework keys:** `tree-of-life` · `alchemical-stages` · `elder-futhark` · `planetary-spheres` · `iching-hexagrams` · `solomonic` · `peircean-signs` · `numogram` · `sacred-geometry` · `enochian` · `chaos-magic`

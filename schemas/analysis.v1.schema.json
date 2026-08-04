@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes/schemas/analysis.v1.schema.json",
+  "title": "Orchestra Analysis v1",
+  "description": "Observed repository graph with optional fail-closed framework mappings.",
+  "type": "object",
+  "required": ["schema", "path", "language", "status", "nodes", "edges"],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "orchestra-analysis.v1"
+    },
+    "path": { "type": "string" },
+    "language": { "type": "string" },
+    "framework": { "type": ["string", "null"] },
+    "secondary_overlay": { "type": ["string", "null"] },
+    "status": {
+      "type": "string",
+      "enum": [
+        "CLEAN",
+        "WEAK_MAPPINGS",
+        "FORCED_CORRESPONDENCE",
+        "NOT_COMPUTABLE",
+        "OBSERVED_ONLY"
+      ]
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "path", "kind", "provenance"],
+        "properties": {
+          "id": { "type": "string" },
+          "path": { "type": "string" },
+          "kind": { "type": "string", "enum": ["module", "package"] },
+          "provenance": {
+            "type": "string",
+            "enum": ["OBSERVED", "INFERRED", "SPECULATIVE"]
+          },
+          "imports": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "parse_error": { "type": ["string", "null"] },
+          "external": { "type": "boolean" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "kind", "provenance"],
+        "properties": {
+          "from": { "type": "string" },
+          "to": { "type": "string" },
+          "kind": { "type": "string" },
+          "provenance": {
+            "type": "string",
+            "enum": ["OBSERVED", "INFERRED", "SPECULATIVE"]
+          },
+          "external": { "type": "boolean" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["functional_concern", "symbolic_locus", "strength"],
+        "properties": {
+          "functional_concern": { "type": "string" },
+          "mechanical_name": { "type": "string" },
+          "symbolic_name": { "type": "string" },
+          "symbolic_locus": { "type": "string" },
+          "strength": {
+            "type": "string",
+            "enum": ["STRONG", "ADEQUATE", "WEAK", "FORCED"]
+          },
+          "notes": { "type": "string" },
+          "overlay_note": { "type": "string" },
+          "node_id": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "candidate_frameworks": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "SPECULATIVE framework suggestions when -f is omitted"
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "operator": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "skill_version": { "type": "string" },
+        "kind": {
+          "type": "string",
+          "enum": ["OBSERVED", "INFERRED", "SPECULATIVE"]
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

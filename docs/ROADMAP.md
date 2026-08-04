@@ -15,15 +15,18 @@ Repo **analyze → map → optimize** (Cursor-ready): [`ANALYZE_OPTIMIZE_PLAN.md
 - Apache-2.0 public packaging + security audit docs
 - Runnable examples (signal-forager, enochian-chaos)
 
-## Next (see ANALYZE_OPTIMIZE_PLAN)
+## Shipped in 0.2.0
 
 | Phase | Command | Scope |
 |-------|---------|-------|
 | A | `analyze` | Read-only repo graph + optional framework map |
 | B | `optimize` | Plan only from analysis artifact |
-| C | `optimize --apply --confirm` | Gated mutation + backup |
 
-Suggested versions: A/B → `0.2.x` · C → `0.3.0`.
+## Next
+
+| Phase | Command | Scope |
+|-------|---------|-------|
+| C | `optimize --apply --confirm` | Gated mutation + backup → `0.3.0` |
 
 ## Deferred
 

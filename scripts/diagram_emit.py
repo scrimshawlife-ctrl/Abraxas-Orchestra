@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.1.6"
+VERSION = "0.2.0"
 FRAMEWORKS: dict[str, dict[str, Any]] = {}
 
 
@@ -344,3 +344,21 @@ def emit_diagram_bundle(
         out=str(out_dir),
         quiet=quiet,
     )
+
+
+def emit_observed_diagram(
+    graph: dict[str, Any],
+    out_dir: Path,
+    *,
+    quiet: bool = True,
+) -> dict:
+    """Write diagram bundle from a pre-built observed/import graph."""
+    from diagram_mermaid import write_diagram_files
+
+    write_diagram_files(
+        out_dir,
+        graph,
+        html=_html_diagram(graph),
+        quiet=quiet,
+    )
+    return graph

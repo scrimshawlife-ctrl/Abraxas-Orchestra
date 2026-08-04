@@ -1,8 +1,8 @@
 # Plan: Repo analyze → map → optimize
 
-Status: **planned** · Target skill: Abraxas Orchestra · Hosts: Hermes, OpenClaw  
-Parent version baseline: `0.1.6` · Implementation owner: Cursor / local agent  
-Does **not** change the public 0.1.x emit-only contract until phases land behind explicit commands.
+Status: **Phase A+B shipped in 0.2.0** · Phase C deferred · Target skill: Abraxas Orchestra · Hosts: Hermes, OpenClaw  
+Parent version baseline: `0.2.0` · Implementation owner: Cursor / local agent  
+Emit-only `structure`/`diagram` contract preserved; `analyze`/`optimize` are additive commands.
 
 ---
 
@@ -88,12 +88,12 @@ python3 scripts/orchestra.py analyze \
 
 **Acceptance (Phase A)**
 
-- [ ] `analyze --path <fixture>` produces `analysis.json` with `provenance.kind` fields
-- [ ] Parse errors recorded per file; do not abort whole run
-- [ ] Path jail: refuse system roots / outside allowed root without flag (mirror installer policy for safety)
-- [ ] Unit tests with a tiny fixture package under `tests/fixtures/mini_pkg/`
-- [ ] Smoke step or dedicated test invokes analyze on fixture
-- [ ] Docs: this file + SKILL.md command list + README how-to row
+- [x] `analyze --path <fixture>` produces `analysis.json` with `provenance.kind` fields
+- [x] Parse errors recorded per file; do not abort whole run
+- [x] Path jail: refuse system roots / outside allowed root without flag (mirror installer policy for safety)
+- [x] Unit tests with a tiny fixture package under `tests/fixtures/mini_pkg/`
+- [x] Smoke step or dedicated test invokes analyze on fixture
+- [x] Docs: this file + SKILL.md command list + README how-to row
 
 ---
 
@@ -121,9 +121,9 @@ python3 scripts/orchestra.py optimize \
 
 **Acceptance (Phase B)**
 
-- [ ] Plan references only OBSERVED nodes + schema loci
-- [ ] No file under the analyzed repo is modified
-- [ ] Empty plan when nothing meets strength threshold (exit 0 with explicit message)
+- [x] Plan references only OBSERVED nodes + schema loci
+- [x] No file under the analyzed repo is modified
+- [x] Empty plan when nothing meets strength threshold (exit 0 with explicit message)
 
 ---
 

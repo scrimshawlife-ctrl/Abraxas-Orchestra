@@ -6,6 +6,18 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.2.0] — 2026-08-04
+
+### Added
+- `analyze` — read-only Python repo import graph + optional fail-closed framework map
+- `optimize` — plan-only refactor suggestions from `analysis.json` (no tree writes)
+- Schemas: `analysis.v1`, `optimize-plan.v1`
+- Fixture `tests/fixtures/mini_pkg/` + analyze/optimize unit tests
+
+### Notes
+- `optimize --apply` (Phase C) is refused fail-closed until a later release
+- Analyze refuses system path prefixes (`/etc`, `/usr`, …) unless `--allow-system`
+
 ## [0.1.6] — 2026-08-04
 
 ### Added
