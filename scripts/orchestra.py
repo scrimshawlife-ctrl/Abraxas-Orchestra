@@ -18,159 +18,33 @@ from typing import Any
 VERSION = "0.1.2"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
-FRAMEWORKS: dict[str, dict[str, Any]] = {
-    "tree-of-life": {
-        "title": "Tree of Life",
-        "reference": "references/tree-of-life-mappings.md",
-        "default_loci": [
-            ("intent", "kether", "System intent / entry contract"),
-            ("intake", "chokmah", "Raw force intake"),
-            ("constraint", "binah", "Schema / form constraint"),
-            ("expand", "chesed", "Generative expansion"),
-            ("adversarial", "geburah", "Severity / filtering"),
-            ("synthesis", "tiphareth", "Central judgment / scoring"),
-            ("persist", "netzach", "Enduring pattern"),
-            ("analyze", "hod", "Analytical decomposition"),
-            ("store", "yesod", "Foundation / substrate"),
-            ("output", "malkuth", "Concrete manifestation"),
-        ],
-        "core_collapse": ["intent", "synthesis", "output"],
-    },
-    "alchemical-stages": {
-        "title": "Alchemical Stages",
-        "reference": "references/alchemical-stages.md",
-        "default_loci": [
-            ("raw_ingest", "nigredo", "Chaos / putrefaction intake"),
-            ("purify", "albedo", "Separation / schema wash"),
-            ("illuminate", "citrinitas", "Insight / scoring"),
-            ("coagulate", "rubedo", "Final stable emission"),
-        ],
-        "core_collapse": ["raw_ingest", "illuminate", "coagulate"],
-    },
-    "elder-futhark": {
-        "title": "Elder Futhark",
-        "reference": "references/elder-futhark.md",
-        "default_loci": [
-            ("resource", "fehu", "Resource / wealth pool"),
-            ("signal_intake", "ansuz", "Inspired signal intake"),
-            ("hard_constraint", "nauthiz", "Need-driven constraint"),
-            ("protection", "algiz", "Guardian / protection layer"),
-            ("just_judgment", "tiwaz", "Ordered judgment"),
-            ("human_surface", "mannaz", "Human / community surface"),
-            ("inherited_store", "othala", "Ancestral / inherited store"),
-        ],
-        "core_collapse": ["signal_intake", "just_judgment", "human_surface"],
-    },
-    "planetary-spheres": {
-        "title": "Planetary Spheres",
-        "reference": "references/planetary-spheres.md",
-        "default_loci": [
-            ("boundary", "saturn", "Hard boundary / persistence"),
-            ("governance", "jupiter", "Expansion policy / law"),
-            ("adversarial", "mars", "Severity / conflict"),
-            ("core", "sun", "Central synthesis / sovereignty"),
-            ("relation", "venus", "Relation / value"),
-            ("comms", "mercury", "Translation / messaging"),
-            ("memory", "moon", "Memory / flux"),
-        ],
-        "core_collapse": ["boundary", "core", "comms"],
-    },
-    "iching-hexagrams": {
-        "title": "I Ching (curated)",
-        "reference": "references/iching-hexagrams.md",
-        "default_loci": [
-            ("init", "qian_creative", "Pure initiation"),
-            ("wait", "xu_waiting", "Deliberate accumulation"),
-            ("conflict", "song_conflict", "Open polarity"),
-            ("harmony", "tai_peace", "Balanced flow"),
-            ("return", "fu_return", "Cyclic renewal"),
-            ("revolution", "ge_revolution", "Radical change"),
-            ("completion", "jiji_completion", "Ordered completion"),
-        ],
-        "core_collapse": ["init", "harmony", "completion"],
-    },
-    "solomonic": {
-        "title": "Solomonic Hierarchy",
-        "reference": "references/solomonic.md",
-        "default_loci": [
-            ("sovereign", "king_contract", "Root authority"),
-            ("domain_owner", "duke_service", "Major domain ownership"),
-            ("executive", "president_admin", "Operational control"),
-            ("task_agent", "knight_worker", "Task-scoped worker"),
-            ("knowledge", "solomonic_knowledge", "Revelation / research"),
-            ("binding", "solomonic_bind", "Constraint / containment"),
-            ("judgment", "solomonic_justice", "Truth / judgment"),
-        ],
-        "core_collapse": ["sovereign", "executive", "task_agent"],
-    },
-    "peircean-signs": {
-        "title": "Peircean Signs",
-        "reference": "references/peircean-signs.md",
-        "default_loci": [
-            ("likeness", "icon", "Similarity representation"),
-            ("trace", "index", "Causal / contiguity link"),
-            ("convention", "symbol", "Conventional code"),
-            ("type_schema", "legisign", "General type / law"),
-            ("instance", "sinsign", "Concrete token / event"),
-            ("inference", "argument", "Necessary consequence"),
-        ],
-        "core_collapse": ["trace", "convention", "inference"],
-    },
-    "numogram": {
-        "title": "Numogram",
-        "reference": "references/numogram.md",
-        "default_loci": [
-            ("potential", "zone_0", "Void / pure potential"),
-            ("init", "zone_1", "First differentiation"),
-            ("structure", "zone_4", "Stable order"),
-            ("threshold", "zone_5", "Tipping / intensive peak"),
-            ("feedback", "zone_6", "Resonance / amplify"),
-            ("completion", "zone_9", "Return / final intensity"),
-        ],
-        "core_collapse": ["init", "threshold", "completion"],
-    },
-    "sacred-geometry": {
-        "title": "Sacred Geometry",
-        "reference": "references/sacred-geometry.md",
-        "default_loci": [
-            ("nested_core", "golden_depth", "φ-bounded nesting"),
-            ("coord_graph", "tetrahedral_core", "Minimal coordination"),
-            ("shared_zone", "vesica_interface", "Shared contract overlap"),
-            ("fractal_layer", "self_similar", "Recursive repetition"),
-        ],
-        "core_collapse": ["nested_core", "shared_zone"],
-    },
-    "enochian": {
-        "title": "Enochian",
-        "reference": "references/enochian.md",
-        "default_loci": [
-            ("edge_intake", "aethyr_tex", "Material gateway / edge intake"),
-            ("air_comms", "watchtower_east", "Air domain — analysis / messaging"),
-            ("fire_transform", "watchtower_south", "Fire domain — transformation"),
-            ("water_memory", "watchtower_west", "Water domain — memory / flux"),
-            ("earth_persist", "watchtower_north", "Earth domain — persistence"),
-            ("domain_entry", "enochian_call", "Invocation / domain-entry token"),
-            ("root_truth_seal", "sigillum_dei_aemeth", "Root truth / session authority seal"),
-            ("jurisdiction_token", "governor_character", "Part-of-Earth placement sigil"),
-            ("cross_domain_bus", "tablet_of_union", "Spirit bus / Black Cross coordination"),
-            ("inverse_capability", "cacodemon_mirror", "Inverse / adversarial fail-mode surface"),
-            ("sovereign_intent", "aethyr_lil", "Apex intent / pure contract"),
-        ],
-        "core_collapse": ["edge_intake", "domain_entry", "sovereign_intent"],
-    },
-    "chaos-magic": {
-        "title": "Chaos Magic",
-        "reference": "references/chaos-magic.md",
-        "default_loci": [
-            ("paradigm_switch", "chaos_shift", "Paradigm engine / framework select"),
-            ("intent_token", "sigil_glyph", "Compressed intent token"),
-            ("context_reset", "banishing_clear", "Session / context banishing"),
-            ("outcome_gate", "results_metric", "Results eval gate"),
-            ("custom_alphabet", "alphabet_desire", "Project-local symbolic encoding"),
-        ],
-        "core_collapse": ["paradigm_switch", "intent_token", "outcome_gate"],
-    },
-}
+def _load_frameworks() -> dict[str, dict[str, Any]]:
+    """Load canonical framework tables from schemas/frameworks.v1.json."""
+    path = SKILL_ROOT / "schemas" / "frameworks.v1.json"
+    if not path.exists():
+        raise SystemExit(f"MISSING frameworks schema: {path}")
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    frameworks: dict[str, dict[str, Any]] = {}
+    for key, meta in raw.get("frameworks", {}).items():
+        loci = []
+        for row in meta.get("default_loci", []):
+            loci.append(
+                (
+                    row["mechanical"],
+                    row["symbolic"],
+                    row.get("note") or "",
+                )
+            )
+        frameworks[key] = {
+            "title": meta["title"],
+            "reference": meta["reference"],
+            "default_loci": loci,
+            "core_collapse": list(meta.get("core_collapse") or []),
+        }
+    return frameworks
+
+
+FRAMEWORKS: dict[str, dict[str, Any]] = _load_frameworks()
 
 
 def _utc_now() -> str:
@@ -247,6 +121,7 @@ def cmd_check(_: argparse.Namespace) -> int:
     required = [
         "SKILL.md", "orchestra.manifest.yaml", "VERSION",
         "schemas/correspondence-table.v1.schema.json",
+        "schemas/frameworks.v1.json",
     ]
     for rel in required:
         if not (SKILL_ROOT / rel).exists():
