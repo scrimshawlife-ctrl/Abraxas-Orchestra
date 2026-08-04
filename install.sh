@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-# Abraxas Orchestra — atomic installer (v0.1.3)
+# Abraxas Orchestra — atomic installer (v0.1.4)
 # Default: ~/.hermes/skills/orchestra
 # Supports --dry-run, --rollback, --target DIR, --allow-outside-home
 
 set -euo pipefail
 
-VERSION="0.1.3"
+VERSION="0.1.4"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_TARGET="${HOME}/.hermes/skills/orchestra"
 BACKUP_ROOT="${HOME}/.hermes/receipts/orchestra-backups"
@@ -242,6 +242,6 @@ backup_existing
 atomic_install
 
 log "Installed Abraxas Orchestra ${VERSION} → ${TARGET}"
-log "Try: python3 ${TARGET}/scripts/orchestra.py do list-frameworks"
+log "Try: python3 ${TARGET}/scripts/orchestra.py list"
 log "     python3 ${TARGET}/scripts/orchestra.py check"
 log "     bash ${TARGET}/scripts/smoke.sh"
