@@ -69,3 +69,46 @@ In code, Paths become explicit adapter modules, interface packages, or typed tra
 - Four Worlds give a clean vertical stratification even when the full Tree is reduced.
 
 Load this file when Tree of Life is selected as primary or secondary framework.
+
+## Four Worlds (stacking)
+
+Use when a single Sephira set is not enough for multi-layer systems.
+
+| World | Focus | Typical software layer |
+|-------|-------|------------------------|
+| Atziluth | Archetypal will | Intent contracts, policy roots |
+| Briah | Creation / form | Schemas, types, interfaces |
+| Yetzirah | Formation | Services, pipelines, agents |
+| Assiah | Action | Runtime, I/O, side effects |
+
+Stacking rule: do not put Assiah concerns in Atziluth modules. Paths between worlds are explicit package boundaries.
+
+## CLI default loci (mechanical → symbolic)
+
+| Mechanical | Symbolic |
+|------------|----------|
+| intent | kether |
+| intake | chokmah |
+| constraint | binah |
+| expand | chesed |
+| adversarial | geburah |
+| synthesis | tiphareth |
+| persist | netzach |
+| analyze | hod |
+| store | yesod |
+| output | malkuth |
+
+Core collapse for `do project`: **intent, synthesis, output**.
+
+## Dual-naming pattern
+
+```text
+# mechanical: synthesis
+# symbolic:   tiphareth
+# locus:      Central judgment / scoring
+```
+
+## Related
+
+- Pipeline overlay: `references/alchemical-stages.md`
+- Projection: `references/pragmatic-projections.md`
