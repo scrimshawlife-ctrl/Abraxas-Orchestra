@@ -4,6 +4,8 @@ All notable changes to Abraxas Orchestra will be recorded here.
 
 The format follows Keep a Changelog principles. Versions follow Semantic Versioning.
 
+Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
+
 ## [0.1.2] — 2026-08-04
 
 ### Added
@@ -14,6 +16,7 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 - `docs/ROADMAP.md` — done vs deferred production bar
 - `CONTRIBUTING.md` — smoke gate + framework-add checklist
 - `schemas/frameworks.v1.json` — canonical framework loci (single source of truth)
+- `docs/RELEASE_NOTES.md` — narrative release notes for operators and agents
 
 ### Fixed
 - Enochian-chaos example regenerated with dual-named module stubs on disk
