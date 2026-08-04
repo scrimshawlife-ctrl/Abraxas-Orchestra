@@ -14,6 +14,8 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 - Installer stages `LICENSE`, `examples`, and itself
 
 ### Added
+- `references/agent-posture.md` — coding-agent build rules (layered growth, current-req only, gated compatibility)
+- SKILL.md / DESIGN pointers to agent posture (not a framework enum entry)
 - Proprietary `LICENSE` and `.gitignore`
 - Example: `examples/enochian-chaos-skeleton/` (Enochian primary + Chaos Magic overlay)
 - Mermaid diagrams for Enochian + Chaos overlay (`EXAMPLE.md`, `references/enochian.md`)
