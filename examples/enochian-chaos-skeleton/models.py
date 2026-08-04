@@ -7,6 +7,23 @@ from enum import Enum
 from typing import Any
 
 
+class PipelineError(Exception):
+    """Base error for Enochian session pipeline failures."""
+
+    def __init__(self, stage: str, message: str, *, details: dict[str, Any] | None = None) -> None:
+        self.stage = stage
+        self.details = details or {}
+        super().__init__(f"[{stage}] {message}")
+
+
+class ValidationError(PipelineError):
+    """Invalid inputs before or during a stage."""
+
+
+class StageError(PipelineError):
+    """Unexpected failure inside a pipeline stage."""
+
+
 class EpistemicLabel(str, Enum):
     OBSERVED = "OBSERVED"
     INFERRED = "INFERRED"
