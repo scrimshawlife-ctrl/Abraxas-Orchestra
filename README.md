@@ -1,7 +1,7 @@
 # Abraxas Orchestra
 
 <p align="center">
-  <img src="assets/hero.jpg" alt="Abraxas Orchestra — symbolic architecture skill" width="720"/>
+  <img src="assets/hero.svg" alt="Abraxas Orchestra — symbolic architecture skill" width="720"/>
 </p>
 
 <p align="center">
@@ -47,7 +47,7 @@ bash install.sh --target ~/.openclaw/skills/orchestra    # OpenClaw
 | Theme | What landed |
 |-------|-------------|
 | Single source of truth | `schemas/frameworks.v1.json` drives CLI loci |
-| Packaging | Smoke script, 13 unit tests, CI 3.11/3.12, atomic install |
+| Packaging | Smoke script, 14 unit tests, CI 3.11/3.12, atomic install |
 | Deploy | Ordered path in `docs/DEPLOY.md` |
 | Examples | Signal-forager pipeline; Enochian + Chaos stubs |
 
@@ -105,7 +105,7 @@ Do **not** invent symbolic loci to satisfy a map. Return `NOT_COMPUTABLE` or mar
 ## Repository layout
 
 ```text
-assets/hero.jpg          # README hero art
+assets/hero.svg          # README hero (JPEG optional)
 SKILL.md                 # Agent contract
 orchestra.manifest.yaml  # Install / discovery metadata
 scripts/orchestra.py     # CLI
@@ -114,7 +114,7 @@ references/              # Framework tables + agent-posture
 schemas/                 # correspondence-table.v1 + frameworks.v1
 examples/                # signal-forager; enochian-chaos
 tests/                   # stdlib unittest
-docs/                    # DESIGN, DEPLOY, RELEASE_NOTES, ROADMAP, …
+docs/                    # DESIGN, DEPLOY, RELEASE_NOTES, ROADMAP, SECURITY
 install.sh               # Atomic installer
 ```
 
@@ -132,6 +132,7 @@ install.sh               # Atomic installer
 | `docs/DESIGN.md` | Design rationale |
 | `docs/OPENCLAW.md` | OpenClaw packaging |
 | `docs/COMMUNITY.md` | Community-skills compliance |
+| `docs/SECURITY.md` | Local threat model |
 | `references/agent-posture.md` | Code implementation posture |
 | `CHANGELOG.md` | Machine version history |
 

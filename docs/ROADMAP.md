@@ -12,13 +12,14 @@
 | Enochian + Chaos example | Structure + Mermaid |
 | Agent posture | Non-framework build rules |
 | Human/agent docs | README, COMMUNITY, SKILL frontmatter |
-| **Automated tests** | `tests/test_orchestra.py` (13 tests) |
+| **Automated tests** | `tests/test_orchestra.py` (14 tests) |
 | **Smoke script** | `scripts/smoke.sh` |
 | **CI** | `.github/workflows/ci.yml` |
 | **Deploy guide** | `docs/DEPLOY.md` |
 | **Release notes** | `docs/RELEASE_NOTES.md` |
 | **Security notes** | `docs/SECURITY.md` |
 | **Canonical loci JSON** | `schemas/frameworks.v1.json` (CLI loads at startup) |
+| **Text-safe hero** | `assets/hero.svg` |
 
 ## Explicitly deferred
 
@@ -51,7 +52,7 @@ Public registry listing additionally requires license compatibility (`docs/COMMU
 | `docs/RELEASE_NOTES.md` | Narrative 0.1.2 notes |
 | `docs/SECURITY.md` | Local threat model |
 
-Still operator-local: **hero binary** (`assets/hero.jpg`), optional `v0.1.2` tag.
+Hero: **`assets/hero.svg`** ships in-repo (text-safe). Optional photographic `hero.jpg` still operator-local. Optional `v0.1.2` tag still operator-local.
 
 ## Next steps for deployment
 
