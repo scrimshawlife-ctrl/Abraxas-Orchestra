@@ -197,6 +197,67 @@ class TestExamples(unittest.TestCase):
         for key in ("summary", "provenance"):
             self.assertIn(key, data)
 
+    def test_enochian_validation_error(self) -> None:
+        import sys as _sys
+
+        root = ROOT / "examples" / "enochian-chaos-skeleton"
+        _sys.path.insert(0, str(root))
+        try:
+            from models import ValidationError  # type: ignore
+            from pipeline import run_session  # type: ignore
+
+            with self.assertRaises(ValidationError) as ctx:
+                run_session(
+                    session_id="",
+                    operator="op",
+                    intent_id="i1",
+                    statement="x",
+                    edge_items=[],
+                )
+            self.assertEqual(ctx.exception.stage, "input")
+        finally:
+            _sys.path.remove(str(root))
+            for name in list(_sys.modules):
+                if name in ("models", "pipeline") or name.startswith(
+                    (
+                        "root_truth",
+                        "domain_entry",
+                        "edge_intake",
+                        "cross_domain",
+                        "inverse",
+                        "sovereign",
+                    )
+                ):
+                    _sys.modules.pop(name, None)
+
+    def test_forager_validation_error(self) -> None:
+        import sys as _sys
+
+        root = ROOT / "examples" / "signal-forager-skeleton"
+        _sys.path.insert(0, str(root))
+        try:
+            from models import ValidationError  # type: ignore
+            from pipeline import run_forage  # type: ignore
+
+            with self.assertRaises(ValidationError) as ctx:
+                run_forage("", [])
+            self.assertEqual(ctx.exception.stage, "intent")
+        finally:
+            _sys.path.remove(str(root))
+            for name in list(_sys.modules):
+                if name in (
+                    "models",
+                    "pipeline",
+                    "intent",
+                    "intake",
+                    "constraint",
+                    "adversarial",
+                    "synthesis",
+                    "store",
+                    "output",
+                ):
+                    _sys.modules.pop(name, None)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
