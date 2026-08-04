@@ -1,15 +1,27 @@
 ---
 name: orchestra
 description: >
-  Hermes and OpenClaw coding-agent skill for symbolic code architecture.
-  Structures modules, pipelines, interfaces, and agent systems according to
-  traditional esoteric maps (Tree of Life, alchemical stages, Elder Futhark,
-  planetary spheres, I Ching, Solomonic hierarchy, Peircean signs, Numogram,
-  sacred geometry, Enochian, Chaos Magic) while remaining production-grade.
-  Use when designing architecture, refactoring for symbolic coherence,
-  generating correspondence tables, dual-named skeletons, paradigm selection,
-  or governed structure inside Abraxas-related work. Fail-closed on weak
-  mappings. Corpus open for expansion.
+  Structure code and agent systems with dual-named modules using traditional
+  correspondence maps (Tree of Life, alchemy, runes, planetary, I Ching,
+  Solomonic, Peircean, Numogram, geometry, Enochian, Chaos Magic). Use when
+  designing architecture, emitting skeletons, correspondence tables, or
+  paradigm overlays. Fail-closed on weak mappings. Hermes and OpenClaw.
+version: 0.1.1
+license: LicenseRef-Proprietary
+compatibility: Requires Python 3.11+; no network required for CLI
+metadata:
+  author: Applied Alchemy Labs
+  homepage: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
+  openclaw:
+    requires:
+      bins:
+        - python3
+  hermes:
+    tags:
+      - architecture
+      - symbolic
+      - abraxas
+      - structuring
 ---
 
 # Abraxas Orchestra
@@ -60,6 +72,13 @@ Activate on requests that involve any of:
 - Paradigm selection / switching among symbolic maps
 - Governed structure inside Abraxas-related work
 - CLI intents: `do structure`, `do project`, `do list-frameworks`, `check`
+
+## When not to use
+
+- Generic CRUD or app scaffolding with no symbolic/architecture intent
+- Operative magic, ritual execution, or spiritual instruction
+- Tasks that need network APIs or secret-bearing integrations (this skill does not provide them)
+- Silent large refactors of production systems without operator review
 
 ## Mandatory Operating Sequence
 
