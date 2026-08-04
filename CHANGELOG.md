@@ -6,19 +6,16 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 ## [Unreleased]
 
-### Added
-- Enochian **Sigils and Seals** taxonomy in `references/enochian.md`
-  - Sigillum Dei Aemeth as root truth/session seal
-  - Heptarchic ensigns / office seals
-  - Watchtower domain seals
-  - Governor characters as jurisdiction placement sigils
-  - Explicit separation from Chaos Magic intent-sigils
-- CLI enochian loci: `root_truth_seal`, `jurisdiction_token`
-- Prior Enochian expansion: Dee vs neo streams, Heptarchia, Parts of the Earth, Union, cacodemons
-- Hermes/OpenClaw coding-agent packaging; 11 frameworks; signal-forager example
+### Fixed
+- Correspondence schema enum expanded to all 11 frameworks + `composite`
+- Schema allows `overlay_note` on mappings (matches CLI emission)
+- `orchestra check` now emits sample tables and validates against schema
+- Installer requires all framework reference files (not only Tree/Alchemy)
+- Installer executable bit set; `.gitignore` and proprietary `LICENSE` added
 
-### Changed
-- SKILL.md, manifest, README, DESIGN, OPENCLAW aligned to dual-host skill
+### Added
+- Enochian Sigils/Seals taxonomy; Dee vs neo streams; Heptarchia; Parts; Union; cacodemons
+- Hermes/OpenClaw coding-agent packaging; 11 frameworks; signal-forager example
 
 ## [0.1.0] — 2026-08-04
 

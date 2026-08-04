@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+
+# Orchestra local emissions
+*_demo_out/
+*_out/
+.orchestra-scratch/
+
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Installer receipts (local only)
+.hermes/
+.openclaw/
