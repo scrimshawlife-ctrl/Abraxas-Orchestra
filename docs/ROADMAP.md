@@ -1,77 +1,34 @@
-# Roadmap and production readiness
+# Roadmap
 
-## Done (v0.1.1 → v0.1.2 engineering)
+## Active implementation plan
 
-| Item | Notes |
-|------|--------|
-| 11-framework open corpus | Including Enochian seals + Chaos Magic |
-| CLI structure / project / check | Stdlib only |
-| Schema validation in `check` | Sample tables per framework |
-| Atomic installer | Hermes + OpenClaw `--target` |
-| Signal-forager example | Runnable pipeline + structured errors |
-| Enochian + Chaos example | Runnable session pipeline + structured errors |
-| Agent posture | Non-framework build rules |
-| Human/agent docs | README, COMMUNITY, SKILL frontmatter |
-| **Automated tests** | `tests/test_orchestra.py` (17 tests) |
-| **Smoke script** | `scripts/smoke.sh` |
-| **CI** | `.github/workflows/ci.yml` |
-| **Deploy guide** | `docs/DEPLOY.md` |
-| **Release notes** | `docs/RELEASE_NOTES.md` |
-| **Security notes** | `docs/SECURITY.md` |
-| **Canonical loci JSON** | `schemas/frameworks.v1.json` (CLI loads at startup) |
-| **Text-safe hero** | `assets/hero.svg` |
-| **Freeze checklist** | `docs/COMPLETION.md` |
+Repo **analyze → map → optimize** (Cursor-ready): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMIZE_PLAN.md).
 
-## Explicitly deferred
+---
 
-| Item | Reason |
-|------|--------|
-| OSI relicense | Operator decision (blocks some public hubs) |
-| Dedicated `openclaw` git branch | Install path already works via `--target` |
-| pytest / coverage gates | Stdlib unittest is enough for v0.1 |
-| Runtime ritual / network integrations | Out of skill scope |
-| Multi-agent orchestration product | Separate Abraxas systems |
+## Done (0.1.x surface)
 
-## Production readiness bar (skill package)
+- Eleven-framework corpus + `schemas/frameworks.v1.json`
+- CLI: `check` | `list` | `structure` | `project` | `diagram`
+- Auto diagram on `structure`/`project --out` (HTML + JSON + Mermaid)
+- Atomic installer with path jail
+- Apache-2.0 public packaging + security audit docs
+- Runnable examples (signal-forager, enochian-chaos)
 
-A release is production-ready for **private Hermes/OpenClaw install** when:
+## Next (see ANALYZE_OPTIMIZE_PLAN)
 
-1. `bash scripts/smoke.sh` exits 0  
-2. `VERSION` matches manifest + CHANGELOG section  
-3. No undeclared network or secrets in CLI path  
-4. Fail-closed paths covered by tests (unknown framework, same overlay)  
-5. Installer `--dry-run` succeeds  
+| Phase | Command | Scope |
+|-------|---------|-------|
+| A | `analyze` | Read-only repo graph + optional framework map |
+| B | `optimize` | Plan only from analysis artifact |
+| C | `optimize --apply --confirm` | Gated mutation + backup |
 
-Public registry listing additionally requires license compatibility (`docs/COMMUNITY.md`).
+Suggested versions: A/B → `0.2.x` · C → `0.3.0`.
 
-## Closed gap pass (docs + loci parity)
+## Deferred
 
-| Item | Notes |
-|------|--------|
-| CLI loads `schemas/frameworks.v1.json` | No embedded FRAMEWORKS dict |
-| CLI default loci on framework refs | Aligned with JSON |
-| `docs/RELEASE_NOTES.md` | Narrative 0.1.2 notes |
-| `docs/SECURITY.md` | Local threat model |
-
-Hero: **`assets/hero.svg`** ships in-repo (text-safe). Optional photographic `hero.jpg` still operator-local. Optional `v0.1.2` tag still operator-local.
-
-## Freeze gate (v0.1.2)
-
-Full checklist: **[`COMPLETION.md`](COMPLETION.md)**.
-
-| Gate | Owner | Status |
-|------|-------|--------|
-| Smoke + 17 tests on `main` | CI / operator | **Met** |
-| Dual runnable examples + error handling | repo | **Met** |
-| Docs (DEPLOY, SECURITY, RELEASE_NOTES) | repo | **Met** |
-| Host install once | operator | Pending local |
-| `v0.1.2` tag | operator | Pending local |
-| Photographic hero | operator | Optional |
-
-When host install is verified and the tag is pushed, mark 0.1.2 **frozen**. Open 0.2 only for contract changes or new product scope.
-
-## Next steps for deployment
-
-Follow **`docs/DEPLOY.md`** in order.
-
-See also: [`COMPLETION.md`](COMPLETION.md) · [`RELEASE_NOTES.md`](RELEASE_NOTES.md) · [`CHANGELOG.md`](../CHANGELOG.md) · [`SECURITY.md`](SECURITY.md).
+- Multi-language analyze beyond Python
+- Network install / remote repo fetch
+- pytest coverage gates as hard CI requirement
+- Ritual/network runtime systems
+- Dedicated OpenClaw fork branch
