@@ -5,7 +5,7 @@
 
 set -euo pipefail
 
-VERSION="0.1.1"
+VERSION="0.1.2"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 DEFAULT_TARGET="${HOME}/.hermes/skills/orchestra"
 BACKUP_ROOT="${HOME}/.hermes/receipts/orchestra-backups"
@@ -131,9 +131,12 @@ atomic_install() {
   run "cp -a '${SCRIPT_DIR}/schemas' '${staging}/'"
   run "cp -a '${SCRIPT_DIR}/docs' '${staging}/'" 2>/dev/null || true
   run "cp -a '${SCRIPT_DIR}/examples' '${staging}/'" 2>/dev/null || true
+  run "cp -a '${SCRIPT_DIR}/tests' '${staging}/'" 2>/dev/null || true
   run "cp -a '${SCRIPT_DIR}/install.sh' '${staging}/'" 2>/dev/null || true
 
   run "chmod +x '${staging}/scripts/orchestra.py'"
+  run "chmod +x '${staging}/scripts/smoke.sh'" 2>/dev/null || true
+  run "chmod +x '${staging}/install.sh'" 2>/dev/null || true
 
   log "Activating at ${TARGET}"
   if [[ $DRY_RUN -eq 1 ]]; then
@@ -160,3 +163,4 @@ log "Installed Abraxas Orchestra ${VERSION} → ${TARGET}"
 log "Try: python3 ${TARGET}/scripts/orchestra.py do list-frameworks"
 log "     python3 ${TARGET}/scripts/orchestra.py do structure -f tree-of-life"
 log "     python3 ${TARGET}/scripts/orchestra.py check"
+log "     bash ${TARGET}/scripts/smoke.sh"

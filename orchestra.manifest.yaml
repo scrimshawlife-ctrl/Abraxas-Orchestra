@@ -1,5 +1,5 @@
 name: orchestra
-version: 0.1.1
+version: 0.1.2
 display_name: Abraxas Orchestra
 kind: hermes-openclaw-skill
 
@@ -13,17 +13,14 @@ description: >
 homepage: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
 repository: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
 
-# Skill discovery
 skill_entry: SKILL.md
 cli_entry: scripts/orchestra.py
 installer: install.sh
 
-# Supported host environments
 hosts:
   - hermes
   - openclaw
 
-# Install targets
 install:
   hermes_path: ~/.hermes/skills/orchestra
   openclaw_path: ~/.openclaw/skills/orchestra
@@ -31,7 +28,6 @@ install:
   supports_dry_run: true
   supports_rollback: true
 
-# Frameworks exposed in v0.1 (corpus open for additive expansion)
 frameworks:
   - tree-of-life
   - alchemical-stages
@@ -45,23 +41,19 @@ frameworks:
   - enochian
   - chaos-magic
 
-# CLI intents
 intents:
   - do list-frameworks
   - do structure
   - do project
   - check
 
-# Schema contracts
 schemas:
   correspondence_table: schemas/correspondence-table.v1.schema.json
 
-# Examples
 examples:
   - examples/signal-forager-skeleton/
   - examples/enochian-chaos-skeleton/
 
-# Governance posture
 governance:
   fail_closed: true
   human_sovereignty: true
@@ -69,13 +61,12 @@ governance:
   observed_first: true
   corpus_open: true
 
-# License posture
 license: proprietary
 
-# Metadata
 metadata:
   abraxas_family: true
   design_doc: docs/DESIGN.md
   openclaw_doc: docs/OPENCLAW.md
+  roadmap_doc: docs/ROADMAP.md
   min_python: "3.11"
   skill_type: coding-agent
