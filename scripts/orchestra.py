@@ -4,6 +4,9 @@ Abraxas Orchestra — CLI entrypoint (v0.1 executable surface)
 
 Minimal, fail-closed, dual-naming skeleton emitter.
 Stdlib only. No external dependencies.
+
+Commands: check | list | structure | project
+Legacy: do <command> still accepted.
 """
 
 from __future__ import annotations
@@ -15,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:
@@ -445,40 +448,52 @@ def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
         prog="orchestra",
         description="Abraxas Orchestra — symbolic code architecture CLI",
+        epilog="Commands: check | list | structure | project",
     )
     p.add_argument("--version", action="version", version=f"Orchestra {VERSION}")
     sub = p.add_subparsers(dest="command", required=True)
 
-    do_p = sub.add_parser("do", help="Execute an intent")
-    do_sub = do_p.add_subparsers(dest="intent", required=True)
-
     def add_structure_args(sp: argparse.ArgumentParser) -> None:
         sp.add_argument("--framework", "-f", required=True, help="Primary framework key")
-        sp.add_argument("--overlay", "-o", default=None, help="Secondary overlay")
+        sp.add_argument("--overlay", "-o", default=None, help="Secondary overlay framework")
         sp.add_argument("--concerns", "-c", default=None, help="Comma-separated concerns")
         sp.add_argument("--out", default=None, help="Write skeleton + JSON to DIR")
 
-    struct_p = do_sub.add_parser("structure", help="Emit dual-named skeleton + correspondence table")
+    check_p = sub.add_parser("check", help="Validate skill integrity")
+    check_p.set_defaults(func=cmd_check)
+
+    list_p = sub.add_parser("list", help="List available frameworks", aliases=["list-frameworks"])
+    list_p.set_defaults(func=cmd_list_frameworks)
+
+    struct_p = sub.add_parser("structure", help="Emit dual-named skeleton + correspondence table")
     add_structure_args(struct_p)
     struct_p.set_defaults(func=cmd_structure)
 
-    project_p = do_sub.add_parser(
+    project_p = sub.add_parser(
         "project",
         help="Emit skeleton with pragmatic projection (collapse oversized / forced maps)",
     )
     add_structure_args(project_p)
     project_p.set_defaults(func=cmd_project)
 
-    list_p = do_sub.add_parser("list-frameworks", help="List available frameworks")
-    list_p.set_defaults(func=cmd_list_frameworks)
-
-    check_p = sub.add_parser("check", help="Validate skill integrity")
-    check_p.set_defaults(func=cmd_check)
-
     return p
 
 
+def _normalize_argv(argv: list[str] | None) -> list[str] | None:
+    """Accept legacy `do <cmd>` by stripping the `do` token."""
+    if argv is None:
+        return None
+    if len(argv) >= 2 and argv[0] == "do":
+        print(
+            "note: `do` is optional — use `orchestra <command>` directly",
+            file=sys.stderr,
+        )
+        return argv[1:]
+    return argv
+
+
 def main(argv: list[str] | None = None) -> int:
+    argv = _normalize_argv(argv if argv is not None else sys.argv[1:])
     parser = build_parser()
     args = parser.parse_args(argv)
     return args.func(args)
