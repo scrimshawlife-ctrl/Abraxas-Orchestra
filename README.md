@@ -8,7 +8,7 @@
   <strong>Hermes + OpenClaw coding-agent skill</strong> for symbolic code architecture
 </p>
 
-Version **0.1.2** · Skill name: `orchestra` · Python ≥ 3.11 · Network: not required
+Version **0.1.3** · Skill name: `orchestra` · Python ≥ 3.11 · Network: not required · License: Apache-2.0
 
 Maps software structure onto traditional correspondence systems (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic) and emits **dual-named skeletons** with recoverable provenance.
 
@@ -20,7 +20,7 @@ Fail-closed on weak mappings. Human sovereignty over forced maps. Corpus open fo
 
 **Deploy to Hermes/OpenClaw:** follow [`docs/DEPLOY.md`](docs/DEPLOY.md) (validate → dry-run → install → verify → wire host).
 
-**Freeze checklist:** [`docs/COMPLETION.md`](docs/COMPLETION.md)
+**Freeze checklist:** [`docs/COMPLETION.md`](docs/COMPLETION.md) · **Public debut:** [`docs/PUBLIC_RELEASE.md`](docs/PUBLIC_RELEASE.md)
 
 ```bash
 git clone https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
@@ -40,20 +40,24 @@ bash install.sh                                          # → ~/.hermes/skills/
 bash install.sh --target ~/.openclaw/skills/orchestra    # OpenClaw
 ```
 
+Installer refuses system paths and targets outside `$HOME` unless `--allow-outside-home`.
+
 ---
 
 ## Release notes
 
-**Current: [0.1.2](docs/RELEASE_NOTES.md#012--2026-08-04)** (2026-08-04) — private Hermes/OpenClaw production bar.
+**Current: [0.1.3](docs/RELEASE_NOTES.md#013--2026-08-04)** (2026-08-04) — public debut (Apache-2.0) + installer path jail.
 
 | Theme | What landed |
 |-------|-------------|
+| License | Apache-2.0 + NOTICE |
+| Security | Path jail installer, audit record, disclosure policy |
 | Single source of truth | `schemas/frameworks.v1.json` drives CLI loci |
-| Packaging | Smoke script, 17 unit tests, CI 3.11/3.12, atomic install |
+| Packaging | Smoke script, 19 unit tests, CI 3.11/3.12, atomic install |
 | Deploy | Ordered path in `docs/DEPLOY.md` |
 | Examples | Signal-forager pipeline; Enochian + Chaos session |
 
-Full narrative: **[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)** · Machine changelog: [`CHANGELOG.md`](CHANGELOG.md)
+Full narrative: **[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)** · Machine changelog: [`CHANGELOG.md`](CHANGELOG.md) · Audit: [`docs/SECURITY_AUDIT.md`](docs/SECURITY_AUDIT.md)
 
 ---
 
@@ -116,8 +120,9 @@ references/              # Framework tables + agent-posture
 schemas/                 # correspondence-table.v1 + frameworks.v1
 examples/                # signal-forager; enochian-chaos
 tests/                   # stdlib unittest
-docs/                    # DESIGN, DEPLOY, COMPLETION, RELEASE_NOTES, …
-install.sh               # Atomic installer
+docs/                    # DESIGN, DEPLOY, COMPLETION, PUBLIC_RELEASE, …
+install.sh               # Atomic installer (path jail)
+LICENSE / NOTICE         # Apache-2.0
 ```
 
 ---
@@ -128,7 +133,9 @@ install.sh               # Atomic installer
 |-----|----------|
 | `SKILL.md` | Agents |
 | `README.md` | Humans + agents |
-| `docs/COMPLETION.md` | v0.1.2 freeze checklist |
+| `docs/COMPLETION.md` | Private production freeze checklist |
+| `docs/PUBLIC_RELEASE.md` | Public debut packaging checklist |
+| `docs/SECURITY_AUDIT.md` | Security audit record (0.1.3) |
 | `docs/RELEASE_NOTES.md` | Narrative release notes |
 | `docs/DEPLOY.md` | Ordered deployment next steps |
 | `docs/ROADMAP.md` | Done / deferred / production bar |
@@ -138,16 +145,19 @@ install.sh               # Atomic installer
 | `docs/SECURITY.md` | Local threat model |
 | `references/agent-posture.md` | Code implementation posture |
 | `CHANGELOG.md` | Machine version history |
+| `.github/SECURITY.md` | Vulnerability reporting |
 
 ---
 
 ## Safety and requirements
 
+Installer refuses system paths and targets outside `$HOME` unless `--allow-outside-home`. CLI performs no network I/O. No third-party runtime dependencies. See [`docs/SECURITY_AUDIT.md`](docs/SECURITY_AUDIT.md).
+
 - **Runtime:** Python 3.11+ standard library only for the CLI
 - **Network:** Not required for `check` / `structure` / `project`
 - **State:** Mutable state stays outside the install root
 - **Destructive ops:** Installer replaces target after backup; use `--dry-run` first
-- **License:** Proprietary evaluation terms — see `LICENSE`
+- **License:** Apache-2.0 — see `LICENSE` and `NOTICE`
 
 ---
 
@@ -155,5 +165,7 @@ install.sh               # Atomic installer
 
 - Repo: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
 - Freeze checklist: [`docs/COMPLETION.md`](docs/COMPLETION.md)
+- Public debut: [`docs/PUBLIC_RELEASE.md`](docs/PUBLIC_RELEASE.md)
+- Security audit: [`docs/SECURITY_AUDIT.md`](docs/SECURITY_AUDIT.md)
 - Release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)
 - Deploy: [`docs/DEPLOY.md`](docs/DEPLOY.md)

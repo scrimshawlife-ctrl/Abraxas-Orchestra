@@ -20,6 +20,7 @@ Checklist for listing **orchestra** in agent skill hubs (OpenClaw, Hermes Skills
 |-------------|--------|-------|
 | Install path documented | Pass | `~/.hermes/skills/orchestra`, `~/.openclaw/skills/orchestra` |
 | Atomic install + dry-run | Pass | `install.sh` |
+| Path jail | Pass | Outside-`$HOME` requires `--allow-outside-home` |
 | `metadata` for runtime gates | Partial | Prefer declaring `requires.bins: [python3]` in frontmatter |
 | No undeclared network/env secrets | Pass | CLI is local stdlib |
 | Mutable state outside package | Pass | Documented invariant |
@@ -33,63 +34,29 @@ Registries often reject or quarantine skills that:
 - Write outside the skill/project tree without disclosure
 - Obfuscate scripts
 
-**Orchestra:** installer copies local files only; CLI uses stdlib; no default network calls. Still run `python3 scripts/orchestra.py check` after install.
+**Orchestra posture:** local copy install, no network in CLI structure path, disclosed path jail, Apache-2.0, audit at `docs/SECURITY_AUDIT.md`.
 
-## License gap (important)
+## License
 
-Current `LICENSE` is **proprietary / evaluation**. Many community registries require **MIT**, **Apache-2.0**, or similar OSI licenses.
+Current `LICENSE` is **Apache-2.0**. Eligible for most community registries that require OSI-approved licenses.
 
-| Option | Effect |
-|--------|--------|
-| Keep proprietary | Fine for private Hermes/OpenClaw use; may block public skill hubs |
-| Dual-license or relicense OSS | Unlocks most community catalogs |
-| Publish a stripped OSS “core” | CLI + schema + 1–2 frameworks public; full corpus private |
+| Option | Implication |
+|--------|-------------|
+| Apache-2.0 (current) | Eligible for public skill hubs |
 
-Until relicense, README and this file must state the restriction clearly.
+## Suggested submission packet
 
-## Suggested frontmatter hardening (community-ready)
+1. Repo URL + tag `v0.1.3` (or later)
+2. One-paragraph description (from `SKILL.md` frontmatter)
+3. Install commands from `docs/DEPLOY.md`
+4. Security one-liner from `docs/PUBLIC_RELEASE.md`
+5. License: Apache-2.0
 
-```yaml
----
-name: orchestra
-description: >
-  Structure code and agent systems with dual-named modules using traditional
-  correspondence maps (Tree of Life, alchemy, runes, planetary, I Ching,
-  Solomonic, Peircean, Numogram, geometry, Enochian, Chaos Magic). Use when
-  designing architecture, emitting skeletons, correspondence tables, or
-  paradigm overlays. Fail-closed on weak mappings.
-version: 0.1.1
-license: LicenseRef-Proprietary
-compatibility: Requires Python 3.11+
-metadata:
-  author: Applied Alchemy Labs
-  homepage: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
-  openclaw:
-    requires:
-      bins: [python3]
-  hermes:
-    tags: [architecture, symbolic, abraxas, structuring]
----
-```
+## Pre-submit checklist
 
-## Human + agent legibility rules
-
-1. **README** — install, how-to, tables, safety, layout (humans first scan).
-2. **SKILL.md** — activation, ordered steps, invariants, definition of done (agents on activation).
-3. **references/** — load only the active framework (token discipline).
-4. **examples/** — one runnable path minimum (`check` + demo).
-5. **No silent behavior** — projections and FORCED maps must be explicit.
-
-## Pre-publish checklist
-
-- [ ] `python3 scripts/orchestra.py check` exits 0
-- [ ] `bash install.sh --dry-run` succeeds
-- [ ] Frontmatter `name` / `description` match discovery needs
-- [ ] LICENSE compatible with target registry **or** registry allows proprietary
-- [ ] No secrets in repo
-- [ ] README “How to use” matches actual CLI flags
-- [ ] `VERSION` == manifest version == CHANGELOG latest section
-
-## Out of scope for community “generic” skills
-
-This skill encodes Abraxas-oriented symbolic architecture. It is not a general “write any app” skill. Listings should say so in the description so routers do not over-trigger.
+- [x] LICENSE is Apache-2.0 (OSI-approved)
+- [ ] `bash scripts/smoke.sh` green on clean clone
+- [ ] Path-refusal check: `--target /etc/orchestra` fails
+- [ ] SKILL frontmatter validates on target host
+- [ ] README states is / is-not clearly
+- [ ] Contact path for security reports (`.github/SECURITY.md`)
