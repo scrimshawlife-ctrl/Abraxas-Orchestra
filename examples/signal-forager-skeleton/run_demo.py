@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from models import PipelineError
 from output import emit_text
 from pipeline import run_forage
 
@@ -37,15 +38,19 @@ def main() -> int:
     out_dir = ROOT / "_demo_out"
     out_dir.mkdir(exist_ok=True)
 
-    report, scored, store = run_forage(
-        "energy market stress signals",
-        DEMO_ITEMS,
-        source="demo_feed",
-        max_signals=10,
-        min_weight=0.15,
-        persist_path=str(out_dir / "store.json"),
-        report_path=str(out_dir / "report.json"),
-    )
+    try:
+        report, scored, store = run_forage(
+            "energy market stress signals",
+            DEMO_ITEMS,
+            source="demo_feed",
+            max_signals=10,
+            min_weight=0.15,
+            persist_path=str(out_dir / "store.json"),
+            report_path=str(out_dir / "report.json"),
+        )
+    except PipelineError as exp:
+        print(f"PIPELINE ERROR [{exp.stage}]: {exp}")
+        return 2
 
     print(emit_text(report))
     print(f"stored={len(store.all())} artifacts → {out_dir}")
