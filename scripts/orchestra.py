@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:
@@ -114,6 +114,7 @@ def cmd_check(_: argparse.Namespace) -> int:
         "schemas/frameworks.v1.json",
         "schemas/analysis.v1.schema.json",
         "schemas/optimize-plan.v1.schema.json",
+        "schemas/optimize-apply.v1.schema.json",
     ]
     for rel in required:
         if not (SKILL_ROOT / rel).exists():
@@ -539,6 +540,10 @@ def cmd_optimize(args: argparse.Namespace) -> int:
     if getattr(args, "apply", False):
         confirm = bool(getattr(args, "confirm", False))
         refresh = bool(getattr(args, "refresh", False))
+        step_ids = None
+        raw_steps = getattr(args, "steps", None)
+        if raw_steps:
+            step_ids = [s.strip() for s in raw_steps.split(",") if s.strip()]
         report, code = apply_optimize_plan(
             analysis,
             plan,
@@ -547,6 +552,7 @@ def cmd_optimize(args: argparse.Namespace) -> int:
             version=VERSION,
             refresh=refresh,
             frameworks=FRAMEWORKS,
+            step_ids=step_ids,
         )
         print(json.dumps(report, indent=2))
         if report.get("status") == "NOT_COMPUTABLE":
@@ -662,6 +668,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--refresh",
         action="store_true",
         help="After --apply --confirm, re-analyze the tree and write analysis.json beside the backup",
+    )
+    opt_p.add_argument(
+        "--steps",
+        default=None,
+        help="Comma-separated step ids to apply (default: all safe_apply steps)",
     )
     opt_p.set_defaults(func=cmd_optimize)
     return p

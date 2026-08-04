@@ -6,6 +6,13 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.3.2] — 2026-08-04
+
+### Added
+- `safe_apply` package promotion for `suggest_boundary` (`module.py` → `module/__init__.py`)
+- `--steps` selective apply filter
+- Schema `optimize-apply.v1`; COMPLETION checklist updated for 0.3.2 freeze
+
 ## [0.3.1] — 2026-08-04
 
 ### Added

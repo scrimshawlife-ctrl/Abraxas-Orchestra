@@ -2,6 +2,14 @@
 
 Narrative notes for operators and agents. Machine changelog: [`CHANGELOG.md`](../CHANGELOG.md).
 
+## 0.3.2 — 2026-08-04
+
+Broader safe_apply + selective steps.
+
+- Package promotion: `suggest_boundary` may move `module.py` → `module/__init__.py`
+- `--steps step-1,step-3` limits apply to listed ids
+- Apply report schema + COMPLETION freeze checklist for 0.3.2
+
 ## 0.3.1 — 2026-08-04
 
 Apply hardening + import-graph refresh.

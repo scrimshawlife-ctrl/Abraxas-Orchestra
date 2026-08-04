@@ -150,8 +150,8 @@ def build_optimize_plan(
     }
     # Annotate concrete mechanical renames as safe_apply when eligible (Phase C).
     try:
-        from optimize_apply import enrich_safe_renames
-        plan = enrich_safe_renames(plan, analysis)
+        from optimize_apply import enrich_safe_steps
+        plan = enrich_safe_steps(plan, analysis)
     except Exception:
         pass
     return plan
@@ -199,8 +199,9 @@ def plan_to_markdown(plan: dict[str, Any]) -> str:
         "",
         "- Plan-only by default — the analyzed repository is not modified.",
         "- `optimize --apply` is dry-run; `optimize --apply --confirm` writes "
-        "only `safe_apply: true` mechanical renames (with backup).",
-        "- `suggest_boundary` / `suggest_extract` stay advisory (`safe_apply: false`).",
+        "only `safe_apply: true` steps (renames + package promotion) with backup.",
+        "- `suggest_extract` stays advisory (`safe_apply: false`).",
+        "- Select steps with `--steps step-1,step-3`.",
         "",
     ]
     return "\n".join(lines)
