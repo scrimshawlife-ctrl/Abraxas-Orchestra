@@ -169,4 +169,22 @@ The skill is **deployed** when:
 1. Files exist under the host skills path  
 2. `check` exits 0 on the **installed** copy  
 3. Host skill index lists `orchestra`  
-4. One structure emission succeeds in a live agent or CLI session  
+4. One structure emission succeeds in a live agent or CLI session
+
+---
+
+## Optional: pin a release tag
+
+```bash
+git fetch origin
+git tag -a v0.1.2 -m "Orchestra 0.1.2 production-ready private skill"
+git push origin v0.1.2
+```
+
+Install from a tag when you need freeze:
+
+```bash
+git clone --branch v0.1.2 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
+cd Abraxas-Orchestra-Hermes
+bash scripts/smoke.sh && bash install.sh
+```
