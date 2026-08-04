@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.3.0"
+VERSION = "0.3.1"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:
@@ -538,12 +538,15 @@ def cmd_optimize(args: argparse.Namespace) -> int:
 
     if getattr(args, "apply", False):
         confirm = bool(getattr(args, "confirm", False))
+        refresh = bool(getattr(args, "refresh", False))
         report, code = apply_optimize_plan(
             analysis,
             plan,
             confirm=confirm,
             backup_dir=getattr(args, "backup_dir", None),
             version=VERSION,
+            refresh=refresh,
+            frameworks=FRAMEWORKS,
         )
         print(json.dumps(report, indent=2))
         if report.get("status") == "NOT_COMPUTABLE":
@@ -559,6 +562,11 @@ def cmd_optimize(args: argparse.Namespace) -> int:
                 f"# applied → backup {report.get('backup_dir')}",
                 file=sys.stderr,
             )
+            if report.get("refresh") and report["refresh"].get("out"):
+                print(
+                    f"# refreshed analysis → {report['refresh']['out']}",
+                    file=sys.stderr,
+                )
         return code
     return 0
 
@@ -649,6 +657,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--backup-dir",
         default=None,
         help="Backup directory for --apply --confirm (default under analyzed root)",
+    )
+    opt_p.add_argument(
+        "--refresh",
+        action="store_true",
+        help="After --apply --confirm, re-analyze the tree and write analysis.json beside the backup",
     )
     opt_p.set_defaults(func=cmd_optimize)
     return p

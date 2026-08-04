@@ -6,6 +6,14 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.3.1] — 2026-08-04
+
+### Added
+- `optimize --apply --confirm --refresh` re-analyzes the tree and writes refreshed `analysis.json` beside the backup
+- Vacate-first ordering when a rename destination is another rename’s source
+- Destination-collision demotion in plan enrichment
+- Analyze skips `.orchestra-backups/`; smoke analyzes `scripts/` + optimize dry-run
+
 ## [0.3.0] — 2026-08-04
 
 ### Added

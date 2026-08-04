@@ -16,7 +16,7 @@ from typing import Any, Callable
 SKIP_DIRS = frozenset({
     ".git", ".hg", ".svn", "__pycache__", ".venv", "venv", "node_modules",
     ".tox", ".mypy_cache", ".ruff_cache", "dist", "build", ".eggs",
-    ".pytest_cache", ".cursor",
+    ".pytest_cache", ".cursor", ".orchestra-backups",
 })
 
 # First path segment after root that indicates a system tree (POSIX).

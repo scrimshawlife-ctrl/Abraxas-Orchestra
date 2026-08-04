@@ -1,7 +1,7 @@
 ---
 name: orchestra
 description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, automatic Mermaid/HTML/JSON diagrams, repo analyze→map→optimize plans, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra."
-version: 0.3.0
+version: 0.3.1
 license: Apache-2.0
 metadata:
   openclaw:
@@ -28,7 +28,7 @@ python3 scripts/orchestra.py diagram   -f <framework> [-c concerns] [-o overlay]
 python3 scripts/orchestra.py analyze   --path DIR [-f FRAMEWORK] [-o OVERLAY] [--out DIR]
 python3 scripts/orchestra.py optimize  --from analysis.json [--out DIR] [--min-strength ADEQUATE]
 python3 scripts/orchestra.py optimize  --from analysis.json --apply
-python3 scripts/orchestra.py optimize  --from analysis.json --apply --confirm [--backup-dir DIR]
+python3 scripts/orchestra.py optimize  --from analysis.json --apply --confirm [--backup-dir DIR] [--refresh]
 ```
 
 ## Analyze → map → optimize
@@ -37,6 +37,7 @@ python3 scripts/orchestra.py optimize  --from analysis.json --apply --confirm [-
 2. **`-f FRAMEWORK`** — propose fail-closed mappings (`STRONG`/`ADEQUATE`/`WEAK`/`FORCED`). Exit `1` if WEAK/FORCED present; `2` on NOT_COMPUTABLE.
 3. **`optimize --from analysis.json`** — plan only by default (no tree writes).
 4. **`--apply`** — dry-run of `safe_apply` mechanical renames; **`--apply --confirm`** writes after backup. FORCED blocks apply.
+5. **`--refresh`** — after confirmed apply, re-analyze and write refreshed `analysis.json` beside the backup.
 
 Do not invent symbolic loci. Do not silently “improve” FORCED/WEAK maps.
 

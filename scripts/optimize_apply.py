@@ -122,9 +122,51 @@ def enrich_safe_renames(
             "kind": node.get("kind", "module"),
         }
         steps.append(s)
+
+    # Fail-closed: demote colliding destinations (two renames → same path)
+    dest_owners: dict[str, str] = {}
+    for s in steps:
+        ren = s.get("rename") or {}
+        if not s.get("safe_apply") or not ren:
+            continue
+        dest = ren["to_path"]
+        if dest in dest_owners:
+            s["safe_apply"] = False
+            s["notes"] = (s.get("notes") or "") + (
+                f" (destination collision with {dest_owners[dest]} — blocked)"
+            )
+            # also demote the earlier owner
+            for prev in steps:
+                if prev.get("id") == dest_owners[dest] and prev.get("safe_apply"):
+                    prev["safe_apply"] = False
+                    prev["notes"] = (prev.get("notes") or "") + (
+                        f" (destination collision with {s.get('id')} — blocked)"
+                    )
+        else:
+            dest_owners[dest] = s.get("id") or dest
+
     out = dict(plan)
     out["steps"] = steps
     return out
+
+
+def collision_error(plan: dict[str, Any]) -> str | None:
+    """Return error if any step notes report destination collision (belt/suspenders)."""
+    tos: dict[str, str] = {}
+    for s in plan.get("steps") or []:
+        ren = s.get("rename") or {}
+        if not ren:
+            continue
+        # Only consider steps that are still marked safe
+        if not s.get("safe_apply"):
+            continue
+        dest = ren.get("to_path")
+        if not dest:
+            continue
+        if dest in tos:
+            return f"destination collision: {tos[dest]} and {s.get('id')} both target {dest}"
+        tos[dest] = s.get("id") or dest
+    return None
 
 
 def _rewrite_module_id(old_id: str, new_leaf: str) -> str:
@@ -197,7 +239,10 @@ def _rewrite_imports_in_tree(
     if not id_map:
         return touched
     for py in root.rglob("*.py"):
-        if any(part in {".venv", "venv", "__pycache__", ".git"} for part in py.parts):
+        if any(
+            part in {".venv", "venv", "__pycache__", ".git", ".orchestra-backups"}
+            for part in py.parts
+        ):
             continue
         if not _under_root(py, root):
             continue
@@ -242,12 +287,15 @@ def apply_optimize_plan(
     confirm: bool = False,
     backup_dir: str | Path | None = None,
     version: str,
+    refresh: bool = False,
+    frameworks: dict[str, dict[str, Any]] | None = None,
 ) -> tuple[dict[str, Any], int]:
     """
     Apply safe_apply rename/move steps.
 
     confirm=False → dry-run (exit 0, no writes).
     confirm=True → backup + mutate.
+    refresh=True (with confirm) → re-analyze tree after successful writes.
     """
     root_raw = analysis.get("path")
     if not root_raw:
@@ -308,6 +356,24 @@ def apply_optimize_plan(
         if not s.get("safe_apply")
     ]
 
+    # Harden: destinations claimed by another pending rename source may be vacated —
+    # apply those "move-away" renames first (deepest/longest from_path last→first).
+    pending_from = {
+        (s.get("rename") or {}).get("from_path")
+        for s in safe_steps
+        if (s.get("rename") or {}).get("from_path")
+    }
+
+    def _apply_order(step: dict[str, Any]) -> tuple[int, str]:
+        ren = step.get("rename") or {}
+        to_p = ren.get("to_path") or ""
+        # If our destination is someone else's source, apply that other first →
+        # so sort steps whose to_path is in pending_from later.
+        vacate_first = 1 if to_p in pending_from else 0
+        return (vacate_first, ren.get("from_path") or "")
+
+    safe_steps = sorted(safe_steps, key=_apply_order)
+
     for step in safe_steps:
         rename = step.get("rename") or {}
         if step.get("action") != "suggest_rename" or not rename:
@@ -336,14 +402,28 @@ def apply_optimize_plan(
                 "reason": f"source missing: {rename['from_path']}",
             })
             continue
+        # Destination may be another rename's source (vacated earlier in apply order).
+        dest_rel = rename["to_path"]
         if dest.exists():
-            actions.append({
-                "step_id": step["id"],
-                "action": "suggest_rename",
-                "status": "blocked",
-                "reason": f"destination exists: {rename['to_path']}",
-            })
-            continue
+            if dry_run and dest_rel in pending_from:
+                pass  # assume vacate-first ordering succeeds
+            elif dest_rel in pending_from:
+                # Still present after earlier steps — vacate failed
+                actions.append({
+                    "step_id": step["id"],
+                    "action": "suggest_rename",
+                    "status": "blocked",
+                    "reason": f"destination still occupied: {rename['to_path']}",
+                })
+                continue
+            else:
+                actions.append({
+                    "step_id": step["id"],
+                    "action": "suggest_rename",
+                    "status": "blocked",
+                    "reason": f"destination exists: {rename['to_path']}",
+                })
+                continue
 
         entry: dict[str, Any] = {
             "step_id": step["id"],
@@ -367,13 +447,15 @@ def apply_optimize_plan(
                 dest.parent.mkdir(parents=True, exist_ok=True)
                 shutil.move(str(src), str(dest))
             id_map[rename["from_id"]] = rename["to_id"]
+            pending_from.discard(rename["from_path"])
         elif dry_run:
             id_map[rename["from_id"]] = rename["to_id"]
 
         actions.append(entry)
 
     import_touches = _rewrite_imports_in_tree(root, id_map, dry_run=dry_run)
-    report = {
+    applied_n = sum(1 for a in actions if a.get("status") in {"applied", "would_apply"})
+    report: dict[str, Any] = {
         "schema": "orchestra-optimize-apply.v1",
         "status": "DRY_RUN" if dry_run else "APPLIED",
         "dry_run": dry_run,
@@ -382,6 +464,7 @@ def apply_optimize_plan(
         "actions": actions,
         "skipped_step_ids": skipped,
         "import_rewrites": import_touches,
+        "refresh": None,
         "provenance": {
             "operator": "orchestra-cli",
             "timestamp": _utc_now(),
@@ -389,6 +472,40 @@ def apply_optimize_plan(
             "kind": "OBSERVED" if not dry_run else "INFERRED",
         },
     }
+
+    if refresh and confirm and applied_n > 0 and frameworks is not None:
+        from analyze_repo import analyze_path, write_analysis_artifacts
+
+        refreshed, rcode = analyze_path(
+            root,
+            frameworks=frameworks,
+            version=version,
+            framework=analysis.get("framework"),
+            overlay=analysis.get("secondary_overlay"),
+            lang=analysis.get("language") or "python",
+        )
+        refresh_dir = bdir if bdir is not None else root / ".orchestra-backups" / "refresh"
+        refresh_dir.mkdir(parents=True, exist_ok=True)
+        write_analysis_artifacts(refreshed, refresh_dir, version=version)
+        report["refresh"] = {
+            "status": refreshed.get("status"),
+            "exit_code": rcode,
+            "nodes": len(refreshed.get("nodes") or []),
+            "edges": len(refreshed.get("edges") or []),
+            "mappings": len(refreshed.get("mappings") or []),
+            "out": str(refresh_dir / "analysis.json"),
+        }
+    elif refresh and not confirm:
+        report["refresh"] = {
+            "status": "SKIPPED",
+            "reason": "refresh requires --apply --confirm",
+        }
+    elif refresh and applied_n == 0:
+        report["refresh"] = {
+            "status": "SKIPPED",
+            "reason": "no applied renames",
+        }
+
     if confirm and bdir is not None:
         (bdir / "apply-report.json").write_text(
             json.dumps(report, indent=2) + "\n", encoding="utf-8"

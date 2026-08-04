@@ -4,7 +4,7 @@ Abraxas Orchestra is a **local** Hermes/OpenClaw skill package.
 
 Public debut audit: [`SECURITY_AUDIT.md`](SECURITY_AUDIT.md) · Policy: [`.github/SECURITY.md`](../.github/SECURITY.md)
 
-## Threat model (v0.3.0)
+## Threat model (v0.3.1)
 
 | Surface | Behavior |
 |---------|----------|
@@ -23,6 +23,7 @@ Public debut audit: [`SECURITY_AUDIT.md`](SECURITY_AUDIT.md) · Policy: [`.githu
 3. Only mechanical renames/moves marked `safe_apply: true` — no content invention
 4. Prefer dry-run (`--apply` without `--confirm`) before first confirm
 5. Use `RESTORE.md` in the backup dir if a rename must be undone
+6. `--refresh` re-reads the analyzed tree after apply (still local, no network); writes under the backup dir
 
 ## Installer guarantees (0.1.3)
 

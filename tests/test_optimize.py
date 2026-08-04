@@ -194,6 +194,50 @@ class TestOptimizeCLI(unittest.TestCase):
             self.assertIn("as nigredo", pipe)
             self.assertIn("nigredo.pull", pipe)
 
+    def test_optimize_apply_refresh(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            work = Path(td) / "pkg"
+            shutil.copytree(RENAME_FIXTURE, work)
+            analysis_path = self._analysis_with_framework(
+                Path(td) / "a", path=work, framework="alchemical-stages"
+            )
+            backup = Path(td) / "backup"
+            r = run_cli(
+                "optimize",
+                "--from", str(analysis_path),
+                "--apply",
+                "--confirm",
+                "--refresh",
+                "--backup-dir", str(backup),
+            )
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            report = json.loads(r.stdout)
+            self.assertIsNotNone(report.get("refresh"))
+            self.assertEqual(report["refresh"]["status"], "CLEAN")
+            refreshed = Path(report["refresh"]["out"])
+            self.assertTrue(refreshed.exists())
+            data = json.loads(refreshed.read_text())
+            ids = {n["id"] for n in data["nodes"]}
+            self.assertIn("raw_ingest", ids)
+            self.assertNotIn("nigredo", ids)
+
+    def test_optimize_refresh_skipped_on_dry_run(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            work = Path(td) / "pkg"
+            shutil.copytree(RENAME_FIXTURE, work)
+            analysis_path = self._analysis_with_framework(
+                Path(td) / "a", path=work, framework="alchemical-stages"
+            )
+            r = run_cli(
+                "optimize",
+                "--from", str(analysis_path),
+                "--apply",
+                "--refresh",
+            )
+            self.assertEqual(r.returncode, 0, r.stderr)
+            report = json.loads(r.stdout)
+            self.assertEqual(report["refresh"]["status"], "SKIPPED")
+
     def test_optimize_apply_blocks_forced(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             analysis_path = Path(td) / "analysis.json"

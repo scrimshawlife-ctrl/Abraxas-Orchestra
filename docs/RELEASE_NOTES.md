@@ -2,6 +2,14 @@
 
 Narrative notes for operators and agents. Machine changelog: [`CHANGELOG.md`](../CHANGELOG.md).
 
+## 0.3.1 — 2026-08-04
+
+Apply hardening + import-graph refresh.
+
+- `--refresh` with `--apply --confirm` re-runs `analyze` and writes beside the backup
+- Destination collisions demoted; vacate-first rename ordering
+- Smoke covers `scripts/` analyze + optimize dry-run
+
 ## 0.3.0 — 2026-08-04
 
 **Optimize apply (Phase C)** — gated mutation.
