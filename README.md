@@ -8,7 +8,7 @@
   <strong>Hermes + OpenClaw coding-agent skill</strong> for symbolic code architecture
 </p>
 
-Version **0.3.1** · Skill name: `orchestra` · Python ≥ 3.11 · Network: not required · License: Apache-2.0
+Version **0.3.2** · Skill name: `orchestra` · Python ≥ 3.11 · Network: not required · License: Apache-2.0
 
 Maps software structure onto traditional correspondence systems (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic) and emits **dual-named skeletons** with recoverable provenance.
 
@@ -46,14 +46,12 @@ Installer refuses system paths and targets outside `$HOME` unless `--allow-outsi
 
 ## Release notes
 
-**Current: [0.3.1](docs/RELEASE_NOTES.md#031--2026-08-04)** (2026-08-04) — analyze → map → optimize apply + refresh.
+**Current: [0.3.2](docs/RELEASE_NOTES.md#032--2026-08-04)** (2026-08-04) — analyze → map → optimize apply.
 
 | Theme | What landed |
 |-------|-------------|
 | Analyze | `analyze --path` OBSERVED Python import graph + optional framework map |
-| Optimize plan | `optimize --from analysis.json` (no tree writes) |
-| Optimize apply | `--apply` dry-run; `--apply --confirm` gated renames + backup |
-| Refresh | `--refresh` re-analyzes after confirmed apply |
+| Optimize | Plan, gated apply, `--refresh`, package promote, `--steps` |
 | Diagrams | Auto HTML/JSON/Mermaid on structure/project/analyze `--out` |
 
 Full narrative: **[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)** · Machine changelog: [`CHANGELOG.md`](CHANGELOG.md) · Plan: [`docs/ANALYZE_OPTIMIZE_PLAN.md`](docs/ANALYZE_OPTIMIZE_PLAN.md)
@@ -78,6 +76,7 @@ Full narrative: **[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)** · Machine 
 | Optimize dry-run | `… optimize --from ./analysis/analysis.json --apply` |
 | Optimize apply | `… optimize --from ./analysis/analysis.json --apply --confirm` |
 | Apply + refresh | `… optimize --from ./analysis/analysis.json --apply --confirm --refresh` |
+| Apply selected steps | `… optimize --from ./analysis/analysis.json --apply --confirm --steps step-1` |
 | Working pipeline demo | `cd examples/signal-forager-skeleton && python3 run_demo.py` |
 
 **Framework keys:** `tree-of-life` · `alchemical-stages` · `elder-futhark` · `planetary-spheres` · `iching-hexagrams` · `solomonic` · `peircean-signs` · `numogram` · `sacred-geometry` · `enochian` · `chaos-magic`

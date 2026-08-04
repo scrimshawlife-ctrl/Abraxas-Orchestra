@@ -1,7 +1,7 @@
 ---
 name: orchestra
 description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, automatic Mermaid/HTML/JSON diagrams, repo analyze→map→optimize plans, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra."
-version: 0.3.1
+version: 0.3.2
 license: Apache-2.0
 metadata:
   openclaw:
@@ -28,7 +28,7 @@ python3 scripts/orchestra.py diagram   -f <framework> [-c concerns] [-o overlay]
 python3 scripts/orchestra.py analyze   --path DIR [-f FRAMEWORK] [-o OVERLAY] [--out DIR]
 python3 scripts/orchestra.py optimize  --from analysis.json [--out DIR] [--min-strength ADEQUATE]
 python3 scripts/orchestra.py optimize  --from analysis.json --apply
-python3 scripts/orchestra.py optimize  --from analysis.json --apply --confirm [--backup-dir DIR] [--refresh]
+python3 scripts/orchestra.py optimize  --from analysis.json --apply --confirm [--backup-dir DIR] [--refresh] [--steps IDS]
 ```
 
 ## Analyze → map → optimize
@@ -36,8 +36,9 @@ python3 scripts/orchestra.py optimize  --from analysis.json --apply --confirm [-
 1. **`analyze --path DIR`** — read-only OBSERVED import graph (Python). Writes `analysis.json` + diagram bundle when `--out` is set.
 2. **`-f FRAMEWORK`** — propose fail-closed mappings (`STRONG`/`ADEQUATE`/`WEAK`/`FORCED`). Exit `1` if WEAK/FORCED present; `2` on NOT_COMPUTABLE.
 3. **`optimize --from analysis.json`** — plan only by default (no tree writes).
-4. **`--apply`** — dry-run of `safe_apply` mechanical renames; **`--apply --confirm`** writes after backup. FORCED blocks apply.
-5. **`--refresh`** — after confirmed apply, re-analyze and write refreshed `analysis.json` beside the backup.
+4. **`--apply`** — dry-run of `safe_apply` steps; **`--apply --confirm`** writes after backup. FORCED blocks apply.
+5. **`safe_apply`** covers mechanical renames and package promotion (`module.py` → `module/__init__.py`).
+6. **`--steps`** — apply only listed step ids; **`--refresh`** re-analyzes after confirm.
 
 Do not invent symbolic loci. Do not silently “improve” FORCED/WEAK maps.
 

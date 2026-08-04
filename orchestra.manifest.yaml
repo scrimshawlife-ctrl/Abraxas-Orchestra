@@ -1,5 +1,5 @@
 name: orchestra
-version: 0.3.1
+version: 0.3.2
 display_name: Abraxas Orchestra
 kind: hermes-openclaw-skill
 
@@ -57,6 +57,7 @@ schemas:
   frameworks: schemas/frameworks.v1.json
   analysis: schemas/analysis.v1.schema.json
   optimize_plan: schemas/optimize-plan.v1.schema.json
+  optimize_apply: schemas/optimize-apply.v1.schema.json
 
 examples:
   - examples/signal-forager-skeleton/

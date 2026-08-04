@@ -23,11 +23,12 @@ Repo **analyze → map → optimize** (Cursor-ready): [`ANALYZE_OPTIMIZE_PLAN.md
 | B | 0.2.0 | `optimize` | Plan only from analysis artifact |
 | C | 0.3.0 | `optimize --apply --confirm` | Gated mechanical renames + backup |
 | C+ | 0.3.1 | `--refresh` + apply hardening | Post-apply re-analyze; collision/vacate ordering |
+| C++ | 0.3.2 | boundary promote + `--steps` | Package promotion safe_apply; selective apply |
 
 ## Next
 
 - Multi-language analyze (see Deferred)
-- Broader safe_apply actions beyond mechanical rename (explicit operator request)
+- Further safe_apply actions only on explicit operator request (`suggest_extract` remains advisory)
 
 ## Deferred
 

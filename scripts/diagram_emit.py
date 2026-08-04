@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.3.1"
+VERSION = "0.3.2"
 FRAMEWORKS: dict[str, dict[str, Any]] = {}
 
 
