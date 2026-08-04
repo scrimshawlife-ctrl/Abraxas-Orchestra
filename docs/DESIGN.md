@@ -1,84 +1,36 @@
-# Abraxas Orchestra — Design Specification
+# Abraxas Orchestra — Design
 
-**Status**: Hermes/OpenClaw coding-agent skill — design surface + executable CLI + open corpus  
+**Status**: Executable skill surface  
 **Version target**: 0.1.2  
-**Date**: 2026-08-04  
-**Repo**: scrimshawlife-ctrl/Abraxas-Orchestra-Hermes  
+**Hosts**: Hermes, OpenClaw
 
-This document is the authoritative design record for the first public surface of the skill.
+## Intent
 
----
+Structure software architecture using traditional correspondence systems as hierarchical maps. Emit dual-named modules (mechanical primary, symbolic secondary) with recoverable provenance. Fail closed on weak mappings. Preserve human sovereignty over forced correspondences.
 
-## 1. Purpose
+## Core contracts
 
-Orchestra is a coding-agent skill that structures software architecture using traditional esoteric correspondence systems while remaining production-grade: dual naming, fail-closed gates, recoverable provenance, and pragmatic projection when pure maps become unmaintainable.
+1. **Dual naming** — Every structural unit carries a mechanical identifier and an optional symbolic locus.
+2. **Provenance** — Correspondence tables declare strength (`STRONG` / `ADEQUATE` / `WEAK` / `FORCED`) and notes.
+3. **Pragmatic projection** — Oversized or forced maps collapse under `do project` with an explicit projection note.
+4. **Open corpus** — Framework tables expand without breaking the CLI contract.
+5. **Agent posture** — Implementation rules live in `references/agent-posture.md` (smallest working layer, no invented loci).
 
----
+## Executable surface (v0.1.2)
 
-## 2. Scope of v0.1
-
-**In scope**
-
-- Eleven framework reference tables (open for expansion)
-- CLI: `do list-frameworks`, `do structure`, `do project`, `check`
-- Correspondence table schema + emission
-- Atomic installer for Hermes and OpenClaw paths
-- Worked examples (signal-forager; enochian-chaos structure)
+- CLI: `check`, `do list-frameworks`, `do structure`, `do project`
 - Schema validation inside `check` (v0.1.2)
+- Atomic installer with dry-run and rollback
+- Smoke script + stdlib unit tests + CI
 
-**Explicitly out of scope for v0.1**
+## Framework data source
 
-- Runtime ritual execution or operative magic
-- Automatic promotion of SPECULATIVE maps to canon
-- Networked multi-agent orchestration beyond local skill install
+Canonical loci live in `schemas/frameworks.v1.json`. The CLI loads this file at startup via `_load_frameworks()`. Markdown under `references/` is progressive-disclosure documentation and must stay aligned with the JSON when frameworks change.
 
-Later versions may expand the Orchestra surface. The v0.1 contract stays stable.
+## Related docs
 
----
-
-## 3. Dual naming
-
-Every emitted locus carries:
-
-- **mechanical** name — public, importable, conventional
-- **symbolic** name — recoverable provenance into the chosen framework
-
-Correspondence tables record strength (`STRONG` / `ADEQUATE` / `WEAK` / `FORCED`) and optional overlay notes.
-
----
-
-## 4. Fail-closed and projection
-
-Unknown frameworks, identical overlay=primary, and empty projected loci return `NOT_COMPUTABLE`.
-
-`do project` may drop FORCED loci and collapse oversized maps to each framework’s core set. Projections are always recorded in the table; never silent.
-
----
-
-## 5. Framework inventory
-
-See `SKILL.md` and `references/`. Enochian includes Dee vs neo streams, seals taxonomy, Heptarchia, Parts of the Earth, and inverse (cacodemon) surfaces. Chaos Magic is the meta-paradigm overlay.
-
----
-
-## 6. Host packaging
-
-- Hermes: `~/.hermes/skills/orchestra`
-- OpenClaw: `~/.openclaw/skills/orchestra` via `--target`
-- Manifest kind: `hermes-openclaw-skill`
-
-See `docs/OPENCLAW.md`.
-
----
-
-## 7. Versioning
-
-- Current target: 0.1.2
-- Schema: `correspondence-table.v1` (enum covers all frameworks + composite)
-- Corpus remains open; additive frameworks do not break v0.1 CLI contracts when registered in `FRAMEWORKS`, schema enum, manifest, and installer refs together.
-
----
-
-## Agent posture
-
-Coding-agent build rules live in `references/agent-posture.md`. They govern implementation style for emitted code (layered growth, current-requirements-only, deps-first). They are not correspondence frameworks and must not override skill versioning, schema stability, or fail-closed provenance.
+- [`RELEASE_NOTES.md`](RELEASE_NOTES.md)
+- [`DEPLOY.md`](DEPLOY.md)
+- [`ROADMAP.md`](ROADMAP.md)
+- [`SECURITY.md`](SECURITY.md)
+- [`CHANGELOG.md`](../CHANGELOG.md)

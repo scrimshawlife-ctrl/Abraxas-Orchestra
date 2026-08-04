@@ -17,6 +17,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - `CONTRIBUTING.md` — smoke gate + framework-add checklist
 - `schemas/frameworks.v1.json` — canonical framework loci (single source of truth)
 - `docs/RELEASE_NOTES.md` — narrative release notes for operators and agents
+- `docs/SECURITY.md` — local threat model
 
 ### Fixed
 - Enochian-chaos example regenerated with dual-named module stubs on disk
@@ -30,6 +31,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - CONTRIBUTING: edit `frameworks.v1.json` when adding frameworks
 - CLI loads `schemas/frameworks.v1.json` at startup (no embedded FRAMEWORKS dict)
 - Installer requires `schemas/frameworks.v1.json`
+- Framework reference files: CLI default loci tables (parity with JSON)
 
 ## [0.1.1] — 2026-08-04
 
