@@ -7,16 +7,17 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
-- Hermes/OpenClaw coding-agent skill packaging made explicit across SKILL.md, manifest, README
-- Full 11-framework registry in manifest and skill contract
-- Enochian and Chaos Magic correspondence tables + CLI registration
-- Signal-forager example with working pipeline logic
-- Executable CLI: `do structure`, `do project`, `do list-frameworks`, `check`
-- Atomic installer for Hermes and OpenClaw targets
+- Enochian reference expanded from investigation:
+  - Dee-purist vs neo-Enochian stream flag (Orchestra defaults to neo-Enochian elemental Watchtowers)
+  - Watchtower authority ladder including cacodemons as inverse capabilities
+  - Black Cross / Tablet of Union as cross-domain bus
+  - 91 Parts of the Earth as jurisdiction / multi-tenant map
+  - Heptarchia as planetary office bridge to `planetary-spheres`
+- CLI enochian loci: `cross_domain_bus`, `inverse_capability`
+- Hermes/OpenClaw coding-agent packaging; 11 frameworks; signal-forager example
 
 ### Changed
-- SKILL.md, orchestra.manifest.yaml, README.md aligned to dual-host coding-agent skill
-- DESIGN.md and OPENCLAW.md updated for 11 frameworks and host packaging
+- SKILL.md, manifest, README, DESIGN, OPENCLAW aligned to dual-host skill
 
 ## [0.1.0] — 2026-08-04
 
