@@ -25,31 +25,36 @@ def run_cli(*args: str) -> subprocess.CompletedProcess[str]:
 
 
 class TestOrchestraCLI(unittest.TestCase):
+    def test_legacy_do_prefix(self) -> None:
+        r = run_cli("do", "list")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("tree-of-life", r.stdout)
+
     def test_check_ok(self) -> None:
         r = run_cli("check")
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertIn("CHECK OK", r.stdout)
 
     def test_list_frameworks(self) -> None:
-        r = run_cli("do", "list-frameworks")
+        r = run_cli("list")
         self.assertEqual(r.returncode, 0, r.stderr)
         self.assertIn("tree-of-life", r.stdout)
         self.assertIn("enochian", r.stdout)
         self.assertIn("chaos-magic", r.stdout)
 
     def test_structure_clean(self) -> None:
-        r = run_cli("do", "structure", "-f", "tree-of-life", "-c", "intent,output")
+        r = run_cli("structure", "-f", "tree-of-life", "-c", "intent,output")
         self.assertEqual(r.returncode, 0, r.stderr)
         self.assertIn('"status": "CLEAN"', r.stdout)
         self.assertIn("intent", r.stdout)
 
     def test_structure_unknown_framework(self) -> None:
-        r = run_cli("do", "structure", "-f", "not-a-real-map")
+        r = run_cli("structure", "-f", "not-a-real-map")
         self.assertEqual(r.returncode, 2)
         self.assertIn("NOT_COMPUTABLE", r.stderr)
 
     def test_structure_overlay_same_as_primary(self) -> None:
-        r = run_cli("do", "structure", "-f", "enochian", "-o", "enochian")
+        r = run_cli("structure", "-f", "enochian", "-o", "enochian")
         self.assertEqual(r.returncode, 2)
         self.assertIn("NOT_COMPUTABLE", r.stderr)
 
@@ -57,7 +62,6 @@ class TestOrchestraCLI(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             out = Path(td) / "skel"
             r = run_cli(
-                "do",
                 "structure",
                 "-f",
                 "chaos-magic",
@@ -75,13 +79,12 @@ class TestOrchestraCLI(unittest.TestCase):
             self.assertTrue((out / "paradigm_switch" / "__init__.py").exists())
 
     def test_project_collapses(self) -> None:
-        r = run_cli("do", "project", "-f", "tree-of-life")
+        r = run_cli("project", "-f", "tree-of-life")
         self.assertEqual(r.returncode, 0, r.stderr)
         self.assertIn("tree-of-life", r.stdout)
 
     def test_enochian_overlay_table(self) -> None:
         r = run_cli(
-            "do",
             "structure",
             "-f",
             "enochian",
@@ -113,7 +116,7 @@ class TestSchemaFile(unittest.TestCase):
         data = json.loads((ROOT / "schemas" / "frameworks.v1.json").read_text())
         self.assertEqual(data.get("schema"), "frameworks.v1")
         self.assertEqual(len(data["frameworks"]), 11)
-        r = run_cli("do", "list-frameworks")
+        r = run_cli("list")
         self.assertEqual(r.returncode, 0)
         for key in data["frameworks"]:
             self.assertIn(key, r.stdout)
