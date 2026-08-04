@@ -1,56 +1,71 @@
 # Example — Signal Forager Skeleton
 
-End-to-end demonstration of Abraxas Orchestra applied to a signal-foraging subsystem.
+End-to-end demonstration of Abraxas Orchestra applied to a signal-foraging subsystem
+with **working pipeline logic**.
 
 ## Intent
 
-Structure a minimal signal-forager with:
+Structure and implement a minimal signal-forager with:
 
-- Clear entry contract (intent)
-- Raw signal intake
-- Schema / constraint enforcement
-- Adversarial filtering
-- Central synthesis / scoring
-- Persistent store
-- Concrete output surface
+- Clear entry contract (intent / Kether)
+- Raw signal intake (intake / Chokmah)
+- Schema / constraint enforcement (constraint / Binah)
+- Adversarial filtering (adversarial / Geburah)
+- Central synthesis / scoring (synthesis / Tiphareth)
+- Persistent store (store / Yesod)
+- Concrete output surface (output / Malkuth)
 
-## Command used
+## Run the demo
 
 ```bash
-python3 scripts/orchestra.py do structure \
-  -f tree-of-life \
-  -o alchemical-stages \
-  -c "intent,intake,constraint,adversarial,synthesis,store,output" \
-  --out examples/signal-forager-skeleton
+cd examples/signal-forager-skeleton
+python3 run_demo.py
 ```
 
-## Mapping summary
+Artifacts land in `_demo_out/report.json` and `_demo_out/store.json`.
 
-| Mechanical   | Symbolic (Tree of Life) | Overlay (Alchemical)      |
-|--------------|-------------------------|---------------------------|
-| intent       | kether                  | nigredo                   |
-| intake       | chokmah                 | albedo                    |
-| constraint   | binah                   | citrinitas                |
-| adversarial  | geburah                 | rubedo                    |
-| synthesis    | tiphareth               | (paired by index)         |
-| store        | yesod                   | (paired by index)         |
-| output       | malkuth                 | (paired by index)         |
+## Pipeline path
 
-Primary framework supplies hierarchy and polarity. Alchemical overlay annotates process stage character. Overlay pairing is index-based in v0.1 (best-effort); operators may refine dual mappings in the correspondence table.
+```
+intent → intake → constraint → adversarial → synthesis → store → output
+```
 
-## Generated artifacts
+| Mechanical   | Symbolic (Tree of Life) | Role                                      |
+|--------------|-------------------------|-------------------------------------------|
+| intent       | kether                  | Forage contract (query, limits, tags)     |
+| intake       | chokmah                 | Heterogeneous → RawSignal                 |
+| constraint   | binah                   | Fail-closed schema validation             |
+| adversarial  | geburah                 | Noise / dup / weight / relevance filter   |
+| synthesis    | tiphareth               | Score + OBSERVED/INFERRED/SPECULATIVE     |
+| store        | yesod                   | In-memory + JSON persistence              |
+| output       | malkuth                 | ForageReport emit (text / JSON)           |
 
-- `SKELETON.md` — human-readable map
-- `correspondence-table.json` — machine-readable provenance
-- Per-module `__init__.py` — dual-named typed stubs ready for implementation
+## Programmatic use
 
-## How to extend
+```python
+from pipeline import run_forage
+from output import emit_text
 
-1. Replace each `placeholder()` with real logic.
-2. Add Path / gate modules between polar pairs (e.g. intake ↔ constraint, adversarial ↔ synthesis).
-3. Run `do project` if the map grows beyond six modules and a reduced core is preferred.
-4. Record any pragmatic collapse in the correspondence table before promoting structure.
+report, scored, store = run_forage(
+    "energy market stress",
+    [{"text": "energy futures widened", "tags": ["market"], "weight": 0.9, "source": "api"}],
+    max_signals=10,
+)
+print(emit_text(report))
+```
 
-## Status
+## Design notes
 
-CLEAN — all selected concerns mapped to strong or adequate loci. No FORCED entries.
+- Stdlib only. Deterministic given identical inputs.
+- Epistemic labels follow Abraxas OBSERVED / INFERRED / SPECULATIVE discipline.
+- Fail-closed at constraint: missing text or invalid weight is rejected with reason.
+- Adversarial pass drops noise patterns, duplicates, under-weight, and query-irrelevant items.
+- Synthesis scores by weight + tag bonus + query-term hits; source type biases label.
+
+## Regenerating structure only
+
+```bash
+./regenerate.sh
+```
+
+Overwrites dual-name stubs; re-apply logic from this tree or from git history if needed.
