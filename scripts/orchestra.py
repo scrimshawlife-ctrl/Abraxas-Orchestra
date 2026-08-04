@@ -190,7 +190,6 @@ def _select_loci(
     if not concerns:
         return list(defaults)
 
-    # Match concerns against mechanical names (case-insensitive substring)
     selected: list[tuple[str, str, str]] = []
     for concern in concerns:
         c = concern.strip().lower()
@@ -200,9 +199,7 @@ def _select_loci(
                 selected.append((mech, sym, note))
                 matched = True
         if not matched:
-            # Unknown concern — still emit a forced locus so operator sees it
             selected.append((concern, f"unmapped_{concern}", "FORCED — no clean locus"))
-    # Deduplicate while preserving order
     seen: set[str] = set()
     out: list[tuple[str, str, str]] = []
     for item in selected:
@@ -212,11 +209,93 @@ def _select_loci(
     return out
 
 
+def _overlay_annotation(
+    primary_loci: list[tuple[str, str, str]], overlay: str
+) -> list[str]:
+    """Return short overlay notes paired by index (best-effort, not forced 1:1)."""
+    if overlay not in FRAMEWORKS:
+        return []
+    o_loci = FRAMEWORKS[overlay]["default_loci"]
+    notes: list[str] = []
+    for i, (mech, _, _) in enumerate(primary_loci):
+        if i < len(o_loci):
+            o_mech, o_sym, o_note = o_loci[i]
+            notes.append(f"overlay:{overlay}/{o_sym} ({o_note})")
+        else:
+            notes.append(f"overlay:{overlay}/—")
+    return notes
+
+
+def _write_skeleton(
+    out_dir: Path,
+    framework: str,
+    meta: dict[str, Any],
+    loci: list[tuple[str, str, str]],
+    table: dict[str, Any],
+    overlay_notes: list[str],
+) -> None:
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    # correspondence table
+    table_path = out_dir / "correspondence-table.json"
+    table_path.write_text(json.dumps(table, indent=2) + "\n", encoding="utf-8")
+
+    # skeleton README
+    lines = [
+        f"# Skeleton — {framework} ({meta['title']})",
+        f"",
+        f"Status: {table['status']}",
+        f"Generated: {table['provenance']['timestamp']}",
+        f"Skill: Orchestra {VERSION}",
+        f"",
+        f"## Dual-named modules",
+        f"",
+    ]
+    for i, (mech, sym, note) in enumerate(loci):
+        lines.append(f"### `{mech}/`")
+        lines.append(f"- mechanical: `{mech}`")
+        lines.append(f"- symbolic: `{sym}`")
+        lines.append(f"- locus: {note}")
+        if overlay_notes and i < len(overlay_notes):
+            lines.append(f"- {overlay_notes[i]}")
+        lines.append("")
+        # create the directory with a stub README
+        mod_dir = out_dir / mech
+        mod_dir.mkdir(parents=True, exist_ok=True)
+        stub = mod_dir / "README.md"
+        stub_body = [
+            f"# {mech}",
+            f"",
+            f"mechanical: `{mech}`",
+            f"symbolic: `{sym}`",
+            f"locus: {note}",
+            f"",
+        ]
+        if overlay_notes and i < len(overlay_notes):
+            stub_body.append(overlay_notes[i])
+            stub_body.append("")
+        stub.write_text("\n".join(stub_body), encoding="utf-8")
+
+    (out_dir / "SKELETON.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def cmd_structure(args: argparse.Namespace) -> int:
     framework = args.framework
     if framework not in FRAMEWORKS:
         print(f"NOT_COMPUTABLE — unknown framework: {framework}", file=sys.stderr)
         print(f"Known: {', '.join(FRAMEWORKS)}", file=sys.stderr)
+        return 2
+
+    overlay = args.overlay
+    if overlay and overlay not in FRAMEWORKS:
+        print(f"NOT_COMPUTABLE — unknown overlay: {overlay}", file=sys.stderr)
+        print(f"Known: {', '.join(FRAMEWORKS)}", file=sys.stderr)
+        return 2
+    if overlay and overlay == framework:
+        print(
+            "NOT_COMPUTABLE — overlay must differ from primary framework",
+            file=sys.stderr,
+        )
         return 2
 
     concerns = None
@@ -225,29 +304,30 @@ def cmd_structure(args: argparse.Namespace) -> int:
 
     loci = _select_loci(framework, concerns)
     meta = FRAMEWORKS[framework]
+    overlay_notes = _overlay_annotation(loci, overlay) if overlay else []
 
-    # Build correspondence table
     mappings = []
     forced = 0
-    for mech, sym, note in loci:
+    for i, (mech, sym, note) in enumerate(loci):
         strength = "FORCED" if note.startswith("FORCED") else "ADEQUATE"
         if strength == "FORCED":
             forced += 1
-        mappings.append(
-            {
-                "functional_concern": note if not note.startswith("FORCED") else mech,
-                "mechanical_name": mech,
-                "symbolic_name": sym,
-                "symbolic_locus": sym,
-                "strength": strength,
-                "notes": note,
-            }
-        )
+        entry: dict[str, Any] = {
+            "functional_concern": note if not note.startswith("FORCED") else mech,
+            "mechanical_name": mech,
+            "symbolic_name": sym,
+            "symbolic_locus": sym,
+            "strength": strength,
+            "notes": note,
+        }
+        if overlay_notes and i < len(overlay_notes):
+            entry["overlay_note"] = overlay_notes[i]
+        mappings.append(entry)
 
     status = "FORCED_CORRESPONDENCE" if forced else "CLEAN"
     table = {
         "framework": framework,
-        "secondary_overlay": None,
+        "secondary_overlay": overlay,
         "status": status,
         "mappings": mappings,
         "pragmatic_projection": None,
@@ -258,25 +338,40 @@ def cmd_structure(args: argparse.Namespace) -> int:
         },
     }
 
-    # Emit dual-named skeleton (directory-style)
+    # stdout emission
     print(f"# Abraxas Orchestra — structure skeleton")
     print(f"# framework : {framework} ({meta['title']})")
+    if overlay:
+        print(f"# overlay   : {overlay} ({FRAMEWORKS[overlay]['title']})")
     print(f"# status    : {status}")
     print(f"# generated : {table['provenance']['timestamp']}")
     print()
     print("## Dual-named skeleton")
     print()
-    for mech, sym, note in loci:
+    for i, (mech, sym, note) in enumerate(loci):
         print(f"{mech}/")
         print(f"  # mechanical : {mech}")
         print(f"  # symbolic   : {sym}")
         print(f"  # locus note : {note}")
+        if overlay_notes and i < len(overlay_notes):
+            print(f"  # {overlay_notes[i]}")
         print()
 
     print("## Correspondence table (JSON)")
     print()
     print(json.dumps(table, indent=2))
     print()
+
+    # optional disk write
+    if args.out:
+        out_dir = Path(args.out).expanduser().resolve()
+        _write_skeleton(out_dir, framework, meta, loci, table, overlay_notes)
+        print(f"# wrote skeleton → {out_dir}")
+        print(f"#   SKELETON.md")
+        print(f"#   correspondence-table.json")
+        for mech, _, _ in loci:
+            print(f"#   {mech}/README.md")
+        print()
 
     if status == "FORCED_CORRESPONDENCE":
         print(
@@ -296,7 +391,6 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--version", action="version", version=f"Orchestra {VERSION}")
     sub = p.add_subparsers(dest="command", required=True)
 
-    # do <intent>
     do_p = sub.add_parser("do", help="Execute an intent")
     do_sub = do_p.add_subparsers(dest="intent", required=True)
 
@@ -307,7 +401,13 @@ def build_parser() -> argparse.ArgumentParser:
         "--framework",
         "-f",
         required=True,
-        help="Framework key (see: do list-frameworks)",
+        help="Primary framework key (see: do list-frameworks)",
+    )
+    struct_p.add_argument(
+        "--overlay",
+        "-o",
+        default=None,
+        help="Secondary overlay framework (optional)",
     )
     struct_p.add_argument(
         "--concerns",
@@ -315,12 +415,16 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Comma-separated functional concerns to map (optional)",
     )
+    struct_p.add_argument(
+        "--out",
+        default=None,
+        help="Write skeleton directories + correspondence-table.json to DIR",
+    )
     struct_p.set_defaults(func=cmd_structure)
 
     list_p = do_sub.add_parser("list-frameworks", help="List available frameworks")
     list_p.set_defaults(func=cmd_list_frameworks)
 
-    # check
     check_p = sub.add_parser("check", help="Validate skill integrity")
     check_p.set_defaults(func=cmd_check)
 

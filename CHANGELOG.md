@@ -7,9 +7,11 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
+- CLI `--out DIR` — write dual-named skeleton directories + correspondence-table.json to disk
+- CLI `--overlay / -o` — secondary framework overlay annotations on primary loci
 - Executable surface: atomic installer (`install.sh`) and minimal CLI (`scripts/orchestra.py`)
 - `do list-frameworks` — list all registered frameworks
-- `do structure -f <framework> [-c concerns]` — emit dual-named skeleton + correspondence table JSON
+- `do structure -f <framework> [-c concerns] [-o overlay] [--out DIR]`
 - `check` — validate skill integrity
 - Fail-closed on unknown frameworks; FORCED status on unmapped concerns
 - Sacred geometry & recursive proportion (`references/sacred-geometry.md`)
