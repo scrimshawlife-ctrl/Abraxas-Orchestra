@@ -64,13 +64,22 @@ validate_source() {
     [[ -f "${SCRIPT_DIR}/${f}" ]] || die "missing required file: ${f}"
   done
 
-  # At least the primary references must exist
+  # All declared framework references must exist
   local refs=(
     "references/tree-of-life-mappings.md"
     "references/alchemical-stages.md"
+    "references/elder-futhark.md"
+    "references/planetary-spheres.md"
+    "references/iching-hexagrams.md"
+    "references/solomonic.md"
+    "references/peircean-signs.md"
+    "references/numogram.md"
+    "references/sacred-geometry.md"
+    "references/enochian.md"
+    "references/chaos-magic.md"
   )
   for f in "${refs[@]}"; do
-    [[ -f "${SCRIPT_DIR}/${f}" ]] || die "missing primary reference: ${f}"
+    [[ -f "${SCRIPT_DIR}/${f}" ]] || die "missing framework reference: ${f}"
   done
 
   # CLI must be importable / runnable
@@ -121,10 +130,13 @@ atomic_install() {
   run "cp -a '${SCRIPT_DIR}/VERSION' '${staging}/'"
   run "cp -a '${SCRIPT_DIR}/README.md' '${staging}/'" 2>/dev/null || true
   run "cp -a '${SCRIPT_DIR}/CHANGELOG.md' '${staging}/'" 2>/dev/null || true
+  run "cp -a '${SCRIPT_DIR}/LICENSE' '${staging}/'" 2>/dev/null || true
   run "cp -a '${SCRIPT_DIR}/scripts' '${staging}/'"
   run "cp -a '${SCRIPT_DIR}/references' '${staging}/'"
   run "cp -a '${SCRIPT_DIR}/schemas' '${staging}/'"
   run "cp -a '${SCRIPT_DIR}/docs' '${staging}/'" 2>/dev/null || true
+  run "cp -a '${SCRIPT_DIR}/examples' '${staging}/'" 2>/dev/null || true
+  run "cp -a '${SCRIPT_DIR}/install.sh' '${staging}/'" 2>/dev/null || true
 
   # Make CLI executable
   run "chmod +x '${staging}/scripts/orchestra.py'"
