@@ -1,7 +1,7 @@
 ---
 name: orchestra
-description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra."
-version: 0.1.4
+description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, diagrammatic HTML/JSON graphs, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra."
+version: 0.1.5
 license: Apache-2.0
 metadata:
   openclaw:
@@ -26,7 +26,10 @@ python3 scripts/orchestra.py check
 python3 scripts/orchestra.py list
 python3 scripts/orchestra.py structure -f <framework> [-c concerns] [-o overlay] [--out DIR]
 python3 scripts/orchestra.py project   -f <framework> [-c concerns] [-o overlay] [--out DIR]
+python3 scripts/orchestra.py diagram   -f <framework> [-c concerns] [-o overlay] [--out DIR]
 ```
+
+`diagram` (alias `diagrammit`) writes `architecture.html` + `architecture.json` (`{nodes, edges, flows}`).
 
 Legacy `do <command>` is still accepted.
 
@@ -34,6 +37,7 @@ Legacy `do <command>` is still accepted.
 
 - Map software structure onto a traditional correspondence system
 - Emit dual-named module skeletons (mechanical primary, symbolic secondary)
+- Emit interactive architecture diagrams + agent graphs
 - Overlay Chaos Magic or a second framework on a primary map
 - Fail closed when a mapping is forced or non-computable
 
@@ -47,8 +51,8 @@ Legacy `do <command>` is still accepted.
 
 1. Identify functional concerns (modules, stages, domains).
 2. Choose primary framework (and optional overlay).
-3. Prefer `scripts/orchestra.py structure` / `project`.
-4. Emit correspondence table JSON matching schema.
+3. Prefer `scripts/orchestra.py structure` / `project` / `diagram`.
+4. Emit correspondence table JSON matching schema (or diagram graph).
 5. Stop on `NOT_COMPUTABLE` or label `FORCED` — do not invent loci.
 
 ## Frameworks
@@ -57,19 +61,11 @@ Canonical loci: `schemas/frameworks.v1.json`
 
 Eleven maps: tree-of-life, alchemical-stages, elder-futhark, planetary-spheres, iching-hexagrams, solomonic, peircean-signs, numogram, sacred-geometry, enochian, chaos-magic.
 
-Detailed tables live in `references/`. Loci for CLI emission live in `schemas/frameworks.v1.json`. Load markdown references when the chosen framework requires detail. Keep active context lean.
-
-## Agent posture
-
-See `references/agent-posture.md` when implementing code under this skill.
-
 ## Install
 
 ```bash
 bash install.sh --dry-run
 bash install.sh
-# OpenClaw:
-bash install.sh --target ~/.openclaw/skills/orchestra
 ```
 
 Installer refuses system paths and targets outside `$HOME` unless `--allow-outside-home`.
