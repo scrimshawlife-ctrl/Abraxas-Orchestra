@@ -25,6 +25,8 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 - Tests: example skeletons + demo report shape + frameworks JSON parity (13 tests)
 - Deploy: optional release-tag instructions
 - CONTRIBUTING: edit `frameworks.v1.json` when adding frameworks
+- CLI loads `schemas/frameworks.v1.json` at startup (no embedded FRAMEWORKS dict)
+- Installer requires `schemas/frameworks.v1.json`
 
 ## [0.1.1] — 2026-08-04
 

@@ -59,6 +59,7 @@ validate_source() {
     "VERSION"
     "scripts/orchestra.py"
     "schemas/correspondence-table.v1.schema.json"
+    "schemas/frameworks.v1.json"
   )
   for f in "${required[@]}"; do
     [[ -f "${SCRIPT_DIR}/${f}" ]] || die "missing required file: ${f}"
