@@ -7,10 +7,15 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
+- Numogram correspondence (`references/numogram.md`)
+- Ten zones as domain / state classes
+- Five syzygies as balanced polar pairs
+- Time-circuit as directed cyclic process
+- Gates as explicit interfaces / currents
+- Peircean sign trichotomies (`references/peircean-signs.md`)
+- Icon / Index / Symbol, Qualisign / Sinsign / Legisign, Rheme / Dicent / Argument
+- Selected high-value ten-class combinations
 - Solomonic hierarchy & functional correspondence (`references/solomonic.md`)
-- Rank ladder (King → Knight) as authority / privilege tiers
-- Functional office categories (knowledge, treasure, warfare, relation, travel, transformation, binding, judgment)
-- Sealed contract (pentacle) model for capability tokens and fail-closed authorization
 - Curated I Ching hexagram set for state machines (`references/iching-hexagrams.md`)
 - Planetary & Elemental spheres domain separation mapping (`references/planetary-spheres.md`)
 - Elder Futhark full aettir + individual rune intent mapping (`references/elder-futhark.md`)
