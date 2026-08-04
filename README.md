@@ -40,6 +40,21 @@ bash install.sh --target ~/.openclaw/skills/orchestra    # OpenClaw
 
 ---
 
+## Release notes
+
+**Current: [0.1.2](docs/RELEASE_NOTES.md#012--2026-08-04)** (2026-08-04) — private Hermes/OpenClaw production bar.
+
+| Theme | What landed |
+|-------|-------------|
+| Single source of truth | `schemas/frameworks.v1.json` drives CLI loci |
+| Packaging | Smoke script, 13 unit tests, CI 3.11/3.12, atomic install |
+| Deploy | Ordered path in `docs/DEPLOY.md` |
+| Examples | Signal-forager pipeline; Enochian + Chaos stubs |
+
+Full narrative: **[`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)** · Machine changelog: [`CHANGELOG.md`](CHANGELOG.md)
+
+---
+
 ## How to use
 
 ### For humans
@@ -96,10 +111,10 @@ orchestra.manifest.yaml  # Install / discovery metadata
 scripts/orchestra.py     # CLI
 scripts/smoke.sh         # Production smoke
 references/              # Framework tables + agent-posture
-schemas/                 # correspondence-table.v1
+schemas/                 # correspondence-table.v1 + frameworks.v1
 examples/                # signal-forager; enochian-chaos
 tests/                   # stdlib unittest
-docs/                    # DESIGN, OPENCLAW, COMMUNITY, DEPLOY, ROADMAP
+docs/                    # DESIGN, DEPLOY, RELEASE_NOTES, ROADMAP, …
 install.sh               # Atomic installer
 ```
 
@@ -111,13 +126,14 @@ install.sh               # Atomic installer
 |-----|----------|
 | `SKILL.md` | Agents |
 | `README.md` | Humans + agents |
+| `docs/RELEASE_NOTES.md` | Narrative release notes |
 | `docs/DEPLOY.md` | Ordered deployment next steps |
 | `docs/ROADMAP.md` | Done / deferred / production bar |
 | `docs/DESIGN.md` | Design rationale |
 | `docs/OPENCLAW.md` | OpenClaw packaging |
 | `docs/COMMUNITY.md` | Community-skills compliance |
 | `references/agent-posture.md` | Code implementation posture |
-| `CHANGELOG.md` | Version history |
+| `CHANGELOG.md` | Machine version history |
 
 ---
 
@@ -134,4 +150,5 @@ install.sh               # Atomic installer
 ## Links
 
 - Repo: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
+- Release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)
 - Deploy: [`docs/DEPLOY.md`](docs/DEPLOY.md)
