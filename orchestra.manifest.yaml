@@ -1,5 +1,5 @@
 name: orchestra
-version: 0.1.4
+version: 0.1.5
 display_name: Abraxas Orchestra
 kind: hermes-openclaw-skill
 
@@ -47,6 +47,7 @@ intents:
   - list
   - structure
   - project
+  - diagram
 
 schemas:
   correspondence_table: schemas/correspondence-table.v1.schema.json
