@@ -18,10 +18,6 @@ from typing import Any
 VERSION = "0.1.0"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
-# ---------------------------------------------------------------------------
-# Framework registry
-# ---------------------------------------------------------------------------
-
 FRAMEWORKS: dict[str, dict[str, Any]] = {
     "tree-of-life": {
         "title": "Tree of Life",
@@ -144,6 +140,32 @@ FRAMEWORKS: dict[str, dict[str, Any]] = {
         ],
         "core_collapse": ["nested_core", "shared_zone"],
     },
+    "enochian": {
+        "title": "Enochian",
+        "reference": "references/enochian.md",
+        "default_loci": [
+            ("edge_intake", "aethyr_tex", "Material gateway / edge intake"),
+            ("air_comms", "watchtower_east", "Air domain — analysis / messaging"),
+            ("fire_transform", "watchtower_south", "Fire domain — transformation"),
+            ("water_memory", "watchtower_west", "Water domain — memory / flux"),
+            ("earth_persist", "watchtower_north", "Earth domain — persistence"),
+            ("domain_entry", "enochian_call", "Invocation / domain-entry token"),
+            ("sovereign_intent", "aethyr_lil", "Apex intent / pure contract"),
+        ],
+        "core_collapse": ["edge_intake", "domain_entry", "sovereign_intent"],
+    },
+    "chaos-magic": {
+        "title": "Chaos Magic",
+        "reference": "references/chaos-magic.md",
+        "default_loci": [
+            ("paradigm_switch", "chaos_shift", "Paradigm engine / framework select"),
+            ("intent_token", "sigil_glyph", "Compressed intent token"),
+            ("context_reset", "banishing_clear", "Session / context banishing"),
+            ("outcome_gate", "results_metric", "Results eval gate"),
+            ("custom_alphabet", "alphabet_desire", "Project-local symbolic encoding"),
+        ],
+        "core_collapse": ["paradigm_switch", "intent_token", "outcome_gate"],
+    },
 }
 
 
@@ -221,7 +243,6 @@ def _select_loci(
 def _apply_pragmatic_projection(
     framework: str, loci: list[tuple[str, str, str]]
 ) -> tuple[list[tuple[str, str, str]], str | None]:
-    """Collapse to core set when pure map is oversized or carries FORCED entries."""
     forced = [x for x in loci if x[2].startswith("FORCED")]
     clean = [x for x in loci if not x[2].startswith("FORCED")]
 
