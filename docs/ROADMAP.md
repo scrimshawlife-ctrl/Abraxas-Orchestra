@@ -8,11 +8,11 @@
 | CLI structure / project / check | Stdlib only |
 | Schema validation in `check` | Sample tables per framework |
 | Atomic installer | Hermes + OpenClaw `--target` |
-| Signal-forager example | Runnable pipeline |
-| Enochian + Chaos example | Structure + Mermaid |
+| Signal-forager example | Runnable pipeline + structured errors |
+| Enochian + Chaos example | Runnable session pipeline + structured errors |
 | Agent posture | Non-framework build rules |
 | Human/agent docs | README, COMMUNITY, SKILL frontmatter |
-| **Automated tests** | `tests/test_orchestra.py` (14 tests) |
+| **Automated tests** | `tests/test_orchestra.py` (17 tests) |
 | **Smoke script** | `scripts/smoke.sh` |
 | **CI** | `.github/workflows/ci.yml` |
 | **Deploy guide** | `docs/DEPLOY.md` |
@@ -20,6 +20,7 @@
 | **Security notes** | `docs/SECURITY.md` |
 | **Canonical loci JSON** | `schemas/frameworks.v1.json` (CLI loads at startup) |
 | **Text-safe hero** | `assets/hero.svg` |
+| **Freeze checklist** | `docs/COMPLETION.md` |
 
 ## Explicitly deferred
 
@@ -54,8 +55,23 @@ Public registry listing additionally requires license compatibility (`docs/COMMU
 
 Hero: **`assets/hero.svg`** ships in-repo (text-safe). Optional photographic `hero.jpg` still operator-local. Optional `v0.1.2` tag still operator-local.
 
+## Freeze gate (v0.1.2)
+
+Full checklist: **[`COMPLETION.md`](COMPLETION.md)**.
+
+| Gate | Owner | Status |
+|------|-------|--------|
+| Smoke + 17 tests on `main` | CI / operator | **Met** |
+| Dual runnable examples + error handling | repo | **Met** |
+| Docs (DEPLOY, SECURITY, RELEASE_NOTES) | repo | **Met** |
+| Host install once | operator | Pending local |
+| `v0.1.2` tag | operator | Pending local |
+| Photographic hero | operator | Optional |
+
+When host install is verified and the tag is pushed, mark 0.1.2 **frozen**. Open 0.2 only for contract changes or new product scope.
+
 ## Next steps for deployment
 
 Follow **`docs/DEPLOY.md`** in order.
 
-See also: [`RELEASE_NOTES.md`](RELEASE_NOTES.md) · [`CHANGELOG.md`](../CHANGELOG.md) · [`SECURITY.md`](SECURITY.md).
+See also: [`COMPLETION.md`](COMPLETION.md) · [`RELEASE_NOTES.md`](RELEASE_NOTES.md) · [`CHANGELOG.md`](../CHANGELOG.md) · [`SECURITY.md`](SECURITY.md).

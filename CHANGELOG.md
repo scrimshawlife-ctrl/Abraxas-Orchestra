@@ -10,7 +10,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
 ### Added
 - `docs/DEPLOY.md` — explicit ordered deployment next steps (Hermes/OpenClaw)
-- `tests/test_orchestra.py` — stdlib unittest suite (15 tests)
+- `tests/test_orchestra.py` — stdlib unittest suite (17 tests)
 - `scripts/smoke.sh` — check + tests + demos + install dry-run
 - `.github/workflows/ci.yml` — Python 3.11/3.12 CI
 - `docs/ROADMAP.md` — done vs deferred production bar
@@ -18,9 +18,11 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - `schemas/frameworks.v1.json` — canonical framework loci (single source of truth)
 - `docs/RELEASE_NOTES.md` — narrative release notes for operators and agents
 - `docs/SECURITY.md` — local threat model
+- `docs/COMPLETION.md` — v0.1.2 freeze checklist
 - `references/enochian-cli-loci.md` — Enochian CLI table companion
 - `assets/hero.svg` — text-safe README hero (JPEG remains optional)
 - Enochian-chaos example: runnable session pipeline (no placeholder stubs)
+- Structured pipeline errors (`ValidationError` / `StageError`) on both examples
 
 ### Fixed
 - Enochian-chaos modules replaced `placeholder()` stubs with real seal/call/edge/bus/inverse/gate logic
