@@ -1,0 +1,67 @@
+{
+  "framework": "enochian",
+  "secondary_overlay": "chaos-magic",
+  "status": "CLEAN",
+  "mappings": [
+    {
+      "functional_concern": "Material gateway / edge intake",
+      "mechanical_name": "edge_intake",
+      "symbolic_name": "aethyr_tex",
+      "symbolic_locus": "aethyr_tex",
+      "strength": "ADEQUATE",
+      "notes": "Material gateway / edge intake",
+      "overlay_note": "overlay:chaos-magic/chaos_shift (Paradigm engine / framework select)"
+    },
+    {
+      "functional_concern": "Invocation / domain-entry token",
+      "mechanical_name": "domain_entry",
+      "symbolic_name": "enochian_call",
+      "symbolic_locus": "enochian_call",
+      "strength": "ADEQUATE",
+      "notes": "Invocation / domain-entry token",
+      "overlay_note": "overlay:chaos-magic/sigil_glyph (Compressed intent token)"
+    },
+    {
+      "functional_concern": "Root truth / session authority seal",
+      "mechanical_name": "root_truth_seal",
+      "symbolic_name": "sigillum_dei_aemeth",
+      "symbolic_locus": "sigillum_dei_aemeth",
+      "strength": "ADEQUATE",
+      "notes": "Root truth / session authority seal",
+      "overlay_note": "overlay:chaos-magic/banishing_clear (Session / context banishing)"
+    },
+    {
+      "functional_concern": "Spirit bus / Black Cross coordination",
+      "mechanical_name": "cross_domain_bus",
+      "symbolic_name": "tablet_of_union",
+      "symbolic_locus": "tablet_of_union",
+      "strength": "ADEQUATE",
+      "notes": "Spirit bus / Black Cross coordination",
+      "overlay_note": "overlay:chaos-magic/results_metric (Results eval gate)"
+    },
+    {
+      "functional_concern": "Inverse / adversarial fail-mode surface",
+      "mechanical_name": "inverse_capability",
+      "symbolic_name": "cacodemon_mirror",
+      "symbolic_locus": "cacodemon_mirror",
+      "strength": "ADEQUATE",
+      "notes": "Inverse / adversarial fail-mode surface",
+      "overlay_note": "overlay:chaos-magic/alphabet_desire (Project-local symbolic encoding)"
+    },
+    {
+      "functional_concern": "Apex intent / pure contract",
+      "mechanical_name": "sovereign_intent",
+      "symbolic_name": "aethyr_lil",
+      "symbolic_locus": "aethyr_lil",
+      "strength": "ADEQUATE",
+      "notes": "Apex intent / pure contract",
+      "overlay_note": "overlay:chaos-magic/—"
+    }
+  ],
+  "pragmatic_projection": null,
+  "provenance": {
+    "operator": "orchestra-cli",
+    "timestamp": "2026-08-04T20:22:16Z",
+    "skill_version": "0.1.1"
+  }
+}
