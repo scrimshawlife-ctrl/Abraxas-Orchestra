@@ -7,6 +7,11 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
+- Elder Futhark full aettir + individual rune intent mapping (`references/elder-futhark.md`)
+- Three-aett subsystem boundary model
+- 24-rune architectural role table with dual-naming examples
+
+### Previously
 - Initial design surface for v0.1.0
 - SKILL.md operating contract
 - Tree of Life primary mappings
