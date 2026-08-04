@@ -1,6 +1,12 @@
 # Abraxas Orchestra
 
-**Hermes + OpenClaw coding-agent skill** for symbolic code architecture.
+<p align="center">
+  <img src="assets/hero.jpg" alt="Abraxas Orchestra — symbolic architecture skill" width="720"/>
+</p>
+
+<p align="center">
+  <strong>Hermes + OpenClaw coding-agent skill</strong> for symbolic code architecture
+</p>
 
 Version **0.1.2** · Skill name: `orchestra` · Python ≥ 3.11 · Network: not required
 
@@ -84,11 +90,12 @@ Do **not** invent symbolic loci to satisfy a map. Return `NOT_COMPUTABLE` or mar
 ## Repository layout
 
 ```text
-SKILL.md                 # Agent contract (frontmatter + procedure)
+assets/hero.jpg          # README hero art
+SKILL.md                 # Agent contract
 orchestra.manifest.yaml  # Install / discovery metadata
-scripts/orchestra.py     # CLI (structure, project, check)
+scripts/orchestra.py     # CLI
 scripts/smoke.sh         # Production smoke
-references/              # Framework tables + agent-posture (load on demand)
+references/              # Framework tables + agent-posture
 schemas/                 # correspondence-table.v1
 examples/                # signal-forager; enochian-chaos
 tests/                   # stdlib unittest
@@ -102,14 +109,14 @@ install.sh               # Atomic installer
 
 | Doc | Audience |
 |-----|----------|
-| `SKILL.md` | Agents (procedure + invariants) |
-| `README.md` | Humans + agents (this file) |
+| `SKILL.md` | Agents |
+| `README.md` | Humans + agents |
 | `docs/DEPLOY.md` | Ordered deployment next steps |
 | `docs/ROADMAP.md` | Done / deferred / production bar |
 | `docs/DESIGN.md` | Design rationale |
 | `docs/OPENCLAW.md` | OpenClaw packaging |
-| `docs/COMMUNITY.md` | Community-skills compliance checklist |
-| `references/agent-posture.md` | How to implement code under this skill |
+| `docs/COMMUNITY.md` | Community-skills compliance |
+| `references/agent-posture.md` | Code implementation posture |
 | `CHANGELOG.md` | Version history |
 
 ---
