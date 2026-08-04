@@ -188,6 +188,83 @@ def cmd_list_frameworks(_: argparse.Namespace) -> int:
     return 0
 
 
+def _validate_table_against_schema(table: dict[str, Any]) -> list[str]:
+    """Lightweight schema check (stdlib only — no jsonschema dependency)."""
+    errors: list[str] = []
+    allowed_fw = {
+        "tree-of-life",
+        "alchemical-stages",
+        "elder-futhark",
+        "planetary-spheres",
+        "iching-hexagrams",
+        "solomonic",
+        "peircean-signs",
+        "numogram",
+        "sacred-geometry",
+        "enochian",
+        "chaos-magic",
+        "composite",
+    }
+    allowed_status = {
+        "CLEAN",
+        "WEAK_MAPPINGS",
+        "FORCED_CORRESPONDENCE",
+        "NOT_COMPUTABLE",
+    }
+    allowed_strength = {"STRONG", "ADEQUATE", "WEAK", "FORCED"}
+    allowed_map_keys = {
+        "functional_concern",
+        "mechanical_name",
+        "symbolic_name",
+        "symbolic_locus",
+        "strength",
+        "notes",
+        "overlay_note",
+    }
+    allowed_top = {
+        "framework",
+        "secondary_overlay",
+        "status",
+        "mappings",
+        "pragmatic_projection",
+        "provenance",
+    }
+
+    for k in table:
+        if k not in allowed_top:
+            errors.append(f"unknown top-level key: {k}")
+
+    if "framework" not in table:
+        errors.append("missing required: framework")
+    elif table["framework"] not in allowed_fw:
+        errors.append(f"framework not in schema enum: {table['framework']}")
+
+    if "status" not in table:
+        errors.append("missing required: status")
+    elif table["status"] not in allowed_status:
+        errors.append(f"status not in schema enum: {table['status']}")
+
+    if "mappings" not in table:
+        errors.append("missing required: mappings")
+    elif not isinstance(table["mappings"], list):
+        errors.append("mappings must be an array")
+    else:
+        for i, m in enumerate(table["mappings"]):
+            if not isinstance(m, dict):
+                errors.append(f"mappings[{i}] not an object")
+                continue
+            for k in m:
+                if k not in allowed_map_keys:
+                    errors.append(f"mappings[{i}] unknown key: {k}")
+            for req in ("functional_concern", "symbolic_locus", "strength"):
+                if req not in m:
+                    errors.append(f"mappings[{i}] missing required: {req}")
+            if "strength" in m and m["strength"] not in allowed_strength:
+                errors.append(f"mappings[{i}] bad strength: {m['strength']}")
+
+    return errors
+
+
 def cmd_check(_: argparse.Namespace) -> int:
     errors: list[str] = []
     required = [
@@ -205,6 +282,21 @@ def cmd_check(_: argparse.Namespace) -> int:
         if not ref.exists():
             errors.append(f"missing reference for {key}: {meta['reference']}")
 
+    # Emit a sample table per framework (and one overlay sample) and validate
+    for key in FRAMEWORKS:
+        loci = _select_loci(key, None)
+        loci = loci[:3]
+        table = _build_table(key, None, loci, [], None)
+        for e in _validate_table_against_schema(table):
+            errors.append(f"{key}: {e}")
+
+    if "tree-of-life" in FRAMEWORKS and "chaos-magic" in FRAMEWORKS:
+        loci = _select_loci("tree-of-life", ["intent", "output"])
+        ov_notes = _overlay_annotation(loci, "chaos-magic")
+        table = _build_table("tree-of-life", "chaos-magic", loci, ov_notes, None)
+        for e in _validate_table_against_schema(table):
+            errors.append(f"overlay-sample: {e}")
+
     if errors:
         print("CHECK FAILED")
         for e in errors:
@@ -214,6 +306,7 @@ def cmd_check(_: argparse.Namespace) -> int:
     print(f"CHECK OK — Orchestra {VERSION}")
     print(f"  skill root : {SKILL_ROOT}")
     print(f"  frameworks : {len(FRAMEWORKS)}")
+    print(f"  schema     : correspondence-table.v1 validated for all frameworks")
     return 0
 
 
