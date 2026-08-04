@@ -7,8 +7,12 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 ## [Unreleased]
 
 ### Added
+- Executable surface: atomic installer (`install.sh`) and minimal CLI (`scripts/orchestra.py`)
+- `do list-frameworks` — list all registered frameworks
+- `do structure -f <framework> [-c concerns]` — emit dual-named skeleton + correspondence table JSON
+- `check` — validate skill integrity
+- Fail-closed on unknown frameworks; FORCED status on unmapped concerns
 - Sacred geometry & recursive proportion (`references/sacred-geometry.md`)
-- Golden-ratio nesting limits, Platonic adjacency, fractal self-similarity, vesica shared contracts
 - Numogram correspondence (`references/numogram.md`)
 - Peircean sign trichotomies (`references/peircean-signs.md`)
 - Solomonic hierarchy & functional correspondence (`references/solomonic.md`)
@@ -17,7 +21,7 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 - Elder Futhark full aettir + individual rune intent mapping (`references/elder-futhark.md`)
 
 ### Changed
-- README and DESIGN.md updated to reflect completed five primary frameworks + Solomonic expansion
+- README and DESIGN.md updated to reflect completed frameworks
 
 ### Previously
 - Initial design surface for v0.1.0
