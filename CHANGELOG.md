@@ -4,18 +4,20 @@ All notable changes to Abraxas Orchestra will be recorded here.
 
 The format follows Keep a Changelog principles. Versions follow Semantic Versioning.
 
-## [Unreleased]
+## [0.1.1] — 2026-08-04
 
 ### Fixed
 - Correspondence schema enum expanded to all 11 frameworks + `composite`
 - Schema allows `overlay_note` on mappings (matches CLI emission)
-- `orchestra check` now emits sample tables and validates against schema
+- `orchestra check` emits sample tables and validates against schema for every framework
 - Installer requires all framework reference files (not only Tree/Alchemy)
-- Installer executable bit set; `.gitignore` and proprietary `LICENSE` added
+- Installer stages `LICENSE`, `examples`, and itself
 
 ### Added
-- Enochian Sigils/Seals taxonomy; Dee vs neo streams; Heptarchia; Parts; Union; cacodemons
-- Hermes/OpenClaw coding-agent packaging; 11 frameworks; signal-forager example
+- Proprietary `LICENSE` and `.gitignore`
+- Example: `examples/enochian-chaos-skeleton/` (Enochian primary + Chaos Magic overlay)
+- Enochian corpus depth (streams, seals, Heptarchia, Parts, Union, cacodemons) from prior Unreleased work
+- Hermes/OpenClaw coding-agent packaging surface
 
 ## [0.1.0] — 2026-08-04
 

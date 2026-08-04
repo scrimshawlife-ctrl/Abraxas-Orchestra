@@ -1,5 +1,5 @@
 name: orchestra
-version: 0.1.0
+version: 0.1.1
 display_name: Abraxas Orchestra
 kind: hermes-openclaw-skill
 
@@ -59,6 +59,7 @@ schemas:
 # Examples
 examples:
   - examples/signal-forager-skeleton/
+  - examples/enochian-chaos-skeleton/
 
 # Governance posture
 governance:
