@@ -4,16 +4,18 @@ Use this page to decide when the skill package is **frozen** for Hermes/OpenClaw
 
 Public debut packaging: [`PUBLIC_RELEASE.md`](PUBLIC_RELEASE.md).
 Analyze → optimize plan (shipped): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMIZE_PLAN.md).
+Version policy: [`SEMVER.md`](SEMVER.md).
 
 ## Automated (must be green on `main`)
 
 | Gate | Command | Expected |
 |------|---------|----------|
 | Smoke | `bash scripts/smoke.sh` | `SMOKE OK` |
-| Unit tests | included in smoke | 40 tests OK |
+| Unit tests | included in smoke | 40+ tests OK |
 | CLI integrity | `python3 scripts/orchestra.py check` | `CHECK OK — Orchestra 0.3.1` |
 | Frameworks | `python3 scripts/orchestra.py list` | 11 keys |
 | Path jail (install) | `bash install.sh --dry-run --target /etc/orchestra` | non-zero exit |
+| Semver | `python3 scripts/bump_version.py check` | parity OK |
 | CI | `.github/workflows/ci.yml` | `version-parity` + `path-jail` + `smoke` (3.11/3.12) → `ci-ok` |
 | Analyze fixture | `python3 scripts/orchestra.py analyze --path tests/fixtures/mini_pkg --out /tmp/orch-an` | `analysis.json` written |
 | Optimize plan | `python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --out /tmp/orch-plan` | plan written, no tree writes |
@@ -29,6 +31,7 @@ Analyze → optimize plan (shipped): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMI
 - [x] Atomic installer (Hermes + OpenClaw `--target`) with path jail
 - [x] Signal-forager + Enochian/Chaos examples with structured errors
 - [x] CI workflow (Python 3.11 / 3.12) + version parity + path-jail jobs
+- [x] Semver policy + `scripts/bump_version.py`
 - [x] Apache-2.0 LICENSE + NOTICE
 - [x] Security docs for apply write surface
 - [x] Installer VERSION aligned to package VERSION
@@ -49,8 +52,8 @@ See `docs/ROADMAP.md` — multi-language analyze, broader safe_apply, pytest cov
 
 Treat schema, CLI, and install layout as a **stable contract**.
 
-- Corpus expansion: edit `schemas/frameworks.v1.json` + `references/` + tests; no major bump required for additive frameworks.
-- New mutating apply actions: bump minor/major per ROADMAP; update SECURITY.
-- Contract change (CLI flags, schema required fields, install paths): bump version and CHANGELOG.
+- Corpus expansion: edit `schemas/frameworks.v1.json` + `references/` + tests; **PATCH** per [`SEMVER.md`](SEMVER.md).
+- New mutating apply actions: bump **MINOR**/**MAJOR** per SEMVER; update SECURITY.
+- Contract change (CLI flags, schema required fields, install paths): bump version via `scripts/bump_version.py` and CHANGELOG.
 
 Public debut (license + registry): see [`PUBLIC_RELEASE.md`](PUBLIC_RELEASE.md).
