@@ -6,6 +6,18 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.3.2] — 2026-08-04
+
+### Added
+- Semantic versioning policy (`docs/SEMVER.md`)
+- `scripts/bump_version.py` — show / check / patch / minor / major / set
+- CI `version-parity` runs `bump_version.py check`
+- `tests/test_semver.py`
+
+### Changed
+- `release_preflight.sh` uses semver parity check
+- CONTRIBUTING documents bump classes (framework=PATCH, capability=MINOR, break=MAJOR)
+
 ## [0.3.1] — 2026-08-04
 
 ### Fixed

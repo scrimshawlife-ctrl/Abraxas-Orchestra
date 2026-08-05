@@ -2,6 +2,15 @@
 
 Narrative notes for operators and agents. Machine changelog: [`CHANGELOG.md`](../CHANGELOG.md).
 
+## 0.3.2 — 2026-08-04
+
+Semantic versioning as an operable contract.
+
+- Policy: [`SEMVER.md`](SEMVER.md)
+- Tool: `python3 scripts/bump_version.py {show,check,patch,minor,major,set}`
+- CI parity job fails on drift or non-core semver in `VERSION`
+- Release flow: bump → CHANGELOG → `release_preflight.sh` → tag `v` + VERSION
+
 ## 0.3.1 — 2026-08-04
 
 Apply hardening + import-graph refresh.
