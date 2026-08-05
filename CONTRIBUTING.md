@@ -14,6 +14,8 @@ python3 scripts/bump_version.py check
 
 Additive frameworks → **PATCH**. New CLI capability → **MINOR**. Breaking CLI/schema/install or unsafe apply defaults → **MAJOR**.
 
+New **write** actions under `optimize --apply` (beyond rename) are at least **MINOR** — see [`docs/SEMVER.md`](docs/SEMVER.md). Keep `suggest_extract` advisory unless an explicit MAJOR review invents file content.
+
 ## Local checks before any change
 
 ```bash

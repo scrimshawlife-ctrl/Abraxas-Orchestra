@@ -96,6 +96,7 @@ python3 ~/.hermes/skills/orchestra/scripts/orchestra.py analyze \
 - Confirm skill discovery picks up `SKILL.md` frontmatter (`name: orchestra`).
 - Keep mutable agent state **outside** the skill install root.
 - Prefer `--dry-run` after upgrades before swapping a live target.
+- After upgrading the skill install, re-run `python3 …/orchestra.py check` and prefer `optimize --apply` (dry-run) before `--confirm`.
 
 ---
 

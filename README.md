@@ -105,7 +105,7 @@ Writes `optimize-plan.json` and `OPTIMIZE.md`. **No source tree changes.**
 ```bash
 # Dry-run first
 python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --apply
-# Optional: --steps step-1,step-3  or  --actions suggest_rename,suggest_boundary
+# Optional: --steps step-1,step-3  or  --actions suggest_rename,suggest_boundary,suggest_flatten
 
 # Only when you mean it — backs up, then writes; optional re-analyze
 python3 scripts/orchestra.py optimize \
@@ -156,7 +156,7 @@ Publish freeze: [`docs/COMPLETION.md`](docs/COMPLETION.md) · Public debut: [`do
 |-------|-------------|
 | Semver | `docs/SEMVER.md`, `scripts/bump_version.py`, CI parity |
 | Analyze | OBSERVED Python import graph + optional framework map |
-| Optimize | Plan only by default; `--apply --confirm` gated rename/promote/flatten + backup |
+| Optimize | Plan only by default; `--apply --confirm` gated rename/promote/flatten; `--steps` / `--actions` |
 | Diagrams | Auto HTML/JSON/Mermaid on structure/project/analyze `--out` |
 | Release | `.github/workflows/release.yml` on tag push |
 
@@ -183,7 +183,7 @@ scripts/bump_version.py  # Semver parity tool
 scripts/publish.sh       # Operator publish helper
 scripts/smoke.sh         # Production smoke
 references/              # Framework tables + agent-posture
-schemas/                 # correspondence, frameworks, analysis, optimize-plan
+schemas/                 # correspondence, frameworks, analysis, optimize-plan, optimize-apply
 examples/                # signal-forager; enochian-chaos
 tests/                   # stdlib unittest + fixtures
 docs/                    # DESIGN, DEPLOY, COMPLETION, SEMVER, …

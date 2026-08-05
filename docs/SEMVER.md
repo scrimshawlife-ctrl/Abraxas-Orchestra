@@ -82,6 +82,6 @@ python3 scripts/bump_version.py minor --dry-run
 ## Anti-patterns
 
 - Editing only `scripts/orchestra.py` VERSION and forgetting `install.sh`
-- Tagging `v0.3.2` while `VERSION` still says `0.3.1`
+- Tagging `v0.4.0` while `VERSION` still says `0.3.2`
 - Shipping a new mutating apply path as PATCH
 - Inventing locus ids to “support” a map without a versioned corpus change

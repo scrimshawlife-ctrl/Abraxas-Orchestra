@@ -1,7 +1,7 @@
 name: release
 
 # Automated GitHub Release when a version tag is pushed.
-# Tag must match VERSION file: v0.3.2 ↔ 0.3.2
+# Tag must match VERSION file: v0.4.0 ↔ 0.4.0
 
 on:
   push:

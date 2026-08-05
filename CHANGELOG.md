@@ -17,7 +17,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
 ### Changed
 - Apply path runs renames → promotes → flattens; collision demotion covers all three move kinds
-- Docs / COMPLETION / ROADMAP aligned to broader `safe_apply` surface
+- Docs aligned: ANALYZE_OPTIMIZE_PLAN (Phase C++), SECURITY / SECURITY_AUDIT, COMPLETION, ROADMAP, PUBLIC_RELEASE, DEPLOY, CONTRIBUTING
 
 ## [0.3.2] — 2026-08-04
 

@@ -93,3 +93,15 @@ See `docs/PUBLIC_RELEASE.md`.
 | Backup / restore | `apply-report.json` + `RESTORE.md` under `--backup-dir` |
 
 Details: `docs/SECURITY.md` (optimize apply write surface).
+
+## Addendum — 0.4.0 broader safe_apply
+
+| Check | Result |
+|-------|--------|
+| New write actions | Package **promote** (`module.py` → `module/__init__.py`) and **flatten** (single-file package → flat module) |
+| Content invention | Still **None** — moves only; `suggest_extract` remains advisory |
+| Selective apply | `--steps` / `--actions` narrow which `safe_apply` steps run; FORCED still refuses whole apply |
+| Collision policy | Destination collisions demote rename / promote / flatten steps fail-closed |
+| Network | **None** |
+
+Details: `docs/SECURITY.md`, `docs/ANALYZE_OPTIMIZE_PLAN.md` (Phase C++).

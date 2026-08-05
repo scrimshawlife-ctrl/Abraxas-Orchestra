@@ -1,7 +1,7 @@
 # Plan: Repo analyze → map → optimize
 
-Status: **Phase A+B+C shipped (0.2.0 / 0.3.0)** · Target skill: Abraxas Orchestra · Hosts: Hermes, OpenClaw  
-Parent version baseline: `0.3.0` · Implementation owner: Cursor / local agent  
+Status: **Phase A+B+C shipped (0.2.0 / 0.3.0); C++ broaden safe_apply shipped (0.4.0)** · Target skill: Abraxas Orchestra · Hosts: Hermes, OpenClaw  
+Parent version baseline: `0.4.0` · Implementation owner: Cursor / local agent  
 Emit-only `structure`/`diagram` contract preserved; `analyze`/`optimize` are additive commands.
 
 ---
@@ -113,9 +113,10 @@ python3 scripts/orchestra.py optimize \
 1. Load Phase A artifact.
 2. Emit ordered **refactor plan** only for mappings ≥ `--min-strength` (default `ADEQUATE`).
 3. Plan items are descriptive and mechanical, e.g.:
-   - suggest package boundary aligned to locus X
-   - suggest rename mechanical module to match dual-name table (optional)
-   - suggest extracting a stage boundary between nodes on a flow
+   - suggest package boundary aligned to locus X (may `safe_apply` as promote)
+   - suggest rename mechanical module to match dual-name table (optional; may `safe_apply`)
+   - suggest flatten of a single-file package (may `safe_apply`)
+   - suggest extracting a stage boundary between nodes on a flow (advisory only)
 4. Blocked items listed with reason (`FORCED`, weak import evidence, etc.).
 5. Write `optimize-plan.json` + `OPTIMIZE.md` (human).
 
@@ -135,8 +136,11 @@ python3 scripts/orchestra.py optimize \
 python3 scripts/orchestra.py optimize \
   --from analysis.json \
   --apply \
-  [--dry-run] \
-  [--backup-dir DIR]
+  [--confirm] \
+  [--backup-dir DIR] \
+  [--refresh] \
+  [--steps IDS] \
+  [--actions NAMES]
 ```
 
 **Behavior**
@@ -144,7 +148,7 @@ python3 scripts/orchestra.py optimize \
 1. Default: if `--apply` missing → plan only (Phase B).
 2. Recommended: `--apply` alone = dry-run of apply; `--apply --confirm` required for writes.
 3. Backup touched paths before write.
-4. Apply only plan steps marked `safe_apply: true` (mechanical renames/moves within root; no content invention).
+4. Apply only plan steps marked `safe_apply: true` (mechanical moves within root; no content invention).
 5. Refuse apply when any critical FORCED mapping is in the selected set.
 
 **Acceptance (Phase C)**
@@ -153,6 +157,31 @@ python3 scripts/orchestra.py optimize \
 - [x] Backup + restore path documented (`RESTORE.md`, `docs/SECURITY.md`)
 - [x] Tests use temp dirs only
 - [x] SECURITY.md note updated for write surface
+
+### Phase C++ — broader mechanical `safe_apply` (0.4.0)
+
+**Shipped actions**
+
+| Action | Safe apply when | Filesystem effect |
+|--------|-----------------|-------------------|
+| `suggest_rename` | concrete path + STRENGTH ≥ ADEQUATE | rename module/package leaf to mechanical name |
+| `suggest_boundary` | flat `leaf.py` stem matches mechanical name | promote → `leaf/__init__.py` |
+| `suggest_flatten` | package is `__init__.py`-only | flatten → `leaf.py` |
+| `suggest_extract` | — | advisory only (would invent content) |
+
+**Selective apply**
+
+- `--steps step-1,step-3` — only listed step ids
+- `--actions suggest_rename,suggest_boundary,suggest_flatten` — only listed action kinds
+
+Apply order: renames → promotes → flattens. Destination collisions demote all conflicting steps.
+
+**Acceptance (C++)**
+
+- [x] Promote + flatten unit tests
+- [x] `--steps` / `--actions` filters
+- [x] `schemas/optimize-apply.v1.schema.json`
+- [x] Docs: SECURITY, COMPLETION, ROADMAP, RELEASE_NOTES
 
 ---
 
@@ -202,7 +231,7 @@ Reuse mapping entry shape from `correspondence-table.v1` when `-f` is set.
   "steps": [
     {
       "id": "step-1",
-      "action": "suggest_boundary|suggest_rename|suggest_extract",
+      "action": "suggest_boundary|suggest_rename|suggest_extract|suggest_flatten",
       "targets": ["module.id"],
       "locus": "symbolic_or_mechanical",
       "strength": "ADEQUATE",
@@ -215,7 +244,8 @@ Reuse mapping entry shape from `correspondence-table.v1` when `-f` is set.
 }
 ```
 
-Add JSON Schema files under `schemas/` when implementing Phase A/B.
+JSON Schema: `schemas/optimize-plan.v1.schema.json`.  
+Apply report schema: `schemas/optimize-apply.v1.schema.json` (`orchestra-optimize-apply.v1`).
 
 ---
 
@@ -223,20 +253,23 @@ Add JSON Schema files under `schemas/` when implementing Phase A/B.
 
 | Path | Change |
 |------|--------|
-| `scripts/orchestra.py` | Register `analyze`, `optimize`; wire parsers |
-| `scripts/analyze_repo.py` (new) | Walk, AST import graph, analysis.json builder |
-| `scripts/optimize_plan.py` (new) | Plan synthesis from analysis |
+| `scripts/orchestra.py` | Register `analyze`, `optimize`; wire parsers (`--steps`, `--actions`) |
+| `scripts/analyze_repo.py` | Walk, AST import graph, analysis.json builder |
+| `scripts/optimize_plan.py` | Plan synthesis from analysis (`rename` / `boundary` / `flatten` / `extract`) |
+| `scripts/optimize_apply.py` | Gated apply: rename, promote, flatten + selective filters |
 | `scripts/diagram_emit.py` | Accept observed graphs (not only loci sequences) |
 | `scripts/diagram_mermaid.py` | Same |
-| `schemas/analysis.v1.schema.json` (new) | Phase A |
-| `schemas/optimize-plan.v1.schema.json` (new) | Phase B |
-| `tests/fixtures/mini_pkg/` (new) | Tiny Python package for tests |
-| `tests/test_analyze.py` (new) | Phase A tests |
-| `tests/test_optimize.py` (new) | Phase B (+ C later) |
+| `schemas/analysis.v1.schema.json` | Phase A |
+| `schemas/optimize-plan.v1.schema.json` | Phase B |
+| `schemas/optimize-apply.v1.schema.json` | Phase C / C++ apply report |
+| `tests/fixtures/mini_pkg/` | Tiny Python package for tests |
+| `tests/fixtures/rename_pkg/` | Rename / apply fixture |
+| `tests/test_analyze.py` | Phase A tests |
+| `tests/test_optimize.py` | Phase B / C / C++ tests |
 | `SKILL.md` | Commands + when-to-use analyze/optimize |
 | `README.md` | How-to rows |
-| `docs/SECURITY.md` | Write surface when Phase C lands |
-| `orchestra.manifest.yaml` | intents list |
+| `docs/SECURITY.md` | Write surface for apply |
+| `orchestra.manifest.yaml` | intents + schemas list |
 | `CHANGELOG.md` / `docs/RELEASE_NOTES.md` | Per phase version bump |
 
 Keep **stdlib only** for analyze/optimize v1.
@@ -285,12 +318,14 @@ Work in this order; stop at phase gates.
 5. **`optimize_plan.py`** + `optimize` CLI (plan only)  
 6. **Docs/SKILL/manifest/CHANGELOG** for the version that ships A (and B if same train)  
 7. **Phase C** only after explicit operator request and security note update  
+8. **Phase C++** (`0.4.0`) — broader mechanical `safe_apply` (promote / flatten / selective apply) — **shipped**
 
 Versioning suggestion:
 
 - Phase A alone → `0.2.0` (new command surface)
 - Phase B → `0.2.1` or fold into `0.2.0` if same PR train
 - Phase C → `0.3.0` (mutating capability)
+- Phase C++ (promote / flatten / selective apply) → `0.4.0` (MINOR; new write actions)
 
 ---
 
@@ -304,15 +339,20 @@ Versioning suggestion:
 | `test_analyze_skips_venv` | no nodes under `.venv` |
 | `test_optimize_plan_no_write` | repo mtime unchanged |
 | `test_optimize_blocks_forced` | forced mappings appear in `blocked` |
+| `test_optimize_apply_confirm_renames` | gated rename + import alias |
+| `test_optimize_boundary_promote` | `module.py` → `module/__init__.py` |
+| `test_optimize_flatten_package` | single-file package → flat module |
+| `test_optimize_steps_filter` / `test_optimize_actions_filter` | selective apply |
 
 ---
 
 ## 10. Security
 
 - Analyze is read-only on `--path`; writes only to `--out`
-- Optimize apply (Phase C): path must resolve under analyzed root; system prefix deny list; backup before mutate
+- Optimize apply (Phase C / C++): path must resolve under analyzed root; system prefix deny list; backup before mutate
+- Safe apply is mechanical only (rename / promote / flatten); `suggest_extract` stays advisory
 - No network in analyze/optimize paths
-- Document in `docs/SECURITY.md` when Phase C merges
+- Documented in `docs/SECURITY.md` and `docs/SECURITY_AUDIT.md`
 
 ---
 
