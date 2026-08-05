@@ -365,7 +365,7 @@ Phase A is done when:
 3. SKILL.md lists `analyze` with fail-closed language  
 4. This plan’s Phase A checkboxes are checked in a follow-up commit or issue  
 
-Phase B/C done when their sections’ checkboxes are checked and version bumped accordingly.
+Phase B/C/C++ done when their sections’ checkboxes are checked and version bumped accordingly.
 
 ---
 
