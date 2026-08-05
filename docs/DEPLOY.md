@@ -103,14 +103,14 @@ python3 ~/.hermes/skills/orchestra/scripts/orchestra.py analyze \
 
 ```bash
 bash scripts/publish.sh
-git push origin v0.3.2
+git push origin v0.4.0
 ```
 
 ```bash
-git clone --branch v0.3.2 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
+git clone --branch v0.4.0 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
 ```
 
-Release notes body: [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2.md)
+Release notes body: [`RELEASE_BODY_v0.4.0.md`](RELEASE_BODY_v0.4.0.md)
 
 ---
 

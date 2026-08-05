@@ -4,14 +4,14 @@ Abraxas Orchestra is a **local** Hermes/OpenClaw skill package.
 
 Public debut audit: [`SECURITY_AUDIT.md`](SECURITY_AUDIT.md) · Policy: [`.github/SECURITY.md`](../.github/SECURITY.md)
 
-## Threat model (v0.3.1)
+## Threat model (v0.4.0)
 
 | Surface | Behavior |
 |---------|----------|
 | CLI | Stdlib only; no network I/O in `check` / `structure` / `project` / `analyze` / `optimize` |
 | Analyze | Read-only on `--path`; writes only under `--out`; refuses system prefixes unless `--allow-system` |
 | Optimize plan | No writes to analyzed tree |
-| Optimize apply | `--apply` dry-run; `--apply --confirm` renames only `safe_apply` steps under analyzed root; backup first; FORCED blocks apply |
+| Optimize apply | `--apply` dry-run; `--apply --confirm` performs `safe_apply` renames / package promotes / single-file flattens under analyzed root; backup first; FORCED blocks apply |
 | Installer | Local copy only; **path jail** under `$HOME` unless `--allow-outside-home` |
 | Schema / JSON | Loaded from skill root on disk only |
 | Examples | Local demos; no credentials required |
@@ -20,9 +20,9 @@ Public debut audit: [`SECURITY_AUDIT.md`](SECURITY_AUDIT.md) · Policy: [`.githu
 
 1. Destinations must resolve under the analyzed `path` from `analysis.json`
 2. Backups refuse system prefixes (`/etc`, `/usr`, …)
-3. Only mechanical renames/moves marked `safe_apply: true` — no content invention
-4. Prefer dry-run (`--apply` without `--confirm`) before first confirm
-5. Use `RESTORE.md` in the backup dir if a rename must be undone
+3. Only mechanical moves marked `safe_apply: true` — no content invention (`suggest_extract` stays advisory)
+4. Prefer dry-run (`--apply` without `--confirm`) before first confirm; narrow with `--steps` / `--actions`
+5. Use `RESTORE.md` in the backup dir if a move must be undone
 6. `--refresh` re-reads the analyzed tree after apply (still local, no network); writes under the backup dir
 
 ## Installer guarantees (0.1.3)

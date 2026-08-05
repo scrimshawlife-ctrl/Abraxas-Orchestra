@@ -2,6 +2,16 @@
 
 Narrative notes for operators and agents. Machine changelog: [`CHANGELOG.md`](../CHANGELOG.md).
 
+## 0.4.0 — 2026-08-05
+
+Broader gated `safe_apply` beyond mechanical rename.
+
+- **Promote:** `suggest_boundary` may move `module.py` → `module/__init__.py` when the stem matches the mechanical name
+- **Flatten:** `suggest_flatten` collapses single-file packages (`leaf/__init__.py` → `leaf.py`) when there are no siblings
+- **Selective apply:** `--steps step-1,step-3` and `--actions suggest_rename,suggest_boundary,suggest_flatten`
+- Schema: `schemas/optimize-apply.v1.schema.json`
+- `suggest_extract` remains advisory (no content invention)
+
 ## 0.3.2 — 2026-08-04
 
 Semantic versioning as an operable contract.

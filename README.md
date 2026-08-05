@@ -8,7 +8,7 @@
   <strong>Hermes + OpenClaw coding-agent skill</strong> for structuring software with traditional symbolic maps
 </p>
 
-Version **0.3.2** · Skill name: `orchestra` · Python ≥ 3.11 · Offline CLI · License: [Apache-2.0](LICENSE)
+Version **0.4.0** · Skill name: `orchestra` · Python ≥ 3.11 · Offline CLI · License: [Apache-2.0](LICENSE)
 
 ---
 
@@ -100,13 +100,14 @@ python3 scripts/orchestra.py optimize \
 
 Writes `optimize-plan.json` and `OPTIMIZE.md`. **No source tree changes.**
 
-**Apply renames (gated)**
+**Apply gated moves (rename / promote / flatten)**
 
 ```bash
 # Dry-run first
 python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --apply
+# Optional: --steps step-1,step-3  or  --actions suggest_rename,suggest_boundary
 
-# Only when you mean it — backs up, then renames; optional re-analyze
+# Only when you mean it — backs up, then writes; optional re-analyze
 python3 scripts/orchestra.py optimize \
   --from /tmp/orch-an/analysis.json \
   --apply --confirm --refresh
@@ -149,13 +150,13 @@ Publish freeze: [`docs/COMPLETION.md`](docs/COMPLETION.md) · Public debut: [`do
 
 ## Release notes
 
-**Current: [0.3.2](docs/RELEASE_NOTES.md#032--2026-08-04)** — semantic versioning policy + `bump_version` tool + automated GitHub Release on `v*` tags.
+**Current: [0.4.0](docs/RELEASE_NOTES.md#040--2026-08-05)** — broader `safe_apply` (promote / flatten) + selective `--steps` / `--actions`.
 
 | Theme | What landed |
 |-------|-------------|
 | Semver | `docs/SEMVER.md`, `scripts/bump_version.py`, CI parity |
 | Analyze | OBSERVED Python import graph + optional framework map |
-| Optimize | Plan only by default; `--apply --confirm` gated renames + backup |
+| Optimize | Plan only by default; `--apply --confirm` gated rename/promote/flatten + backup |
 | Diagrams | Auto HTML/JSON/Mermaid on structure/project/analyze `--out` |
 | Release | `.github/workflows/release.yml` on tag push |
 

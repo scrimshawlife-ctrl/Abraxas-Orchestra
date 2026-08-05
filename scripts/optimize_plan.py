@@ -85,6 +85,8 @@ def build_optimize_plan(
                 ),
             })
 
+        node = nodes_by_id.get(node_id) if node_id else None
+
         # suggest_boundary for STRONG/ADEQUATE mapped modules
         step_n += 1
         steps.append({
@@ -99,6 +101,25 @@ def build_optimize_plan(
                 f"`{mech}` ({locus}). Keep public API mechanical."
             ),
         })
+
+        # suggest_flatten for single-file packages (inverse of promote)
+        if node and node.get("kind") == "package":
+            rel = node.get("path") or ""
+            if rel.endswith("__init__.py"):
+                step_n += 1
+                steps.append({
+                    "id": f"step-{step_n}",
+                    "action": "suggest_flatten",
+                    "targets": [node_id],
+                    "locus": f"{mech}/{locus}",
+                    "strength": strength,
+                    "safe_apply": False,
+                    "notes": (
+                        f"Optional flatten: `{node_id}` is a package path "
+                        f"`{rel}`. If it contains only `__init__.py`, apply may "
+                        f"collapse it to a flat module."
+                    ),
+                })
 
     # suggest_extract for observed import edges between two mapped nodes
     mapped_ids = {
@@ -148,10 +169,10 @@ def build_optimize_plan(
             "analysis_path": analysis.get("path"),
         },
     }
-    # Annotate concrete mechanical renames as safe_apply when eligible (Phase C).
+    # Annotate concrete mechanical steps as safe_apply when eligible (Phase C+).
     try:
-        from optimize_apply import enrich_safe_renames
-        plan = enrich_safe_renames(plan, analysis)
+        from optimize_apply import enrich_safe_steps
+        plan = enrich_safe_steps(plan, analysis)
     except Exception:
         pass
     return plan
@@ -199,8 +220,9 @@ def plan_to_markdown(plan: dict[str, Any]) -> str:
         "",
         "- Plan-only by default — the analyzed repository is not modified.",
         "- `optimize --apply` is dry-run; `optimize --apply --confirm` writes "
-        "only `safe_apply: true` mechanical renames (with backup).",
-        "- `suggest_boundary` / `suggest_extract` stay advisory (`safe_apply: false`).",
+        "only `safe_apply: true` steps (rename / promote / flatten) with backup.",
+        "- `suggest_extract` stays advisory (`safe_apply: false`).",
+        "- Select steps with `--steps step-1,step-3` or `--actions suggest_rename`.",
         "",
     ]
     return "\n".join(lines)

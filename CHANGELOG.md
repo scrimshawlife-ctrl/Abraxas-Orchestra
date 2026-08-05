@@ -6,6 +6,19 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.4.0] — 2026-08-05
+
+### Added
+- `suggest_boundary` safe apply: promote `module.py` → `module/__init__.py` when stem matches mechanical name
+- `suggest_flatten` plan + safe apply: collapse single-file packages `leaf/__init__.py` → `leaf.py`
+- `optimize --steps` — apply only listed step ids (still must be `safe_apply`)
+- `optimize --actions` — filter by action name (`suggest_rename`, `suggest_boundary`, `suggest_flatten`)
+- Schema `schemas/optimize-apply.v1.schema.json`
+
+### Changed
+- Apply path runs renames → promotes → flattens; collision demotion covers all three move kinds
+- Docs / COMPLETION / ROADMAP aligned to broader `safe_apply` surface
+
 ## [0.3.2] — 2026-08-04
 
 ### Added

@@ -27,13 +27,14 @@ Version policy: [`SEMVER.md`](SEMVER.md) · bump tool: `scripts/bump_version.py`
 | C+ | 0.3.1 | `--refresh` + apply hardening | Post-apply re-analyze; collision/vacate ordering |
 | CI | 0.3.1 | Actions | version-parity, path-jail, smoke 3.11/3.12, `ci-ok` |
 | Semver | 0.3.1+ | `bump_version.py` | Policy + parity tool + CI check |
+| C++ | 0.4.0 | promote / flatten / `--steps` / `--actions` | Broader mechanical `safe_apply` |
 
 ## Next
 
-- Use `docs/SEMVER.md` + `scripts/bump_version.py` for all releases after 0.3.1
-- Operator: tag `v0.3.1`, host install, optional branch protection (`docs/CI.md`)
+- Use `docs/SEMVER.md` + `scripts/bump_version.py` for all releases
+- Operator: tag `v0.4.0`, host install, optional branch protection (`docs/CI.md`)
 - Multi-language analyze (see Deferred)
-- Broader safe_apply actions beyond mechanical rename (explicit operator request)
+- Broader safe_apply that invents file content (explicit MAJOR / operator request)
 
 ## Deferred
 

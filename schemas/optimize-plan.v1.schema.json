@@ -24,7 +24,12 @@
           "id": { "type": "string" },
           "action": {
             "type": "string",
-            "enum": ["suggest_boundary", "suggest_rename", "suggest_extract"]
+            "enum": [
+              "suggest_boundary",
+              "suggest_rename",
+              "suggest_extract",
+              "suggest_flatten"
+            ]
           },
           "targets": {
             "type": "array",

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes/schemas/optimize-apply.v1.schema.json",
+  "title": "Orchestra Optimize Apply Report v1",
+  "description": "Result of optimize --apply (dry-run or confirmed writes).",
+  "type": "object",
+  "required": ["schema", "status", "dry_run", "actions"],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "const": "orchestra-optimize-apply.v1"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["DRY_RUN", "APPLIED", "NOT_COMPUTABLE"]
+    },
+    "dry_run": { "type": "boolean" },
+    "root": { "type": "string" },
+    "backup_dir": { "type": ["string", "null"] },
+    "selected_step_ids": {
+      "type": ["array", "null"],
+      "items": { "type": "string" }
+    },
+    "selected_actions": {
+      "type": ["array", "null"],
+      "items": { "type": "string" }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["step_id", "action", "status"],
+        "properties": {
+          "step_id": { "type": "string" },
+          "action": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["would_apply", "applied", "blocked", "skipped"]
+          },
+          "from_path": { "type": "string" },
+          "to_path": { "type": "string" },
+          "from_id": { "type": "string" },
+          "to_id": { "type": "string" },
+          "module_id": { "type": "string" },
+          "backup": { "type": "string" },
+          "reason": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "skipped_step_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "import_rewrites": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "refresh": {
+      "type": ["object", "null"],
+      "additionalProperties": true
+    },
+    "error": { "type": "string" },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
