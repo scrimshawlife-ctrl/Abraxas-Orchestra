@@ -38,6 +38,8 @@ bash install.sh --dry-run --target /etc/orchestra   # must fail
 bash install.sh --dry-run                           # must pass
 ```
 
+Or full preflight: `bash scripts/release_preflight.sh`
+
 ---
 
 ## 2. Choose host and target path
@@ -120,5 +122,7 @@ git clone --branch v0.3.1 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestr
 | Unknown framework | `list`; keys must match `schemas/frameworks.v1.json` |
 | Install denied (outside home) | Use a path under `$HOME`, or pass `--allow-outside-home` deliberately |
 | Install denied (system path) | Never target `/etc`, `/usr`, etc. |
+
+CI and branch protection: [`CI.md`](CI.md).
 
 See also: [`COMPLETION.md`](COMPLETION.md) · [`PUBLIC_RELEASE.md`](PUBLIC_RELEASE.md) · [`SECURITY_AUDIT.md`](SECURITY_AUDIT.md) · [`ROADMAP.md`](ROADMAP.md) · [`SECURITY.md`](SECURITY.md).

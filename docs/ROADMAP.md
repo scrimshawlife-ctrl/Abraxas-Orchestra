@@ -2,7 +2,7 @@
 
 ## Active implementation plan
 
-Repo **analyze → map → optimize** (Cursor-ready): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMIZE_PLAN.md).
+Repo **analyze → map → optimize** (shipped): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMIZE_PLAN.md).
 
 ---
 
@@ -23,9 +23,11 @@ Repo **analyze → map → optimize** (Cursor-ready): [`ANALYZE_OPTIMIZE_PLAN.md
 | B | 0.2.0 | `optimize` | Plan only from analysis artifact |
 | C | 0.3.0 | `optimize --apply --confirm` | Gated mechanical renames + backup |
 | C+ | 0.3.1 | `--refresh` + apply hardening | Post-apply re-analyze; collision/vacate ordering |
+| CI | 0.3.1 | Actions | version-parity, path-jail, smoke 3.11/3.12, `ci-ok` |
 
 ## Next
 
+- Operator: tag `v0.3.1`, host install, optional branch protection (`docs/CI.md`)
 - Multi-language analyze (see Deferred)
 - Broader safe_apply actions beyond mechanical rename (explicit operator request)
 
