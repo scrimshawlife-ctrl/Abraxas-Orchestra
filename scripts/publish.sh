@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Operator publish helper for Abraxas Orchestra.
-# Does NOT create the GitHub Release UI draft (paste body from docs/RELEASE_BODY_v0.3.2.md).
+# Pushing the tag triggers .github/workflows/release.yml (GitHub Release).
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -23,8 +23,10 @@ echo "Next (requires your credentials):"
 echo "  git push origin main"
 echo "  git push origin v${V}"
 echo ""
-echo "Then GitHub → Releases → Create release from tag v${V}"
-echo "Paste body from: docs/RELEASE_BODY_v${V}.md"
+echo "Push the tag to trigger .github/workflows/release.yml:"
+echo "  git push origin v${V}"
+echo "Actions will smoke-test and create the GitHub Release."
+echo "Notes source: docs/RELEASE_BODY_v${V}.md (if present)"
 echo ""
 echo "Host install:"
 echo "  bash install.sh --dry-run && bash install.sh"

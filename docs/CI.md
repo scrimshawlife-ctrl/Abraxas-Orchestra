@@ -37,3 +37,27 @@ Until the first Actions run completes on `main`, the check name may not appear i
 ```bash
 bash scripts/release_preflight.sh
 ```
+
+## Release workflow
+
+Workflow: [`.github/workflows/release.yml`](../.github/workflows/release.yml)
+
+| Trigger | Behavior |
+|---------|----------|
+| Push tag `v*` | Validate `VERSION` matches tag, smoke, create/update GitHub Release |
+| `workflow_dispatch` | Same checks; optional dry-run |
+
+**Tag rule:** annotated tag `vX.Y.Z` must equal `VERSION` file (`X.Y.Z`).
+
+Release notes preference:
+
+1. `docs/RELEASE_BODY_vX.Y.Z.md` if present
+2. Else CHANGELOG section for that version
+
+Operator:
+
+```bash
+bash scripts/publish.sh
+git push origin v$(tr -d '[:space:]' < VERSION)
+# Actions → release workflow creates the GitHub Release
+```
