@@ -4,6 +4,8 @@
 
 Repo **analyze → map → optimize** (shipped): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMIZE_PLAN.md).
 
+Version policy: [`SEMVER.md`](SEMVER.md) · bump tool: `scripts/bump_version.py`.
+
 ---
 
 ## Done (0.1.x surface)
@@ -24,9 +26,11 @@ Repo **analyze → map → optimize** (shipped): [`ANALYZE_OPTIMIZE_PLAN.md`](AN
 | C | 0.3.0 | `optimize --apply --confirm` | Gated mechanical renames + backup |
 | C+ | 0.3.1 | `--refresh` + apply hardening | Post-apply re-analyze; collision/vacate ordering |
 | CI | 0.3.1 | Actions | version-parity, path-jail, smoke 3.11/3.12, `ci-ok` |
+| Semver | 0.3.1+ | `bump_version.py` | Policy + parity tool + CI check |
 
 ## Next
 
+- Use `docs/SEMVER.md` + `scripts/bump_version.py` for all releases after 0.3.1
 - Operator: tag `v0.3.1`, host install, optional branch protection (`docs/CI.md`)
 - Multi-language analyze (see Deferred)
 - Broader safe_apply actions beyond mechanical rename (explicit operator request)

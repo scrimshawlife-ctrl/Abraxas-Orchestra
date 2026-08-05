@@ -12,12 +12,14 @@ Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 
 | Job | Purpose |
 |-----|---------|
-| `version-parity` | `VERSION` matches CLI, SKILL, manifest, `install.sh` |
+| `version-parity` | Semver format + `python3 scripts/bump_version.py check` |
 | `path-jail` | Installer refuses `/etc/orchestra`; `analyze --path /etc` exits 2 |
 | `smoke` | Full `scripts/smoke.sh` on Python 3.11 and 3.12 |
 | `ci-ok` | Aggregate — all of the above must succeed |
 
 Permissions: `contents: read` only.
+
+Version policy: [`SEMVER.md`](SEMVER.md).
 
 ## Branch protection (recommended)
 

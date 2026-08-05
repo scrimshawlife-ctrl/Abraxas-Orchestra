@@ -2,6 +2,18 @@
 
 Private skill package. External PRs are not solicited by default.
 
+## Versioning
+
+See [`docs/SEMVER.md`](docs/SEMVER.md). Single source of truth: `VERSION`.
+
+```bash
+python3 scripts/bump_version.py show
+python3 scripts/bump_version.py patch|minor|major   # updates parity files
+python3 scripts/bump_version.py check
+```
+
+Additive frameworks → **PATCH**. New CLI capability → **MINOR**. Breaking CLI/schema/install or unsafe apply defaults → **MAJOR**.
+
 ## Local checks before any change
 
 ```bash
@@ -37,4 +49,4 @@ GitHub connector text pushes cannot carry JPEG/WebP. Commit `assets/hero.jpg` fr
 
 ## License
 
-Proprietary evaluation terms (`LICENSE`). Do not assume OSI redistribution rights.
+Apache-2.0 (`LICENSE` + `NOTICE`). Preserve copyright and license headers.

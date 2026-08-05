@@ -7,14 +7,10 @@ cd "$ROOT"
 echo "==> smoke"
 bash scripts/smoke.sh
 
-echo "==> version parity"
-V="$(tr -d '[:space:]' < VERSION)"
+echo "==> version parity (semver)"
+python3 scripts/bump_version.py check
+V="$(python3 scripts/bump_version.py show)"
 echo "VERSION=$V"
-grep -q "VERSION = \"${V}\"" scripts/orchestra.py
-grep -q "^version: ${V}$" SKILL.md
-grep -q "^version: ${V}$" orchestra.manifest.yaml
-grep -q "^VERSION=\"${V}\"$" install.sh
-echo "parity OK"
 
 echo "==> path jail (install)"
 set +e
