@@ -1,10 +1,11 @@
-# Completion checklist — v0.3.1
+# Completion checklist — v0.3.2
 
 Use this page to decide when the skill package is **frozen** for Hermes/OpenClaw use (private or public).
 
 Public debut packaging: [`PUBLIC_RELEASE.md`](PUBLIC_RELEASE.md).
 Analyze → optimize plan (shipped): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMIZE_PLAN.md).
 Version policy: [`SEMVER.md`](SEMVER.md).
+Publish helper: `scripts/publish.sh` · Release body: [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2.md).
 
 ## Automated (must be green on `main`)
 
@@ -12,7 +13,7 @@ Version policy: [`SEMVER.md`](SEMVER.md).
 |------|---------|----------|
 | Smoke | `bash scripts/smoke.sh` | `SMOKE OK` |
 | Unit tests | included in smoke | 40+ tests OK |
-| CLI integrity | `python3 scripts/orchestra.py check` | `CHECK OK — Orchestra 0.3.1` |
+| CLI integrity | `python3 scripts/orchestra.py check` | `CHECK OK — Orchestra 0.3.2` |
 | Frameworks | `python3 scripts/orchestra.py list` | 11 keys |
 | Path jail (install) | `bash install.sh --dry-run --target /etc/orchestra` | non-zero exit |
 | Semver | `python3 scripts/bump_version.py check` | parity OK |
@@ -36,15 +37,21 @@ Version policy: [`SEMVER.md`](SEMVER.md).
 - [x] Security docs for apply write surface
 - [x] Installer VERSION aligned to package VERSION
 
-## Operator gates (local)
+## Operator gates (publish)
 
-- [ ] One successful install on your host (`docs/DEPLOY.md` steps 2–4)
-- [ ] Optional: annotated tag `v0.3.1` (see `docs/DEPLOY.md`)
+Engineering on `main` is frozen at **0.3.2**. Remaining steps are local/credentialed only:
+
+- [ ] `bash scripts/release_preflight.sh` green on your machine
+- [ ] Host install: `bash install.sh --dry-run && bash install.sh` then `check`
+- [ ] Tag: `bash scripts/publish.sh` then `git push origin v0.3.2`
+- [ ] GitHub Release from tag `v0.3.2` — body in `docs/RELEASE_BODY_v0.3.2.md`
+- [ ] Optional: branch protection requiring **`ci-ok`** (`docs/CI.md`)
+- [ ] Optional: registry submit (`docs/COMMUNITY.md`)
 - [ ] Optional: photographic `assets/hero.jpg` (SVG already ships)
-- [ ] Optional: GitHub Release + registry submit (`docs/COMMUNITY.md`)
-- [ ] Optional: branch protection requiring check `ci-ok`
 
-## Explicitly deferred past 0.3.1
+Helper: `scripts/publish.sh`
+
+## Explicitly deferred past 0.3.2
 
 See `docs/ROADMAP.md` — multi-language analyze, broader safe_apply, pytest coverage gates, ritual/network runtime, dedicated OpenClaw branch.
 
