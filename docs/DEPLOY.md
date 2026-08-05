@@ -29,7 +29,7 @@ python3 scripts/orchestra.py check
 python3 scripts/orchestra.py list
 ```
 
-Expected: `SMOKE OK`, `CHECK OK — Orchestra <version>`, eleven frameworks listed.
+Or: `bash scripts/release_preflight.sh`
 
 Optional security sanity:
 
@@ -37,8 +37,6 @@ Optional security sanity:
 bash install.sh --dry-run --target /etc/orchestra   # must fail
 bash install.sh --dry-run                           # must pass
 ```
-
-Or full preflight: `bash scripts/release_preflight.sh`
 
 ---
 
@@ -104,13 +102,15 @@ python3 ~/.hermes/skills/orchestra/scripts/orchestra.py analyze \
 ## Optional: pin a release tag
 
 ```bash
-git tag -a v0.3.1 -m "Orchestra 0.3.1 analyze/optimize"
-git push origin v0.3.1
+bash scripts/publish.sh
+git push origin v0.3.2
 ```
 
 ```bash
-git clone --branch v0.3.1 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
+git clone --branch v0.3.2 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
 ```
+
+Release notes body: [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2.md)
 
 ---
 
