@@ -174,12 +174,19 @@ class TestOptimizeCLI(unittest.TestCase):
             analysis_path = self._analysis_with_framework(
                 Path(td) / "a", path=work, framework="alchemical-stages"
             )
+            plan = json.loads(run_cli("optimize", "--from", str(analysis_path)).stdout)
+            rename_ids = ",".join(
+                s["id"] for s in plan["steps"]
+                if s["action"] == "suggest_rename" and s.get("safe_apply")
+            )
+            self.assertTrue(rename_ids)
             backup = Path(td) / "backup"
             r = run_cli(
                 "optimize",
                 "--from", str(analysis_path),
                 "--apply",
                 "--confirm",
+                "--steps", rename_ids,
                 "--backup-dir", str(backup),
             )
             self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
@@ -201,6 +208,11 @@ class TestOptimizeCLI(unittest.TestCase):
             analysis_path = self._analysis_with_framework(
                 Path(td) / "a", path=work, framework="alchemical-stages"
             )
+            plan = json.loads(run_cli("optimize", "--from", str(analysis_path)).stdout)
+            rename_ids = ",".join(
+                s["id"] for s in plan["steps"]
+                if s["action"] == "suggest_rename" and s.get("safe_apply")
+            )
             backup = Path(td) / "backup"
             r = run_cli(
                 "optimize",
@@ -208,6 +220,7 @@ class TestOptimizeCLI(unittest.TestCase):
                 "--apply",
                 "--confirm",
                 "--refresh",
+                "--steps", rename_ids,
                 "--backup-dir", str(backup),
             )
             self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
@@ -220,6 +233,146 @@ class TestOptimizeCLI(unittest.TestCase):
             ids = {n["id"] for n in data["nodes"]}
             self.assertIn("raw_ingest", ids)
             self.assertNotIn("nigredo", ids)
+
+    def test_optimize_boundary_promote(self) -> None:
+        """Flat module with matching mechanical name promotes to package."""
+        with tempfile.TemporaryDirectory() as td:
+            work = Path(td) / "pkg"
+            work.mkdir()
+            (work / "__init__.py").write_text("", encoding="utf-8")
+            (work / "intake.py").write_text(
+                '"""Raw force intake."""\ndef pull():\n    return {}\n',
+                encoding="utf-8",
+            )
+            (work / "output.py").write_text(
+                "from . import intake\ndef emit():\n    return intake.pull()\n",
+                encoding="utf-8",
+            )
+            analysis_path = self._analysis_with_framework(
+                Path(td) / "a", path=work, framework="tree-of-life"
+            )
+            plan_r = run_cli("optimize", "--from", str(analysis_path))
+            self.assertEqual(plan_r.returncode, 0, plan_r.stderr)
+            plan = json.loads(plan_r.stdout)
+            intake_boundary = [
+                s for s in plan["steps"]
+                if s["action"] == "suggest_boundary"
+                and s.get("safe_apply")
+                and "intake" in (s.get("targets") or [])
+            ]
+            self.assertTrue(intake_boundary, msg=plan)
+            ids = ",".join(s["id"] for s in intake_boundary)
+            backup = Path(td) / "backup"
+            r = run_cli(
+                "optimize",
+                "--from", str(analysis_path),
+                "--apply",
+                "--confirm",
+                "--steps", ids,
+                "--backup-dir", str(backup),
+            )
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            report = json.loads(r.stdout)
+            self.assertEqual(report["status"], "APPLIED")
+            self.assertTrue((work / "intake" / "__init__.py").exists())
+            self.assertFalse((work / "intake.py").exists())
+            self.assertTrue((work / "output.py").exists())
+            out = (work / "output.py").read_text()
+            self.assertIn("intake", out)
+
+    def test_optimize_flatten_package(self) -> None:
+        """Single-file package flattens to module.py."""
+        with tempfile.TemporaryDirectory() as td:
+            work = Path(td) / "pkg"
+            work.mkdir()
+            (work / "__init__.py").write_text("", encoding="utf-8")
+            intake = work / "intake"
+            intake.mkdir()
+            (intake / "__init__.py").write_text(
+                '"""Raw force intake."""\ndef pull():\n    return {}\n',
+                encoding="utf-8",
+            )
+            (work / "output.py").write_text(
+                "from . import intake\ndef emit():\n    return intake.pull()\n",
+                encoding="utf-8",
+            )
+            analysis_path = self._analysis_with_framework(
+                Path(td) / "a", path=work, framework="tree-of-life"
+            )
+            plan = json.loads(run_cli("optimize", "--from", str(analysis_path)).stdout)
+            flatten_steps = [
+                s for s in plan["steps"]
+                if s["action"] == "suggest_flatten"
+                and s.get("safe_apply")
+                and "intake" in (s.get("targets") or [])
+            ]
+            self.assertTrue(flatten_steps, msg=plan)
+            ids = ",".join(s["id"] for s in flatten_steps)
+            backup = Path(td) / "backup"
+            r = run_cli(
+                "optimize",
+                "--from", str(analysis_path),
+                "--apply",
+                "--confirm",
+                "--steps", ids,
+                "--backup-dir", str(backup),
+            )
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            report = json.loads(r.stdout)
+            self.assertEqual(report["status"], "APPLIED")
+            self.assertTrue((work / "intake.py").exists())
+            self.assertFalse((work / "intake").exists())
+
+    def test_optimize_steps_filter(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            work = Path(td) / "pkg"
+            shutil.copytree(RENAME_FIXTURE, work)
+            analysis_path = self._analysis_with_framework(
+                Path(td) / "a", path=work, framework="alchemical-stages"
+            )
+            plan = json.loads(run_cli("optimize", "--from", str(analysis_path)).stdout)
+            rename_steps = [
+                s for s in plan["steps"]
+                if s["action"] == "suggest_rename" and s.get("safe_apply")
+            ]
+            self.assertTrue(rename_steps)
+            only = rename_steps[0]["id"]
+            r = run_cli(
+                "optimize",
+                "--from", str(analysis_path),
+                "--apply",
+                "--steps", only,
+            )
+            self.assertEqual(r.returncode, 0, r.stderr)
+            report = json.loads(r.stdout)
+            self.assertEqual(report["selected_step_ids"], [only])
+            applied = [a for a in report["actions"] if a["status"] == "would_apply"]
+            self.assertTrue(all(a["step_id"] == only for a in applied))
+
+    def test_optimize_actions_filter(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            work = Path(td) / "pkg"
+            work.mkdir()
+            (work / "__init__.py").write_text("", encoding="utf-8")
+            (work / "intake.py").write_text(
+                '"""Raw force intake."""\ndef pull():\n    return {}\n',
+                encoding="utf-8",
+            )
+            analysis_path = self._analysis_with_framework(
+                Path(td) / "a", path=work, framework="tree-of-life"
+            )
+            r = run_cli(
+                "optimize",
+                "--from", str(analysis_path),
+                "--apply",
+                "--actions", "suggest_boundary",
+            )
+            self.assertEqual(r.returncode, 0, r.stderr)
+            report = json.loads(r.stdout)
+            self.assertEqual(report["selected_actions"], ["suggest_boundary"])
+            applied = [a for a in report["actions"] if a["status"] == "would_apply"]
+            self.assertTrue(applied)
+            self.assertTrue(all(a["action"] == "suggest_boundary" for a in applied))
 
     def test_optimize_refresh_skipped_on_dry_run(self) -> None:
         with tempfile.TemporaryDirectory() as td:
@@ -298,6 +451,19 @@ class TestOptimizeSchema(unittest.TestCase):
         self.assertEqual(
             schema["properties"]["schema"]["const"],
             "orchestra-optimize-plan.v1",
+        )
+        self.assertIn(
+            "suggest_flatten",
+            schema["properties"]["steps"]["items"]["properties"]["action"]["enum"],
+        )
+
+    def test_apply_schema_file_exists(self) -> None:
+        schema = json.loads(
+            (ROOT / "schemas" / "optimize-apply.v1.schema.json").read_text()
+        )
+        self.assertEqual(
+            schema["properties"]["schema"]["const"],
+            "orchestra-optimize-apply.v1",
         )
 
 

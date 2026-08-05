@@ -3,19 +3,20 @@
 Public debut checklist for Abraxas Orchestra.  
 Private freeze gates: [`COMPLETION.md`](COMPLETION.md). CI: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml).
 
-**Current public line:** `0.3.2`  
+**Current public line:** `0.4.0`  
 Helper: `bash scripts/publish.sh`  
-Release body: [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2.md)  
+Release body: [`RELEASE_BODY_v0.4.0.md`](RELEASE_BODY_v0.4.0.md)  
 **Automated release:** [`.github/workflows/release.yml`](../.github/workflows/release.yml) (runs on `v*` tag push)
 
-## Capability surface (0.3.2)
+## Capability surface (0.4.0)
 
 | Command | Role |
 |---------|------|
 | `structure` / `project` / `diagram` | Emit dual-named skeletons + diagrams |
 | `analyze` | OBSERVED Python import graph + optional framework map |
 | `optimize` | Plan only by default |
-| `optimize --apply --confirm` | Gated mechanical renames + backup |
+| `optimize --apply --confirm` | Gated mechanical rename / promote / flatten + backup |
+| `--steps` / `--actions` | Selective apply |
 | `--refresh` | Re-analyze after confirmed apply |
 
 ## Pre-publish gate
@@ -32,10 +33,10 @@ bash scripts/release_preflight.sh
    ```bash
    bash scripts/publish.sh
    git push origin main
-   git push origin v0.3.2
+   git push origin v0.4.0
    ```
 4. Push tag → **Actions `release` workflow** creates the GitHub Release  
-   (notes from [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2.md))
+   (notes from [`RELEASE_BODY_v0.4.0.md`](RELEASE_BODY_v0.4.0.md))
 5. Host install: [`DEPLOY.md`](DEPLOY.md)
 6. Optional: registry submit [`COMMUNITY.md`](COMMUNITY.md)
 
