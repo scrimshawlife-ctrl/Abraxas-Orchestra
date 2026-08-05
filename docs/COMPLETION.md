@@ -6,6 +6,7 @@ Public debut packaging: [`PUBLIC_RELEASE.md`](PUBLIC_RELEASE.md).
 Analyze → optimize plan (shipped): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMIZE_PLAN.md).
 Version policy: [`SEMVER.md`](SEMVER.md).
 Publish helper: `scripts/publish.sh` · Release body: [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2.md).
+Release automation: [`.github/workflows/release.yml`](../.github/workflows/release.yml).
 
 ## Automated (must be green on `main`)
 
@@ -18,6 +19,7 @@ Publish helper: `scripts/publish.sh` · Release body: [`RELEASE_BODY_v0.3.2.md`]
 | Path jail (install) | `bash install.sh --dry-run --target /etc/orchestra` | non-zero exit |
 | Semver | `python3 scripts/bump_version.py check` | parity OK |
 | CI | `.github/workflows/ci.yml` | `version-parity` + `path-jail` + `smoke` (3.11/3.12) → `ci-ok` |
+| Release | `.github/workflows/release.yml` | Tag `v*` → Release (tag must match VERSION) |
 | Analyze fixture | `python3 scripts/orchestra.py analyze --path tests/fixtures/mini_pkg --out /tmp/orch-an` | `analysis.json` written |
 | Optimize plan | `python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --out /tmp/orch-plan` | plan written, no tree writes |
 
@@ -25,42 +27,22 @@ Publish helper: `scripts/publish.sh` · Release body: [`RELEASE_BODY_v0.3.2.md`]
 
 - [x] Canonical loci: `schemas/frameworks.v1.json`
 - [x] CLI: `check` / `list` / `structure` / `project` / `diagram`
-- [x] CLI: `analyze` (Phase A) + `optimize` plan (Phase B)
-- [x] CLI: `optimize --apply --confirm` (+ `--refresh`) (Phase C / C+)
-- [x] Schemas: `analysis.v1`, `optimize-plan.v1`
-- [x] Auto diagram HTML/JSON/Mermaid on structure/project/analyze `--out`
-- [x] Atomic installer (Hermes + OpenClaw `--target`) with path jail
-- [x] Signal-forager + Enochian/Chaos examples with structured errors
-- [x] CI workflow (Python 3.11 / 3.12) + version parity + path-jail jobs
-- [x] Semver policy + `scripts/bump_version.py`
-- [x] Apache-2.0 LICENSE + NOTICE
-- [x] Security docs for apply write surface
-- [x] Installer VERSION aligned to package VERSION
+- [x] CLI: `analyze` + `optimize` plan + gated apply
+- [x] Auto diagram HTML/JSON/Mermaid on `--out`
+- [x] Atomic installer with path jail
+- [x] CI + semver tooling
+- [x] Automated GitHub Release on `v*` tag push
+- [x] Apache-2.0 + security docs
 
 ## Operator gates (publish)
-
-Engineering on `main` is frozen at **0.3.2**. Remaining steps are local/credentialed only:
 
 - [ ] `bash scripts/release_preflight.sh` green on your machine
 - [ ] Host install: `bash install.sh --dry-run && bash install.sh` then `check`
 - [ ] Tag: `bash scripts/publish.sh` then `git push origin v0.3.2`
-- [ ] GitHub Release from tag `v0.3.2` — body in `docs/RELEASE_BODY_v0.3.2.md`
+- [ ] Confirm Actions **release** workflow green (creates GitHub Release)
 - [ ] Optional: branch protection requiring **`ci-ok`** (`docs/CI.md`)
 - [ ] Optional: registry submit (`docs/COMMUNITY.md`)
-- [ ] Optional: photographic `assets/hero.jpg` (SVG already ships)
-
-Helper: `scripts/publish.sh`
 
 ## Explicitly deferred past 0.3.2
 
-See `docs/ROADMAP.md` — multi-language analyze, broader safe_apply, pytest coverage gates, ritual/network runtime, dedicated OpenClaw branch.
-
-## After freeze
-
-Treat schema, CLI, and install layout as a **stable contract**.
-
-- Corpus expansion: edit `schemas/frameworks.v1.json` + `references/` + tests; **PATCH** per [`SEMVER.md`](SEMVER.md).
-- New mutating apply actions: bump **MINOR**/**MAJOR** per SEMVER; update SECURITY.
-- Contract change (CLI flags, schema required fields, install paths): bump version via `scripts/bump_version.py` and CHANGELOG.
-
-Public debut (license + registry): see [`PUBLIC_RELEASE.md`](PUBLIC_RELEASE.md).
+See `docs/ROADMAP.md`.

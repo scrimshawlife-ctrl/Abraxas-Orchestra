@@ -5,7 +5,8 @@ Private freeze gates: [`COMPLETION.md`](COMPLETION.md). CI: [`.github/workflows/
 
 **Current public line:** `0.3.2`  
 Helper: `bash scripts/publish.sh`  
-Release body (paste into GitHub): [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2.md)
+Release body: [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2.md)  
+**Automated release:** [`.github/workflows/release.yml`](../.github/workflows/release.yml) (runs on `v*` tag push)
 
 ## Capability surface (0.3.2)
 
@@ -21,7 +22,6 @@ Release body (paste into GitHub): [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2
 
 ```bash
 bash scripts/release_preflight.sh
-# or full sequence in scripts/publish.sh
 ```
 
 ## Debut sequence (you — requires credentials)
@@ -34,8 +34,8 @@ bash scripts/release_preflight.sh
    git push origin main
    git push origin v0.3.2
    ```
-4. GitHub → Releases → Create from tag `v0.3.2`  
-   Paste [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2.md)
+4. Push tag → **Actions `release` workflow** creates the GitHub Release  
+   (notes from [`RELEASE_BODY_v0.3.2.md`](RELEASE_BODY_v0.3.2.md))
 5. Host install: [`DEPLOY.md`](DEPLOY.md)
 6. Optional: registry submit [`COMMUNITY.md`](COMMUNITY.md)
 
