@@ -14,6 +14,7 @@ Analyze → optimize plan (shipped): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMI
 | CLI integrity | `python3 scripts/orchestra.py check` | `CHECK OK — Orchestra 0.3.1` |
 | Frameworks | `python3 scripts/orchestra.py list` | 11 keys |
 | Path jail (install) | `bash install.sh --dry-run --target /etc/orchestra` | non-zero exit |
+| CI | `.github/workflows/ci.yml` | `version-parity` + `path-jail` + `smoke` (3.11/3.12) → `ci-ok` |
 | Analyze fixture | `python3 scripts/orchestra.py analyze --path tests/fixtures/mini_pkg --out /tmp/orch-an` | `analysis.json` written |
 | Optimize plan | `python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --out /tmp/orch-plan` | plan written, no tree writes |
 
@@ -27,7 +28,7 @@ Analyze → optimize plan (shipped): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMI
 - [x] Auto diagram HTML/JSON/Mermaid on structure/project/analyze `--out`
 - [x] Atomic installer (Hermes + OpenClaw `--target`) with path jail
 - [x] Signal-forager + Enochian/Chaos examples with structured errors
-- [x] CI workflow (Python 3.11 / 3.12)
+- [x] CI workflow (Python 3.11 / 3.12) + version parity + path-jail jobs
 - [x] Apache-2.0 LICENSE + NOTICE
 - [x] Security docs for apply write surface
 - [x] Installer VERSION aligned to package VERSION
@@ -38,6 +39,7 @@ Analyze → optimize plan (shipped): [`ANALYZE_OPTIMIZE_PLAN.md`](ANALYZE_OPTIMI
 - [ ] Optional: annotated tag `v0.3.1` (see `docs/DEPLOY.md`)
 - [ ] Optional: photographic `assets/hero.jpg` (SVG already ships)
 - [ ] Optional: GitHub Release + registry submit (`docs/COMMUNITY.md`)
+- [ ] Optional: branch protection requiring check `ci-ok`
 
 ## Explicitly deferred past 0.3.1
 
