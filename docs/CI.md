@@ -93,6 +93,18 @@ Until the first Actions run completes on a new fork, the check name may not appe
 bash scripts/release_preflight.sh
 ```
 
+## GitHub Pages (landing page)
+
+Workflow: [`.github/workflows/pages.yml`](../.github/workflows/pages.yml)
+
+| Item | Value |
+|------|--------|
+| Source | `site/` (static HTML) |
+| Trigger | Push to `main` touching `site/**`, or `workflow_dispatch` |
+| URL | https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/ |
+
+Repo **Settings → Pages → Source** must be **GitHub Actions** (not branch/`/docs`).
+
 ## Release workflow
 
 Workflow: [`.github/workflows/release.yml`](../.github/workflows/release.yml)

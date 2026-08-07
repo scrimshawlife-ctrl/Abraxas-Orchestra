@@ -265,7 +265,8 @@ Details: [`docs/SECURITY.md`](docs/SECURITY.md) (live) · [`docs/SECURITY_AUDIT.
 ## Links
 
 - Repo: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra  
-- Deploy: [`docs/DEPLOY.md`](docs/DEPLOY.md)  
+- **Site (GitHub Pages):** https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/  
+- Deploy skill: [`docs/DEPLOY.md`](docs/DEPLOY.md)  
 - CI / branch protection: [`docs/CI.md`](docs/CI.md)  
 - Semver: [`docs/SEMVER.md`](docs/SEMVER.md)  
 - Changelog: [`CHANGELOG.md`](CHANGELOG.md)  
