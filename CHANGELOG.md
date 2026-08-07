@@ -10,6 +10,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
 ### Added
 - Pure unit tests for `diagram_emit` / `diagram_mermaid` (`tests/test_diagrams.py`)
+- Static landing page under `site/` deployed via GitHub Pages (`.github/workflows/pages.yml`)
 
 ### Changed
 - Branch protection on `main`: require PR + `ci-ok`, **enforce for admins** (no bypass)

@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Abraxas Orchestra — symbolic architecture skill</title>
+  <meta name="description" content="Hermes + OpenClaw coding-agent skill for dual-named architecture, diagrams, and fail-closed analyze→optimize. Offline, stdlib-only Python CLI."/>
+  <meta property="og:title" content="Abraxas Orchestra"/>
+  <meta property="og:description" content="Structure software with traditional symbolic maps. Scaffold, diagram, analyze, optimize — fail-closed."/>
+  <meta property="og:image" content="assets/hero.svg"/>
+  <link rel="icon" href="assets/hero.svg" type="image/svg+xml"/>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --bg2: #12182a;
+      --panel: #171a21;
+      --line: #2a3140;
+      --text: #e8eaed;
+      --muted: #9aa3b2;
+      --gold: #c9a227;
+      --gold2: #f0e6b0;
+      --accent: #7c9cff;
+      --ok: #6bcf8e;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: var(--gold2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 1.25rem; }
+    header.hero {
+      padding: 2.5rem 0 1rem;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%, rgba(201,162,39,0.12), transparent 60%),
+        linear-gradient(180deg, #0b1020 0%, #12102a 50%, #0b1020 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-img {
+      display: block;
+      width: min(100%, 720px);
+      margin: 0 auto 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+    h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 500;
+      font-size: clamp(1.75rem, 4vw, 2.4rem);
+      text-align: center;
+      margin: 0 0 0.5rem;
+      color: var(--gold2);
+    }
+    .tagline {
+      text-align: center;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      margin: 0 0 1.25rem;
+    }
+    .meta {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+    .meta strong { color: var(--text); font-weight: 600; }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.65rem 1.1rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn:hover { border-color: var(--gold); text-decoration: none; background: #1e2430; }
+    .btn.primary {
+      background: linear-gradient(135deg, #3a2f12, #2a2410);
+      border-color: var(--gold);
+      color: var(--gold2);
+    }
+    nav.toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1rem;
+      justify-content: center;
+      padding: 1rem 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    nav.toc a { color: var(--muted); }
+    nav.toc a:hover { color: var(--gold2); }
+    section {
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    section h2 {
+      font-family: Georgia, serif;
+      font-weight: 500;
+      font-size: 1.45rem;
+      color: var(--gold2);
+      margin: 0 0 1rem;
+    }
+    section p, section li { color: #c5cad3; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.1rem 1.15rem;
+    }
+    .card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+    .card p { margin: 0; font-size: 0.92rem; }
+    pre, code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.85rem;
+    }
+    pre {
+      background: #0a0e18;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      overflow-x: auto;
+      color: #d4d8e0;
+      line-height: 1.45;
+    }
+    code { color: var(--gold2); }
+    pre code { color: inherit; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.65rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th { color: var(--muted); font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    .pill {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin: 0.15rem 0.2rem 0.15rem 0;
+    }
+    .pill.ok { border-color: #2d5a3d; color: var(--ok); }
+    footer {
+      padding: 2rem 0 3rem;
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-align: center;
+    }
+    .note {
+      background: #141a28;
+      border-left: 3px solid var(--gold);
+      padding: 0.85rem 1rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <img class="hero-img" src="assets/hero.svg" width="720" height="378" alt="Abraxas Orchestra"/>
+      <h1>Abraxas Orchestra</h1>
+      <p class="tagline">Hermes · OpenClaw · Symbolic architecture</p>
+      <p class="meta">
+        Version <strong>0.6.0</strong> · skill <strong>orchestra</strong> · Python ≥ 3.11 ·
+        Offline CLI · <strong>Apache-2.0</strong>
+      </p>
+      <div class="actions">
+        <a class="btn primary" href="https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra">GitHub repo</a>
+        <a class="btn" href="https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra/releases/latest">Latest release</a>
+        <a class="btn" href="https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra/blob/main/README.md">README</a>
+        <a class="btn" href="https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra/blob/main/docs/CI.md">CI &amp; branch protection</a>
+      </div>
+      <nav class="toc" aria-label="On this page">
+        <a href="#what">What it is</a>
+        <a href="#install">Install</a>
+        <a href="#commands">Commands</a>
+        <a href="#analyze">Analyze</a>
+        <a href="#safety">Safety</a>
+        <a href="#frameworks">Frameworks</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="what">
+      <h2>What this is</h2>
+      <p>
+        <strong>Orchestra</strong> is a local Hermes + OpenClaw coding-agent skill that organizes software
+        the way traditional systems organize meaning — Tree of Life, alchemy, runes, planetary spheres,
+        I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic.
+      </p>
+      <div class="grid" style="margin-top:1.25rem">
+        <div class="card">
+          <h3>1. Scaffold</h3>
+          <p>Emit dual-named project skeletons (mechanical + symbolic) from a chosen map, with provenance.</p>
+        </div>
+        <div class="card">
+          <h3>2. Diagram</h3>
+          <p>Write HTML, JSON, and Mermaid architecture graphs next to the skeleton or analysis.</p>
+        </div>
+        <div class="card">
+          <h3>3. Analyze → optimize</h3>
+          <p>Observe import graphs, map when the fit is honest, plan renames — write only with <code>--confirm</code>.</p>
+        </div>
+      </div>
+      <p class="note" style="margin-top:1.25rem">
+        Not a network service, magic runtime, or silent auto-refactorer. Weak or forced mappings fail closed.
+        You stay in control of filesystem changes.
+      </p>
+    </section>
+
+    <section id="install">
+      <h2>Install</h2>
+<pre><code>git clone https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra.git
+cd Abraxas-Orchestra
+bash scripts/smoke.sh
+bash install.sh --dry-run
+bash install.sh                          # → ~/.hermes/skills/orchestra
+# OpenClaw:
+# bash install.sh --target ~/.openclaw/skills/orchestra</code></pre>
+      <p>After install, the host discovers the skill from <code>SKILL.md</code> (<code>name: orchestra</code>).</p>
+    </section>
+
+    <section id="commands">
+      <h2>Day-to-day commands</h2>
+<pre><code>python3 scripts/orchestra.py list
+python3 scripts/orchestra.py structure -f tree-of-life -c "intent,synthesis,output" --out /tmp/orch-skel
+python3 scripts/orchestra.py diagram -f numogram --out /tmp/orch-diag
+python3 scripts/orchestra.py analyze --path /path/to/pkg -f tree-of-life --out /tmp/orch-an
+python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --out /tmp/orch-plan
+python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --apply --confirm</code></pre>
+      <p>
+        Mapping strengths: <span class="pill ok">STRONG</span>
+        <span class="pill ok">ADEQUATE</span>
+        <span class="pill">WEAK</span>
+        <span class="pill">FORCED</span>
+        — weak/forced fail closed so agents do not paper over bad fits.
+      </p>
+    </section>
+
+    <section id="analyze">
+      <h2>Multi-language analyze</h2>
+      <table>
+        <thead>
+          <tr><th>Language</th><th>Fidelity</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Python</td><td>Full AST import graph</td></tr>
+          <tr><td>JavaScript / TypeScript</td><td>Token + structured import/export/require nodes</td></tr>
+          <tr><td>Go</td><td>Token + structured <code>import</code> declarations</td></tr>
+          <tr><td>Rust</td><td>Token + structured <code>use</code> / <code>mod</code></td></tr>
+          <tr><td>Ruby</td><td>Token + structured <code>require</code> / <code>require_relative</code></td></tr>
+          <tr><td><code>auto</code></td><td>Union of the above extensions</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:1rem">
+        Non-Python resolution is best-effort (import-surface only, not full compilers).
+        Optimize apply remains Python-oriented.
+      </p>
+<pre><code>python3 scripts/orchestra.py analyze --path . --lang auto --out /tmp/orch-an</code></pre>
+    </section>
+
+    <section id="safety">
+      <h2>Safety &amp; quality gates</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>Local</h3>
+          <p>Stdlib-only CLI · no network for structure/analyze/optimize · install path jail · optimize requires <code>--confirm</code></p>
+        </div>
+        <div class="card">
+          <h3>CI</h3>
+          <p><code>ci-ok</code> requires version parity, path-jail, integrity floors, smoke, and coverage-gate. Soft coverage is informational.</p>
+        </div>
+        <div class="card">
+          <h3>main branch</h3>
+          <p>PR required · <code>ci-ok</code> required · <strong>enforce for admins</strong> (no status bypass) · no force-push.</p>
+        </div>
+      </div>
+<pre style="margin-top:1.25rem"><code>python3 scripts/orchestra.py check
+python3 scripts/bump_version.py check
+python3 scripts/integrity_check.py
+python3 scripts/coverage_report.py --gate</code></pre>
+    </section>
+
+    <section id="frameworks">
+      <h2>Frameworks</h2>
+      <p>Eleven maps ship in <code>schemas/frameworks.v1.json</code>:</p>
+      <p>
+        <span class="pill">tree-of-life</span>
+        <span class="pill">alchemical-stages</span>
+        <span class="pill">elder-futhark</span>
+        <span class="pill">planetary-spheres</span>
+        <span class="pill">iching-hexagrams</span>
+        <span class="pill">solomonic</span>
+        <span class="pill">peircean-signs</span>
+        <span class="pill">numogram</span>
+        <span class="pill">sacred-geometry</span>
+        <span class="pill">enochian</span>
+        <span class="pill">chaos-magic</span>
+      </p>
+      <p>
+        Fit guide:
+        <a href="https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra/blob/main/docs/FRAMEWORK_FIT.md">docs/FRAMEWORK_FIT.md</a>
+        · Security:
+        <a href="https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra/blob/main/docs/SECURITY.md">docs/SECURITY.md</a>
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <p>
+        <a href="https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra">scrimshawlife-ctrl/Abraxas-Orchestra</a>
+        · Apache-2.0 · offline skill page
+      </p>
+    </div>
+  </footer>
+</body>
+</html>
