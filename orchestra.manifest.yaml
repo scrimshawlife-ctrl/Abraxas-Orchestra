@@ -8,7 +8,8 @@ description: >
   Structure modules, pipelines, interfaces, and agent systems according to
   traditional esoteric maps while remaining production-grade.
   Fail-closed on weak mappings. Dual-named skeletons with recoverable provenance.
-  Analyze local Python trees and emit optimize plans without silent mutation.
+  Analyze local trees and emit optimize plans without silent mutation.
+  Hermes agents route via CommandRouter groups: meta, emit, repo.
   Corpus remains open for expansion with additional traditional systems.
 
 homepage: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra
@@ -43,6 +44,19 @@ frameworks:
   - enochian
   - chaos-magic
 
+# Same groups as scripts/orchestra_router.py — Hermes must route this way too
+command_groups:
+  meta:
+    - check
+    - list
+  emit:
+    - structure
+    - project
+    - diagram
+  repo:
+    - analyze
+    - optimize
+
 intents:
   - check
   - list
@@ -74,6 +88,7 @@ license: Apache-2.0
 
 metadata:
   abraxas_family: true
+  command_router: scripts/orchestra_router.py
   design_doc: docs/DESIGN.md
   openclaw_doc: docs/OPENCLAW.md
   roadmap_doc: docs/ROADMAP.md
@@ -82,5 +97,7 @@ metadata:
   completion_doc: docs/COMPLETION.md
   public_release_doc: docs/PUBLIC_RELEASE.md
   security_audit: docs/SECURITY_AUDIT.md
+  agent_posture: references/agent-posture.md
+  site: https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/
   min_python: "3.11"
   skill_type: coding-agent

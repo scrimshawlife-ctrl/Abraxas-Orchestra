@@ -79,21 +79,30 @@ bash install.sh --rollback
 ## 4. Post-install verification
 
 ```bash
+# meta
 python3 ~/.hermes/skills/orchestra/scripts/orchestra.py check
+python3 ~/.hermes/skills/orchestra/scripts/orchestra.py list
 bash ~/.hermes/skills/orchestra/scripts/smoke.sh
 
+# emit
 python3 ~/.hermes/skills/orchestra/scripts/orchestra.py structure \
   -f tree-of-life -c "intent,synthesis,output" --out /tmp/orch-skel
 
+# repo
 python3 ~/.hermes/skills/orchestra/scripts/orchestra.py analyze \
   --path /path/to/pkg -f tree-of-life --out /tmp/orch-an
 ```
 
 ---
 
-## 5. Wire the host
+## 5. Wire the host (Hermes routing)
 
 - Confirm skill discovery picks up `SKILL.md` frontmatter (`name: orchestra`).
+- Hermes agents must route Orchestra work like the CLI **CommandRouter**:
+  - **meta** — `check`, `list`
+  - **emit** — `structure`, `project`, `diagram`
+  - **repo** — `analyze`, `optimize`
+- Full agent contract: installed `SKILL.md` + `references/agent-posture.md`.
 - Keep mutable agent state **outside** the skill install root.
 - Prefer `--dry-run` after upgrades before swapping a live target.
 

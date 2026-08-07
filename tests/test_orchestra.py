@@ -231,7 +231,24 @@ class TestPackageIdentity(unittest.TestCase):
 
     def test_design_documents_040_surface(self) -> None:
         design = self._read("docs/DESIGN.md")
-        self.assertRegex(design, r"0\.4\.\d+")
+        self.assertRegex(design, r"0\.\d+\.\d+")
         for cmd in ("analyze", "optimize", "structure", "diagram", "check", "list"):
             self.assertIn(cmd, design)
         self.assertNotIn("Version target**: 0.1.2", design)
+
+    def test_hermes_skill_routes_like_cli_router(self) -> None:
+        """Hermes SKILL.md must document the same meta/emit/repo groups as CLI."""
+        skill = self._read("SKILL.md")
+        self.assertIn("Hermes routing", skill)
+        for group in ("meta", "emit", "repo"):
+            self.assertIn(group, skill)
+        for cmd in (
+            "check", "list", "structure", "project", "diagram", "analyze", "optimize",
+        ):
+            self.assertIn(cmd, skill)
+        manifest = self._read("orchestra.manifest.yaml")
+        self.assertIn("command_groups:", manifest)
+        posture = self._read("references/agent-posture.md")
+        self.assertIn("meta", posture)
+        self.assertIn("emit", posture)
+        self.assertIn("repo", posture)

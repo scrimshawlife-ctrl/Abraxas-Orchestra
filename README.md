@@ -46,17 +46,26 @@ bash install.sh                          # → ~/.hermes/skills/orchestra
 
 After install, the host discovers the skill from `SKILL.md` (`name: orchestra`).
 
-### Day-to-day commands
+### Day-to-day commands (router groups)
 
-All commands work from the repo or from the install root (`~/.hermes/skills/orchestra`).
+Same groups for **CLI** and **Hermes** agents (`CommandRouter` / `SKILL.md`):
 
-**List maps**
+| Group | Commands | Purpose |
+|-------|----------|---------|
+| **meta** | `check`, `list` | Integrity + framework discovery |
+| **emit** | `structure`, `project`, `diagram` | Skeleton + diagrams from a framework |
+| **repo** | `analyze`, `optimize` | Observe existing tree → plan → gated apply |
+
+All commands work from the repo or install root (`~/.hermes/skills/orchestra`).
+
+**meta — list maps**
 
 ```bash
 python3 scripts/orchestra.py list
+python3 scripts/orchestra.py check
 ```
 
-**Scaffold a dual-named layout** (example: Tree of Life, three concerns)
+**emit — scaffold** (Tree of Life, three concerns)
 
 ```bash
 python3 scripts/orchestra.py structure \
@@ -71,19 +80,19 @@ Writes under `--out`:
 - `correspondence-table.json`  
 - `architecture.html` · `architecture.json` · `architecture.mmd` (auto)
 
-**Project mode** (collapse oversized / forced maps before emit):
+**emit — project** (collapse oversized / forced maps):
 
 ```bash
 python3 scripts/orchestra.py project -f enochian -o chaos-magic --out /tmp/orch-proj
 ```
 
-**Diagram only** (no skeleton files):
+**emit — diagram only**:
 
 ```bash
 python3 scripts/orchestra.py diagram -f numogram --out /tmp/orch-diag
 ```
 
-**Analyze an existing package** (Python AST by default; also js/ts/go/rust/ruby/`auto`)
+**repo — analyze** (Python AST by default; also js/ts/go/rust/ruby/`auto`)
 
 ```bash
 python3 scripts/orchestra.py analyze \
@@ -97,7 +106,7 @@ python3 scripts/orchestra.py analyze --path . --lang auto --out /tmp/orch-an
 
 Produces `analysis.json` plus the same diagram trio. Mapping strengths: `STRONG` / `ADEQUATE` / `WEAK` / `FORCED`. Weak or forced maps fail closed (non-zero exit) so agents do not “paper over” bad fits. Non-Python languages contribute OBSERVED import edges only; framework mapping still keys off path/name tokens.
 
-**Optimize plan (read-only)**
+**repo — optimize plan** (read-only)
 
 ```bash
 python3 scripts/orchestra.py optimize \
@@ -107,7 +116,7 @@ python3 scripts/orchestra.py optimize \
 
 Writes `optimize-plan.json` and `OPTIMIZE.md`. **No source tree changes.**
 
-**Apply gated moves (rename / promote / flatten)**
+**repo — apply gated moves** (rename / promote / flatten)
 
 ```bash
 # Dry-run first
@@ -120,16 +129,17 @@ python3 scripts/orchestra.py optimize \
   --apply --confirm --refresh
 ```
 
-### When an agent should call this skill
+### When Hermes should call this skill
 
-Use Orchestra when the user wants:
+Route first (**meta** / **emit** / **repo**), then run the matching CLI command:
 
-- architecture shaped by a traditional symbolic map  
-- dual naming (code identifiers + symbolic loci) with provenance  
-- automatic Mermaid/HTML/JSON diagrams for a mapped design  
-- a fail-closed read of a repo before any rename plan (Python first; multi-lang observe with care)  
+| User wants… | Group | Commands |
+|-------------|-------|----------|
+| Is the skill healthy? What maps exist? | **meta** | `check`, `list` |
+| New dual-named skeleton or diagram from a map | **emit** | `structure`, `project`, `diagram` |
+| Observe / map / refactor an existing tree | **repo** | `analyze`, `optimize` |
 
-Agents: prefer `structure` / `project` / `analyze` with `--out` over inventing ad-hoc Mermaid. Do not invent loci that are not in `schemas/frameworks.v1.json`.
+Prefer `structure` / `project` / `analyze` with `--out` over inventing ad-hoc Mermaid. Do not invent loci that are not in `schemas/frameworks.v1.json`. Full agent contract: installed `SKILL.md` + `references/agent-posture.md`.
 
 ### Integrity + coverage
 
