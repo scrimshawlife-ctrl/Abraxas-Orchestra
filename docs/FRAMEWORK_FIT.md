@@ -47,6 +47,27 @@ python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --apply
 python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --apply --confirm
 ```
 
+## Python best case (tree-of-life)
+
+When building a staged Python package, choose concerns that **are** framework mechanical names:
+
+```bash
+python3 scripts/orchestra.py structure \
+  -f tree-of-life \
+  -c "intent,intake,analyze,store,output" \
+  --out ./myapp-skel
+```
+
+| Mechanical | Symbolic | Role |
+|------------|----------|------|
+| `intent` | kether | Entry contract |
+| `intake` | chokmah | Load / pull |
+| `analyze` | hod | Score / transform |
+| `store` | yesod | Persist |
+| `output` | malkuth | Emit |
+
+Hermes: route **emit** → `structure`. Site demo: [before & after](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/#before-after).
+
 ## Naming tips that improve fit
 
 - Name modules after **mechanical locus** strings in `schemas/frameworks.v1.json` when you own the tree.
