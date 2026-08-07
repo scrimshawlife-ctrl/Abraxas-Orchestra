@@ -71,8 +71,21 @@ Analyzer heuristics (still **fail-closed** — loci only from `frameworks.v1.jso
 
 ## When not to map
 
-- Polyglot repos (Python-only analyze in 0.4.x)
 - Generated / vendor trees — exclude or narrow `--path`
 - Pure libraries with no architectural stages — use OBSERVED graph + diagrams only
+- Polyglot monorepos where non-Python edges are critical to correctness — import-surface parsers are **not** full language compilers (see below)
+
+## Multi-language analyze (limits)
+
+| Language | Fidelity |
+|----------|----------|
+| Python | Full AST import graph |
+| JavaScript / TypeScript | Token + structured import/export/require nodes |
+| Go | Token + structured `import` declarations |
+| Rust | Token + structured `use` / `mod` |
+| Ruby | Token + structured `require` / `require_relative` |
+| `auto` | Union of the above extensions |
+
+Non-Python resolution is best-effort (relative paths when possible; packages stay external). Optimize apply remains Python-oriented. Details: `scripts/analyze_langs.py`, `docs/DESIGN.md`.
 
 Canonical loci: `schemas/frameworks.v1.json` · Human tables: `references/`

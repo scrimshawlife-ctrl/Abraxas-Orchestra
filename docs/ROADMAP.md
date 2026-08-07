@@ -37,7 +37,7 @@ Version policy: [`SEMVER.md`](SEMVER.md) · bump tool: `scripts/bump_version.py`
 ## Next
 
 - Use `docs/SEMVER.md` + `scripts/bump_version.py` for all releases
-- Optional branch protection without admin bypass (`docs/CI.md`)
+- Merge via PR only; `main` enforces `ci-ok` for admins (`docs/CI.md`)
 - Full language ASTs / type-aware resolve (optional future deps)
 - Broader safe_apply that invents file content (explicit MAJOR / operator request)
 
