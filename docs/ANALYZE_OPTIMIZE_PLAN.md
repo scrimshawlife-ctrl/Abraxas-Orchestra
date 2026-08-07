@@ -321,7 +321,7 @@ Versioning suggestion:
 Phase A is done when:
 
 1. `bash scripts/smoke.sh` green including analyze fixture  
-2. Cursor/agent can run analyze on Abraxas-Orchestra-Hermes itself and get a coherent graph  
+2. Cursor/agent can run analyze on Abraxas-Orchestra itself and get a coherent graph  
 3. SKILL.md lists `analyze` with fail-closed language  
 4. This plan’s Phase A checkboxes are checked in a follow-up commit or issue  
 

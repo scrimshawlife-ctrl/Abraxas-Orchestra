@@ -11,8 +11,8 @@ description: >
   Analyze local Python trees and emit optimize plans without silent mutation.
   Corpus remains open for expansion with additional traditional systems.
 
-homepage: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
-repository: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes
+homepage: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra
+repository: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra
 
 skill_entry: SKILL.md
 cli_entry: scripts/orchestra.py

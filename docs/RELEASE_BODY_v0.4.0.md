@@ -13,8 +13,8 @@ Broader gated `safe_apply` beyond mechanical rename.
 ## Install
 
 ```bash
-git clone --branch v0.4.0 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
-cd Abraxas-Orchestra-Hermes
+git clone --branch v0.4.0 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra.git
+cd Abraxas-Orchestra
 bash scripts/smoke.sh
 bash install.sh --dry-run && bash install.sh
 ```

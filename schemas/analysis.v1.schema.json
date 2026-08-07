@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes/schemas/analysis.v1.schema.json",
+  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra/schemas/analysis.v1.schema.json",
   "title": "Orchestra Analysis v1",
   "description": "Observed repository graph with optional fail-closed framework mappings.",
   "type": "object",

@@ -13,8 +13,8 @@ Hermes + OpenClaw coding-agent skill for symbolic code architecture.
 ### Install
 
 ```bash
-git clone --branch v0.3.2 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
-cd Abraxas-Orchestra-Hermes
+git clone --branch v0.3.2 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra.git
+cd Abraxas-Orchestra
 bash scripts/smoke.sh
 bash install.sh --dry-run && bash install.sh
 ```

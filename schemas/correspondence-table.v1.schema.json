@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes/schemas/correspondence-table.v1.schema.json",
+  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra/schemas/correspondence-table.v1.schema.json",
   "title": "Orchestra Correspondence Table v1",
   "description": "Explicit mapping of functional concerns onto a chosen esoteric framework. Used as provenance artifact.",
   "type": "object",

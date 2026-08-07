@@ -196,3 +196,42 @@ class TestInstaller(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
+class TestPackageIdentity(unittest.TestCase):
+    """Guard live packaging surfaces against wrong repo name drift."""
+
+    CANON = "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra"
+    STALE = "Abraxas-Orchestra-Hermes"
+
+    def _read(self, rel: str) -> str:
+        return (ROOT / rel).read_text(encoding="utf-8")
+
+    def test_readme_clone_urls_use_real_repo(self) -> None:
+        text = self._read("README.md")
+        self.assertNotIn(self.STALE, text)
+        self.assertIn(f"{self.CANON}.git", text)
+        self.assertIn(f"- Repo: {self.CANON}", text)
+
+    def test_manifest_and_notice_repository(self) -> None:
+        manifest = self._read("orchestra.manifest.yaml")
+        notice = self._read("NOTICE")
+        for text in (manifest, notice):
+            self.assertNotIn(self.STALE, text)
+            self.assertIn(self.CANON, text)
+
+    def test_schema_ids_use_real_repo(self) -> None:
+        schemas = list((ROOT / "schemas").glob("*.json"))
+        self.assertGreaterEqual(len(schemas), 4)
+        for path in schemas:
+            text = path.read_text(encoding="utf-8")
+            if '"$id"' not in text:
+                continue
+            self.assertNotIn(self.STALE, text, msg=path.name)
+            self.assertIn(self.CANON, text, msg=path.name)
+
+    def test_design_documents_040_surface(self) -> None:
+        design = self._read("docs/DESIGN.md")
+        self.assertIn("0.4.0", design)
+        for cmd in ("analyze", "optimize", "structure", "diagram", "check", "list"):
+            self.assertIn(cmd, design)
+        self.assertNotIn("Version target**: 0.1.2", design)

@@ -31,8 +31,8 @@ It is **not** a network service, a magic runtime, or a silent auto-refactorer. W
 ### Install once
 
 ```bash
-git clone https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
-cd Abraxas-Orchestra-Hermes
+git clone https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra.git
+cd Abraxas-Orchestra
 bash scripts/smoke.sh                    # must print SMOKE OK
 bash install.sh --dry-run
 bash install.sh                          # → ~/.hermes/skills/orchestra
@@ -136,8 +136,8 @@ python3 scripts/bump_version.py check
 ## Quick start (minimal)
 
 ```bash
-git clone https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
-cd Abraxas-Orchestra-Hermes
+git clone https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra.git
+cd Abraxas-Orchestra
 bash scripts/smoke.sh
 python3 scripts/orchestra.py list
 python3 scripts/orchestra.py structure -f tree-of-life -c "intent,synthesis,output" --out /tmp/orch-skel
@@ -195,23 +195,39 @@ LICENSE / NOTICE         # Apache-2.0
 
 ## Documentation map
 
+**Canonical (source of truth for the current tree):**
+
+| Doc | Role |
+|-----|------|
+| `VERSION` | Single version number for the package |
+| `CHANGELOG.md` | Machine-oriented version history |
+| `docs/SECURITY.md` | Live threat model and write surfaces |
+| `SKILL.md` | Agent contract + current commands |
+| `README.md` | Humans + agents (this file) |
+| `docs/DESIGN.md` | Current design rationale / executable surface |
+| `docs/SEMVER.md` | Version bump policy |
+| `docs/DEPLOY.md` | Install and host wiring |
+
+**Supporting (still accurate, not version history):**
+
 | Doc | Audience |
 |-----|----------|
-| `SKILL.md` | Agents |
-| `README.md` | Humans + agents |
-| `docs/DEPLOY.md` | Install and host wiring |
-| `docs/COMPLETION.md` | Production freeze checklist |
-| `docs/PUBLIC_RELEASE.md` | Public debut |
-| `docs/SEMVER.md` | Version bump policy |
 | `docs/CI.md` | Actions + branch protection |
-| `docs/ANALYZE_OPTIMIZE_PLAN.md` | Analyze → optimize design |
-| `docs/RELEASE_NOTES.md` | Narrative releases |
-| `docs/SECURITY.md` / `SECURITY_AUDIT.md` | Threat model + audit |
-| `docs/DESIGN.md` | Design rationale |
+| `docs/ANALYZE_OPTIMIZE_PLAN.md` | Analyze → optimize design (shipped) |
 | `docs/OPENCLAW.md` | OpenClaw packaging |
 | `docs/COMMUNITY.md` | Community-skills notes |
 | `references/agent-posture.md` | How agents fill skeletons |
-| `CHANGELOG.md` | Machine version history |
+| `docs/SECURITY_AUDIT.md` | Audit history + status addenda (see SECURITY.md for live rules) |
+
+**Historical / freeze notes (not the live CLI surface):**
+
+| Doc | Role |
+|-----|------|
+| `docs/COMPLETION.md` | Production freeze checklist (point-in-time) |
+| `docs/PUBLIC_RELEASE.md` | Public debut notes |
+| `docs/RELEASE_NOTES.md` | Narrative releases |
+| `docs/RELEASE_BODY_v*.md` | Tag release body drafts |
+| `docs/RESTORE_NOTE.md` | 0.3.2 CLI restore incident marker |
 
 ---
 
@@ -224,13 +240,13 @@ LICENSE / NOTICE         # Apache-2.0
 - **State:** Keep mutable agent state outside the skill install root  
 - **License:** Apache-2.0 — see `LICENSE` and `NOTICE`  
 
-Details: [`docs/SECURITY_AUDIT.md`](docs/SECURITY_AUDIT.md)
+Details: [`docs/SECURITY.md`](docs/SECURITY.md) (live) · [`docs/SECURITY_AUDIT.md`](docs/SECURITY_AUDIT.md) (history)
 
 ---
 
 ## Links
 
-- Repo: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes  
+- Repo: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra  
 - Deploy: [`docs/DEPLOY.md`](docs/DEPLOY.md)  
 - Freeze: [`docs/COMPLETION.md`](docs/COMPLETION.md)  
 - Semver: [`docs/SEMVER.md`](docs/SEMVER.md)  

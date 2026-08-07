@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes/schemas/optimize-apply.v1.schema.json",
+  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra/schemas/optimize-apply.v1.schema.json",
   "title": "Orchestra Optimize Apply Report v1",
   "description": "Result of optimize --apply (dry-run or confirmed writes).",
   "type": "object",

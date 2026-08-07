@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes/schemas/optimize-plan.v1.schema.json",
+  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra/schemas/optimize-plan.v1.schema.json",
   "title": "Orchestra Optimize Plan v1",
   "description": "Ordered refactor plan derived from an analysis artifact. Plan-only by default.",
   "type": "object",

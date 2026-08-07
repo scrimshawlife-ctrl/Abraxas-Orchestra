@@ -23,7 +23,7 @@ Do not install if smoke fails.
 ## 1. Local validation (mandatory)
 
 ```bash
-cd Abraxas-Orchestra-Hermes
+cd Abraxas-Orchestra
 bash scripts/smoke.sh
 python3 scripts/orchestra.py check
 python3 scripts/orchestra.py list
@@ -107,7 +107,7 @@ git push origin v0.4.0
 ```
 
 ```bash
-git clone --branch v0.4.0 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra-Hermes.git
+git clone --branch v0.4.0 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra.git
 ```
 
 Release notes body: [`RELEASE_BODY_v0.4.0.md`](RELEASE_BODY_v0.4.0.md)
