@@ -1,6 +1,6 @@
 # Abraxas Orchestra
 
-**Site:** [https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/)
+**Site:** [https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/) · includes [Python best-case before/after](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/#before-after)
 
 <p align="center">
   <img src="assets/hero.jpg" alt="Abraxas Orchestra — symbolic architecture skill" width="720"/>
