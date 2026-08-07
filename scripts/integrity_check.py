@@ -16,6 +16,7 @@ from pathlib import Path
 # when intentional large deletes land — raise deliberately, never silently.
 LINE_FLOORS: dict[str, int] = {
     "scripts/orchestra.py": 500,
+    "scripts/orchestra_router.py": 80,
     "scripts/optimize_apply.py": 300,
     "scripts/optimize_enrich.py": 200,
     "scripts/optimize_rewrite.py": 50,

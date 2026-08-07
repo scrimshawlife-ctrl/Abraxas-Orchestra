@@ -21,7 +21,7 @@ Structure software architecture using traditional correspondence systems as hier
 
 ## Executable surface (v0.6.0)
 
-CLI entry: `python3 scripts/orchestra.py` (legacy `do <cmd>` prefix still accepted).
+CLI entry: `python3 scripts/orchestra.py` — commands registered on `CommandRouter` (`scripts/orchestra_router.py`): **meta** (check, list), **emit** (structure, project, diagram), **repo** (analyze, optimize). Legacy `do <cmd>` prefix still accepted.
 
 | Command | Role |
 |---------|------|

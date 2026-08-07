@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-Abraxas Orchestra — CLI entrypoint (v0.2 executable surface)
+Abraxas Orchestra — CLI entrypoint
 
 Minimal, fail-closed, dual-naming skeleton emitter + repo analyze/optimize plan.
 Stdlib only. No external dependencies.
 
-Commands: check | list | structure | project | diagram | analyze | optimize
+Commands are registered on a CommandRouter (see orchestra_router.py):
+  meta:  check | list
+  emit:  structure | project | diagram
+  repo:  analyze | optimize
 Legacy: do <command> still accepted.
 """
 
@@ -17,6 +20,8 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from orchestra_router import CommandRouter, CommandSpec
 
 VERSION = "0.6.0"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
@@ -582,51 +587,33 @@ def cmd_optimize(args: argparse.Namespace) -> int:
     return 0
 
 
-def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(
-        prog="orchestra",
-        description="Abraxas Orchestra — symbolic code architecture CLI",
-        epilog="Commands: check | list | structure | project | diagram | analyze | optimize",
-    )
-    p.add_argument("--version", action="version", version=f"Orchestra {VERSION}")
-    sub = p.add_subparsers(dest="command", required=True)
+# ---------------------------------------------------------------------------
+# Arg builders (shared option shapes)
+# ---------------------------------------------------------------------------
 
-    def add_structure_args(sp: argparse.ArgumentParser) -> None:
-        sp.add_argument("--framework", "-f", required=True, help="Primary framework key")
-        sp.add_argument("--overlay", "-o", default=None, help="Secondary overlay framework")
-        sp.add_argument("--concerns", "-c", default=None, help="Comma-separated concerns")
-        sp.add_argument("--out", default=None, help="Write skeleton + JSON + diagrams to DIR")
 
-    check_p = sub.add_parser("check", help="Validate skill integrity")
-    check_p.set_defaults(func=cmd_check)
-    list_p = sub.add_parser("list", help="List available frameworks", aliases=["list-frameworks"])
-    list_p.set_defaults(func=cmd_list_frameworks)
-    struct_p = sub.add_parser("structure", help="Emit dual-named skeleton + correspondence table")
-    add_structure_args(struct_p)
-    struct_p.set_defaults(func=cmd_structure)
-    project_p = sub.add_parser(
-        "project",
-        help="Emit skeleton with pragmatic projection (collapse oversized / forced maps)",
-    )
-    add_structure_args(project_p)
-    project_p.set_defaults(func=cmd_project)
-    diag_p = sub.add_parser(
-        "diagram",
-        aliases=["diagrammit"],
-        help="Emit interactive HTML + agent JSON + Mermaid architecture graph",
-    )
-    add_structure_args(diag_p)
-    diag_p.add_argument("--project", action="store_true", help="Apply pragmatic projection before graphing")
-    diag_p.set_defaults(func=cmd_diagram)
+def _add_emit_args(sp: argparse.ArgumentParser) -> None:
+    """Args shared by structure / project / diagram."""
+    sp.add_argument("--framework", "-f", required=True, help="Primary framework key")
+    sp.add_argument("--overlay", "-o", default=None, help="Secondary overlay framework")
+    sp.add_argument("--concerns", "-c", default=None, help="Comma-separated concerns")
+    sp.add_argument("--out", default=None, help="Write outputs to DIR")
 
-    analyze_p = sub.add_parser(
-        "analyze",
-        help="Observe a local Python repo graph; optionally map onto a framework",
+
+def _add_diagram_args(sp: argparse.ArgumentParser) -> None:
+    _add_emit_args(sp)
+    sp.add_argument(
+        "--project",
+        action="store_true",
+        help="Apply pragmatic projection before graphing",
     )
-    analyze_p.add_argument("--path", required=True, help="Local directory to analyze")
-    analyze_p.add_argument("--framework", "-f", default=None, help="Optional framework key for mapping")
-    analyze_p.add_argument("--overlay", "-o", default=None, help="Secondary overlay framework")
-    analyze_p.add_argument(
+
+
+def _add_analyze_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument("--path", required=True, help="Local directory to analyze")
+    sp.add_argument("--framework", "-f", default=None, help="Optional framework key for mapping")
+    sp.add_argument("--overlay", "-o", default=None, help="Secondary overlay framework")
+    sp.add_argument(
         "--lang",
         default="python",
         help=(
@@ -634,59 +621,56 @@ def build_parser() -> argparse.ArgumentParser:
             "or auto (all supported extensions)"
         ),
     )
-    analyze_p.add_argument("--max-depth", type=int, default=None, help="Max directory depth")
-    analyze_p.add_argument("--max-files", type=int, default=2000, help="Cap files processed")
-    analyze_p.add_argument("--out", default=None, help="Write analysis + diagrams to DIR")
-    analyze_p.add_argument(
+    sp.add_argument("--max-depth", type=int, default=None, help="Max directory depth")
+    sp.add_argument("--max-files", type=int, default=2000, help="Cap files processed")
+    sp.add_argument("--out", default=None, help="Write analysis + diagrams to DIR")
+    sp.add_argument(
         "--allow-system",
         action="store_true",
         help="Permit analyzing system prefixes (dangerous; explicit)",
     )
-    analyze_p.set_defaults(func=cmd_analyze)
 
-    opt_p = sub.add_parser(
-        "optimize",
-        help="Emit refactor plan from analysis.json (plan-only; no tree writes)",
-    )
-    opt_p.add_argument(
+
+def _add_optimize_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument(
         "--from",
         dest="from_analysis",
         required=True,
         help="Path to analysis.json from analyze",
     )
-    opt_p.add_argument("--out", default=None, help="Write optimize-plan.json + OPTIMIZE.md")
-    opt_p.add_argument(
+    sp.add_argument("--out", default=None, help="Write optimize-plan.json + OPTIMIZE.md")
+    sp.add_argument(
         "--min-strength",
         default="ADEQUATE",
         choices=["STRONG", "ADEQUATE", "WEAK", "FORCED"],
         help="Minimum mapping strength for plan steps (default ADEQUATE)",
     )
-    opt_p.add_argument(
+    sp.add_argument(
         "--apply",
         action="store_true",
         help="Apply safe_apply steps (dry-run unless --confirm)",
     )
-    opt_p.add_argument(
+    sp.add_argument(
         "--confirm",
         action="store_true",
         help="Required with --apply to perform writes (backup first)",
     )
-    opt_p.add_argument(
+    sp.add_argument(
         "--backup-dir",
         default=None,
         help="Backup directory for --apply --confirm (default under analyzed root)",
     )
-    opt_p.add_argument(
+    sp.add_argument(
         "--refresh",
         action="store_true",
         help="After --apply --confirm, re-analyze the tree and write analysis.json beside the backup",
     )
-    opt_p.add_argument(
+    sp.add_argument(
         "--steps",
         default=None,
         help="Comma-separated step ids to apply (default: all safe_apply steps)",
     )
-    opt_p.add_argument(
+    sp.add_argument(
         "--actions",
         default=None,
         help=(
@@ -694,24 +678,79 @@ def build_parser() -> argparse.ArgumentParser:
             "(suggest_rename,suggest_boundary,suggest_flatten)"
         ),
     )
-    opt_p.set_defaults(func=cmd_optimize)
-    return p
 
 
-def _normalize_argv(argv: list[str] | None) -> list[str] | None:
-    if argv is None:
-        return None
-    if len(argv) >= 2 and argv[0] == "do":
-        print("note: `do` is optional — use `orchestra <command>` directly", file=sys.stderr)
-        return argv[1:]
-    return argv
+# ---------------------------------------------------------------------------
+# Router registration
+# ---------------------------------------------------------------------------
+
+
+def build_router() -> CommandRouter:
+    """Register all CLI commands on a single router."""
+    router = CommandRouter(
+        prog="orchestra",
+        description="Abraxas Orchestra — symbolic code architecture CLI",
+        version=VERSION,
+    )
+    router.add(CommandSpec(
+        name="check",
+        handler=cmd_check,
+        help="Validate skill integrity",
+        group="meta",
+    ))
+    router.add(CommandSpec(
+        name="list",
+        handler=cmd_list_frameworks,
+        help="List available frameworks",
+        aliases=("list-frameworks",),
+        group="meta",
+    ))
+    router.add(CommandSpec(
+        name="structure",
+        handler=cmd_structure,
+        help="Emit dual-named skeleton + correspondence table",
+        group="emit",
+        configure=_add_emit_args,
+    ))
+    router.add(CommandSpec(
+        name="project",
+        handler=cmd_project,
+        help="Emit skeleton with pragmatic projection (collapse oversized / forced maps)",
+        group="emit",
+        configure=_add_emit_args,
+    ))
+    router.add(CommandSpec(
+        name="diagram",
+        handler=cmd_diagram,
+        help="Emit interactive HTML + agent JSON + Mermaid architecture graph",
+        aliases=("diagrammit",),
+        group="emit",
+        configure=_add_diagram_args,
+    ))
+    router.add(CommandSpec(
+        name="analyze",
+        handler=cmd_analyze,
+        help="Observe a local repo import graph; optionally map onto a framework",
+        group="repo",
+        configure=_add_analyze_args,
+    ))
+    router.add(CommandSpec(
+        name="optimize",
+        handler=cmd_optimize,
+        help="Emit refactor plan from analysis.json (plan-only unless --apply --confirm)",
+        group="repo",
+        configure=_add_optimize_args,
+    ))
+    return router
+
+
+def build_parser() -> argparse.ArgumentParser:
+    """Back-compat: build the full CLI parser via the router."""
+    return build_router().build_parser()
 
 
 def main(argv: list[str] | None = None) -> int:
-    argv = _normalize_argv(argv if argv is not None else sys.argv[1:])
-    parser = build_parser()
-    args = parser.parse_args(argv)
-    return args.func(args)
+    return build_router().dispatch(argv)
 
 
 if __name__ == "__main__":
