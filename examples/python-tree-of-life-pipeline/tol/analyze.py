@@ -12,7 +12,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from intent import Intent
+from .intent import Intent
 
 
 def score(intent: Intent, rows: list[dict[str, Any]]) -> list[dict[str, Any]]:

@@ -1,12 +1,5 @@
 #!/usr/bin/env python3
-"""
-Orchestrated pipeline — optimized *by* Tree of Life stages, not only named after them.
-
-Flow (mechanical · symbolic):
-  intent (kether) → intake (chokmah) → analyze (hod) → store (yesod) → output (malkuth)
-
-Each stage has one job. Cross-stage calls are one-way along the map.
-"""
+"""CLI entry for the Tree-of-Life optimized pipeline example."""
 
 from __future__ import annotations
 
@@ -14,23 +7,10 @@ import json
 import sys
 from pathlib import Path
 
-# Allow `python3 pipeline.py` from this directory
+# Ensure parent of `tol` package is on path when run as a script
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from analyze import score
-from intent import accept
-from intake import pull
-from output import emit
-from store import persist
-
-
-def run(source: str = "demo", *, max_items: int = 12) -> dict:
-    """Execute the dual-named stage chain; structure is the control plane."""
-    intent = accept(source, max_items=max_items)       # kether — contract first
-    raw = pull(intent)                                 # chokmah — raw force only
-    scored = score(intent, raw)                        # hod — analysis only
-    saved = persist(scored)                            # yesod — foundation only
-    return emit(saved)                                 # malkuth — manifestation
+from tol.pipeline import run  # noqa: E402
 
 
 def main() -> int:

@@ -321,12 +321,12 @@ def run(src):
         </div>
         <div class="ba-panel after">
           <header>After — optimized by the map</header>
-<pre><code># pipeline.py — one-way flow along the Tree
-from intent import accept      # kether — contract only
-from intake import pull        # chokmah — raw force only
-from analyze import score      # hod — analysis only
-from store import persist      # yesod — foundation only
-from output import emit        # malkuth — manifestation only
+<pre><code># tol/pipeline.py — one-way flow along the Tree
+from .intent import accept     # kether — contract only
+from .intake import pull       # chokmah — raw force only
+from .analyze import score     # hod — analysis only
+from .store import persist     # yesod — foundation only
+from .output import emit       # malkuth — manifestation only
 
 def run(source: str, *, max_items: int = 12):
     intent = accept(source, max_items=max_items)
@@ -335,8 +335,9 @@ def run(source: str, *, max_items: int = 12):
     saved  = persist(scored)        # no new scores here
     return emit(saved)              # final shape only
 
-# Each package forbids the others' jobs.
-# Structure is the optimization, not a label.</code></pre>
+# Each module forbids the others' jobs.
+# Structure is the optimization, not a label.
+# Package: examples/python-tree-of-life-pipeline/</code></pre>
         </div>
       </div>
 

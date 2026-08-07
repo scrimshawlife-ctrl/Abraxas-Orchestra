@@ -12,12 +12,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from intent import Intent
+from .intent import Intent
 
 
 def pull(intent: Intent) -> list[dict[str, Any]]:
     """chokmah — load raw force bounded by intent (demo: synthetic rows)."""
-    # Demo intake: in production, open intent.source (file/API).
     raw = [
         {"id": i, "text": f"event-{i}", "weight": (i % 5) / 4.0}
         for i in range(intent.max_items)

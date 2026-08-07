@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import importlib
 import subprocess
 import sys
 import unittest
@@ -28,15 +29,16 @@ class TestPythonTreeOfLifePipeline(unittest.TestCase):
         self.assertIn("malkuth", r.stdout)
 
     def test_intent_rejects_empty_source(self) -> None:
-        sys.path.insert(0, str(EXAMPLE))
-        from intent import accept  # type: ignore
-
+        # Load as package without polluting bare top-level names
+        if str(EXAMPLE) not in sys.path:
+            sys.path.insert(0, str(EXAMPLE))
+        intent = importlib.import_module("tol.intent")
         with self.assertRaises(ValueError):
-            accept("")
+            intent.accept("")
 
     def test_stage_modules_exist(self) -> None:
-        for name in ("intent", "intake", "analyze", "store", "output"):
-            self.assertTrue((EXAMPLE / name / "__init__.py").is_file())
+        for name in ("intent", "intake", "analyze", "store", "output", "pipeline"):
+            self.assertTrue((EXAMPLE / "tol" / f"{name}.py").is_file())
 
 
 if __name__ == "__main__":

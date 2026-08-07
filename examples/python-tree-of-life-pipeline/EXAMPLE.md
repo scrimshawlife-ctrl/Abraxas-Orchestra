@@ -4,11 +4,13 @@ This is **not** a rename-only skeleton. The map optimizes the code:
 
 | Stage | Symbolic | Allowed work | Forbidden here |
 |-------|----------|--------------|----------------|
-| `intent` | kether | Validate goals / limits | I/O, scoring |
-| `intake` | chokmah | Pull raw records | Scoring, persist |
-| `analyze` | hod | Score / filter | File I/O, emission |
-| `store` | yesod | Persist | New scoring rules |
-| `output` | malkuth | Final payload shape | Intake, analysis |
+| `tol.intent` | kether | Validate goals / limits | I/O, scoring |
+| `tol.intake` | chokmah | Pull raw records | Scoring, persist |
+| `tol.analyze` | hod | Score / filter | File I/O, emission |
+| `tol.store` | yesod | Persist | New scoring rules |
+| `tol.output` | malkuth | Final payload shape | Intake, analysis |
+
+Package name is `tol` (not bare `intent`/`analyze`) so imports never shadow other examples.
 
 ## Run
 
@@ -20,7 +22,7 @@ python3 pipeline.py
 ## Hermes route
 
 1. **emit** `structure -f tree-of-life -c "intent,intake,analyze,store,output"` (scaffold)  
-2. Implement domain logic **inside** each stage’s contract (this example)  
-3. Optional **repo** `analyze` to re-check import graph stays clean  
+2. Implement domain logic **inside** each stage’s contract (this example under `tol/`)  
+3. Optional **repo** `analyze` to re-check import graph  
 
-See site: [Python best case before/after](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/#before-after).
+Site: [before & after](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/#before-after).
