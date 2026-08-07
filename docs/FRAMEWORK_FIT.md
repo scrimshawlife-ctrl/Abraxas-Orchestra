@@ -66,7 +66,9 @@ python3 scripts/orchestra.py structure \
 | `store` | yesod | Persist |
 | `output` | malkuth | Emit |
 
-Hermes: route **emit** → `structure`. Site demo: [before & after](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/#before-after).
+Hermes: route **emit** → `structure`, then implement logic **optimized by** each locus
+(not rename-only). Full working example: `examples/python-tree-of-life-pipeline/`.  
+Site demo: [before & after](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/#before-after).
 
 ## Naming tips that improve fit
 

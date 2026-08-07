@@ -76,6 +76,7 @@ schemas:
 examples:
   - examples/signal-forager-skeleton/
   - examples/enochian-chaos-skeleton/
+  - examples/python-tree-of-life-pipeline/
 
 governance:
   fail_closed: true

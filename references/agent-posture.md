@@ -29,6 +29,21 @@ Do not freestyle architecture Mermaid or invent loci outside the framework table
 - Tag OBSERVED / INFERRED / SPECULATIVE when scoring or promoting structure into larger Abraxas systems.
 - No silent collapse of oversized maps — use **emit** `project` for pragmatic projection.
 
+## Optimize by the map (not rename-only)
+
+Scaffold folders are not enough. After **emit** `structure` / `project`, implement domain logic
+so each package only does the work of its locus:
+
+- **intent / kether** — contracts and limits; no I/O  
+- **intake / chokmah** — raw pull; no scoring  
+- **analyze / hod** — score/filter; no persist/emit  
+- **store / yesod** — substrate; no new scoring rules  
+- **output / malkuth** — final manifestation  
+
+Cross-stage calls should follow the map’s one-way edges (see
+`examples/python-tree-of-life-pipeline/`). Structure is the control plane that
+*optimizes* the code, not a label glued onto a tangle.
+
 ## Layered growth
 
 ```text
