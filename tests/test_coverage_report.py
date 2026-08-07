@@ -27,7 +27,7 @@ class TestCoverageReport(unittest.TestCase):
         self.assertIn("Import check", r.stdout)
         self.assertIn("OK —", r.stdout)
         self.assertIn("Test linkage", r.stdout)
-        self.assertIn("soft report only", r.stdout)
+        self.assertIn("soft mode", r.stdout)
         # In-process section should mention analyze_repo or mapping-related hits
         self.assertIn("In-process line coverage", r.stdout)
 
@@ -45,7 +45,18 @@ class TestCoverageReport(unittest.TestCase):
             self.assertTrue(out.is_file())
             text = out.read_text(encoding="utf-8")
             self.assertIn("Orchestra soft quality report", text)
-            self.assertGreater(len(text), 200)
+            self.assertIn("soft mode", text)
+
+    def test_gate_passes_on_real_repo(self) -> None:
+        r = subprocess.run(
+            [PYTHON, str(SCRIPT), "--gate"],
+            cwd=str(ROOT),
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("GATE OK", r.stdout)
 
     def test_broken_script_import_fails(self) -> None:
         with tempfile.TemporaryDirectory() as td:

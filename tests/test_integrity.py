@@ -48,7 +48,9 @@ class TestIntegrityCheck(unittest.TestCase):
                 "scripts/optimize_enrich.py",
                 "scripts/optimize_rewrite.py",
                 "scripts/analyze_repo.py",
+                "scripts/analyze_langs.py",
                 "scripts/optimize_plan.py",
+                "scripts/coverage_report.py",
             ):
                 shutil.copy2(ROOT / rel, dest / rel)
             (dest / "scripts" / "orchestra.py").write_text(

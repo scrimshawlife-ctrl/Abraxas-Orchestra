@@ -16,8 +16,9 @@ Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 | `path-jail` | Installer refuses `/etc/orchestra`; `analyze --path /etc` exits 2 |
 | `integrity` | Critical-file line floors + markers (`scripts/integrity_check.py`) |
 | `smoke` | Full `scripts/smoke.sh` on Python 3.11 and 3.12 |
-| `coverage-soft` | Soft quality report (`scripts/coverage_report.py`) — **informational**, not required by `ci-ok` |
-| `ci-ok` | Aggregate — version-parity, path-jail, integrity, smoke must succeed |
+| `coverage-soft` | Soft quality report — **informational** artifact |
+| `coverage-gate` | Hard floors + required linkage (`coverage_report.py --gate`) — **required** by `ci-ok` |
+| `ci-ok` | Aggregate — version-parity, path-jail, integrity, smoke, coverage-gate |
 
 Local soft report:
 

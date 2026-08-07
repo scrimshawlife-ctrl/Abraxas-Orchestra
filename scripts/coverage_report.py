@@ -14,7 +14,7 @@ Exit codes:
   0 — report produced and import check passed
   2 — import failure or unit tests failed under the tracer
 
-Never enforces a numeric coverage floor (hard gates remain deferred).
+With ``--gate``, also enforces hard floors on core modules (CI gate).
 """
 
 from __future__ import annotations
@@ -27,6 +27,28 @@ import sys
 import trace
 import unittest
 from pathlib import Path
+
+# In-process line-coverage floors for core modules (percent).
+# Tuned to pure unit tests (not CLI subprocess suite). Raise deliberately.
+COVERAGE_FLOORS: dict[str, float] = {
+    "analyze_repo.py": 15.0,
+    "analyze_langs.py": 35.0,
+    "bump_version.py": 40.0,
+    "integrity_check.py": 25.0,
+}
+
+# Scripts that must be mentioned from tests/ (subprocess CLI coverage counts).
+REQUIRED_LINKAGE: tuple[str, ...] = (
+    "analyze_repo.py",
+    "analyze_langs.py",
+    "orchestra.py",
+    "optimize_apply.py",
+    "optimize_plan.py",
+    "optimize_enrich.py",
+    "bump_version.py",
+    "integrity_check.py",
+    "coverage_report.py",
+)
 
 
 def skill_root() -> Path:
@@ -99,6 +121,8 @@ def _inprocess_coverage(root: Path) -> tuple[bool, dict[str, tuple[int, int, flo
         "test_mapping",
         "test_integrity",
         "test_semver",
+        "test_analyze_langs",
+        # do not include test_coverage_report — it re-enters this script
     ]
     loader = unittest.TestLoader()
     suite = unittest.TestSuite()
@@ -155,7 +179,8 @@ def _inprocess_coverage(root: Path) -> tuple[bool, dict[str, tuple[int, int, flo
         n_exec = len(exec_lines)
         n_hit = len(hit)
         pct = (100.0 * n_hit / n_exec) if n_exec else 0.0
-        if n_hit > 0:
+        # Always record gate modules; others only if touched
+        if n_hit > 0 or path.name in COVERAGE_FLOORS:
             per_file[path.name] = (n_hit, n_exec, pct)
 
     note = (
@@ -165,11 +190,41 @@ def _inprocess_coverage(root: Path) -> tuple[bool, dict[str, tuple[int, int, flo
     return ok, per_file, note
 
 
-def run_report(root: Path | None = None) -> tuple[int, str]:
+def evaluate_gates(
+    *,
+    import_errors: list[str],
+    linked: dict[str, list[str]],
+    per_file: dict[str, tuple[int, int, float]],
+    unit_ok: bool,
+) -> list[str]:
+    """Return human-readable gate failures (empty = pass)."""
+    fails: list[str] = []
+    if import_errors:
+        fails.append(f"import check failed ({len(import_errors)} module(s))")
+    if not unit_ok:
+        fails.append("pure unit tests failed under tracer")
+    for name in REQUIRED_LINKAGE:
+        if name not in linked or not linked[name]:
+            # allow missing file (optional future modules)
+            fails.append(f"linkage required: {name} not mentioned in tests/")
+    for name, floor in sorted(COVERAGE_FLOORS.items()):
+        if name not in per_file:
+            fails.append(f"coverage floor: {name} not measured (need >= {floor:.1f}%)")
+            continue
+        _h, _e, pct = per_file[name]
+        if pct + 1e-9 < floor:
+            fails.append(
+                f"coverage floor: {name} at {pct:.1f}% < required {floor:.1f}%"
+            )
+    return fails
+
+
+def run_report(root: Path | None = None, *, gate: bool = False) -> tuple[int, str]:
     root = (root or skill_root()).resolve()
     scripts = _script_files(root)
     lines: list[str] = []
-    lines.append("Orchestra soft quality report (stdlib)")
+    title = "Orchestra coverage gate report" if gate else "Orchestra soft quality report"
+    lines.append(f"{title} (stdlib)")
     lines.append(f"root: {root}")
     lines.append("")
 
@@ -207,39 +262,73 @@ def run_report(root: Path | None = None) -> tuple[int, str]:
     ok, per_file, note = _inprocess_coverage(root)
     lines.append(f"  {note}")
     if per_file:
-        lines.append(f"  {'file':<28} {'hit':>5} {'exec':>5} {'pct':>7}")
-        lines.append("  " + "-" * 48)
+        lines.append(f"  {'file':<28} {'hit':>5} {'exec':>5} {'pct':>7} {'floor':>7}")
+        lines.append("  " + "-" * 56)
         total_h = total_e = 0
         for name, (h, e, pct) in sorted(per_file.items(), key=lambda x: x[1][2]):
-            lines.append(f"  {name:<28} {h:>5} {e:>5} {pct:>6.1f}%")
+            floor = COVERAGE_FLOORS.get(name)
+            floor_s = f"{floor:.1f}%" if floor is not None else "-"
+            lines.append(f"  {name:<28} {h:>5} {e:>5} {pct:>6.1f}% {floor_s:>7}")
             total_h += h
             total_e += e
         overall = (100.0 * total_h / total_e) if total_e else 0.0
-        lines.append("  " + "-" * 48)
-        lines.append(f"  {'SUBTOTAL (touched)':<28} {total_h:>5} {total_e:>5} {overall:>6.1f}%")
+        lines.append("  " + "-" * 56)
+        lines.append(f"  {'SUBTOTAL (listed)':<28} {total_h:>5} {total_e:>5} {overall:>6.1f}%")
     else:
         lines.append("  (no script lines hit by pure unit tests)")
     if not ok:
         lines.append("  note: pure unit tests reported failures under tracer")
     lines.append("")
-    lines.append(
-        "soft report only — no coverage floor enforced "
-        "(hard gates deferred; see docs/ROADMAP.md)"
+
+    gate_fails = evaluate_gates(
+        import_errors=import_errors,
+        linked=linked,
+        per_file=per_file,
+        unit_ok=ok,
     )
-    lines.append("")
+    if gate:
+        lines.append("## 4. Hard gates")
+        if gate_fails:
+            lines.append("  GATE FAIL")
+            for f in gate_fails:
+                lines.append(f"  - {f}")
+        else:
+            lines.append("  GATE OK — imports, linkage, and coverage floors")
+        lines.append("")
+        lines.append(
+            "Floors (in-process %): "
+            + ", ".join(f"{k}>={v:.0f}%" for k, v in sorted(COVERAGE_FLOORS.items()))
+        )
+        lines.append("")
+    else:
+        lines.append(
+            "soft mode — floors not enforced; run with --gate for CI hard gate"
+        )
+        lines.append(
+            "Floors (reference): "
+            + ", ".join(f"{k}>={v:.0f}%" for k, v in sorted(COVERAGE_FLOORS.items()))
+        )
+        lines.append("")
 
     text = "\n".join(lines)
     if import_errors or not ok:
+        return 2, text
+    if gate and gate_fails:
         return 2, text
     return 0, text
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Soft quality/coverage report for Orchestra")
+    parser = argparse.ArgumentParser(description="Soft/hard quality coverage report for Orchestra")
     parser.add_argument("--root", type=Path, default=None)
     parser.add_argument("--out", type=Path, default=None, help="Write report to this path")
+    parser.add_argument(
+        "--gate",
+        action="store_true",
+        help="Enforce hard floors + required test linkage (CI gate)",
+    )
     args = parser.parse_args(argv)
-    code, text = run_report(args.root)
+    code, text = run_report(args.root, gate=args.gate)
     sys.stdout.write(text)
     if not text.endswith("\n"):
         sys.stdout.write("\n")

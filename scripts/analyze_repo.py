@@ -73,9 +73,16 @@ def _pkg_parts(root: Path, py_file: Path) -> list[str]:
     return list(rel.parts)
 
 
-def _collect_py_files(root: Path, *, max_depth: int | None, max_files: int) -> list[Path]:
+def _collect_source_files(
+    root: Path,
+    *,
+    extensions: frozenset[str] | set[str],
+    max_depth: int | None,
+    max_files: int,
+) -> list[Path]:
     files: list[Path] = []
     root = root.resolve()
+    exts = {e.lower() if e.startswith(".") else f".{e.lower()}" for e in extensions}
 
     def walk(current: Path, depth: int) -> None:
         if len(files) >= max_files:
@@ -94,11 +101,18 @@ def _collect_py_files(root: Path, *, max_depth: int | None, max_files: int) -> l
                 if name in SKIP_DIRS or name.startswith("."):
                     continue
                 walk(entry, depth + 1)
-            elif entry.is_file() and entry.suffix == ".py":
+            elif entry.is_file() and entry.suffix.lower() in exts:
                 files.append(entry)
 
     walk(root, 0)
     return files[:max_files]
+
+
+def _collect_py_files(root: Path, *, max_depth: int | None, max_files: int) -> list[Path]:
+    """Backward-compatible collector for Python only."""
+    return _collect_source_files(
+        root, extensions={".py"}, max_depth=max_depth, max_files=max_files
+    )
 
 
 def _resolve_import(
@@ -578,11 +592,26 @@ def analyze_path(
         ), 2
 
     root = root.resolve()
-    if lang != "python":
+
+    # Multi-language support (stdlib regex extractors + Python AST)
+    from analyze_langs import (
+        SUPPORTED_LANGS,
+        extensions_for_lang,
+        extract_edges_for_file,
+        language_for_path,
+        module_id_for_file,
+        normalize_lang,
+    )
+
+    lang_key = normalize_lang(lang)
+    if lang_key not in SUPPORTED_LANGS:
         return _error_analysis(
             path=str(root), lang=lang, framework=framework,
             overlay=overlay, version=version,
-            error=f"unsupported language for v1: {lang}",
+            error=(
+                f"unsupported language: {lang} "
+                f"(supported: {', '.join(sorted(SUPPORTED_LANGS))})"
+            ),
         ), 2
 
     if framework and framework not in frameworks:
@@ -599,34 +628,60 @@ def analyze_path(
             error=f"unknown overlay: {overlay}",
         ), 2
 
-    py_files = _collect_py_files(root, max_depth=max_depth, max_files=max_files)
-    if not py_files:
+    exts = extensions_for_lang(lang_key)
+    source_files = _collect_source_files(
+        root, extensions=exts, max_depth=max_depth, max_files=max_files
+    )
+    if not source_files:
         return _error_analysis(
             path=str(root), lang=lang, framework=framework,
             overlay=overlay, version=version,
-            error="empty tree — no Python files found",
+            error=f"empty tree — no source files found for language={lang_key}",
         ), 2
 
-    id_for_file = {f: _module_id(root, f) for f in py_files}
+    # Build ids with per-file language
+    file_lang: dict[Path, str] = {}
+    id_for_file: dict[Path, str] = {}
+    for f in source_files:
+        fl = language_for_path(f) or "python"
+        file_lang[f] = fl
+        if fl == "python":
+            id_for_file[f] = _module_id(root, f)
+        else:
+            id_for_file[f] = module_id_for_file(root, f, fl)
     known = set(id_for_file.values())
 
     nodes: list[dict[str, Any]] = []
     edges: list[dict[str, Any]] = []
     source_by_id: dict[str, str] = {}
+    languages_seen: set[str] = set()
 
-    for f in py_files:
+    for f in source_files:
         mid = id_for_file[f]
+        fl = file_lang[f]
+        languages_seen.add(fl)
         rel = str(f.relative_to(root))
-        kind = "package" if f.name == "__init__.py" else "module"
+        kind = "package" if (fl == "python" and f.name == "__init__.py") else "module"
         parse_error = None
         imports: list[str] = []
         try:
             text = f.read_text(encoding="utf-8")
             source_by_id[mid] = text[:2000]
-            tree = ast.parse(text, filename=str(f))
-            for target, external in _imports_from_ast(
-                tree, root=root, current_file=f, known=known
-            ):
+            if fl == "python":
+                tree = ast.parse(text, filename=str(f))
+                pairs = _imports_from_ast(
+                    tree, root=root, current_file=f, known=known
+                )
+            else:
+                pairs = extract_edges_for_file(
+                    lang=fl,
+                    text=text,
+                    root=root,
+                    current=f,
+                    known=known,
+                    self_id=mid,
+                )
+            for target, external in pairs:
                 imports.append(target)
                 edges.append({
                     "from": mid,
@@ -634,6 +689,7 @@ def analyze_path(
                     "kind": "import",
                     "provenance": "OBSERVED",
                     "external": external,
+                    "language": fl,
                 })
         except SyntaxError as exc:
             parse_error = f"SyntaxError: {exc.msg} (line {exc.lineno})"
@@ -646,6 +702,7 @@ def analyze_path(
             "id": mid,
             "path": rel,
             "kind": kind,
+            "language": fl,
             "provenance": "OBSERVED",
             "imports": imports,
             "parse_error": parse_error,
@@ -703,10 +760,18 @@ def analyze_path(
     else:
         candidate_frameworks = _suggest_frameworks(nodes, frameworks)
 
+    # Report requested language; when auto, also list observed languages
+    reported_lang = lang_key
+    if lang_key == "auto" and len(languages_seen) == 1:
+        reported_lang = next(iter(languages_seen))
+    elif lang_key == "auto":
+        reported_lang = "auto"
+
     analysis: dict[str, Any] = {
         "schema": "orchestra-analysis.v1",
         "path": str(root),
-        "language": lang,
+        "language": reported_lang,
+        "languages": sorted(languages_seen),
         "framework": framework,
         "secondary_overlay": overlay,
         "status": status,

@@ -6,6 +6,19 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.5.0] — 2026-08-07
+
+### Added
+- Multi-language analyze: `javascript`, `typescript`, `go`, `rust`, `ruby`, and `auto`
+- `scripts/analyze_langs.py` — stdlib regex import extractors (Python remains AST)
+- Hard coverage floors via `python3 scripts/coverage_report.py --gate`
+- CI job `coverage-gate` required by `ci-ok` (floors on core in-process modules)
+- `tests/test_analyze_langs.py`
+
+### Changed
+- `analyze --lang` help and docs; analysis includes `languages` + per-node `language`
+- Soft `coverage-soft` remains informational; hard floors are the gate
+
 ## [0.4.3] — 2026-08-07
 
 ### Added

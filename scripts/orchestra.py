@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.4.3"
+VERSION = "0.5.0"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:
@@ -626,7 +626,14 @@ def build_parser() -> argparse.ArgumentParser:
     analyze_p.add_argument("--path", required=True, help="Local directory to analyze")
     analyze_p.add_argument("--framework", "-f", default=None, help="Optional framework key for mapping")
     analyze_p.add_argument("--overlay", "-o", default=None, help="Secondary overlay framework")
-    analyze_p.add_argument("--lang", default="python", help="Language (v1: python only)")
+    analyze_p.add_argument(
+        "--lang",
+        default="python",
+        help=(
+            "Language: python (default), javascript, typescript, go, rust, ruby, "
+            "or auto (all supported extensions)"
+        ),
+    )
     analyze_p.add_argument("--max-depth", type=int, default=None, help="Max directory depth")
     analyze_p.add_argument("--max-files", type=int, default=2000, help="Cap files processed")
     analyze_p.add_argument("--out", default=None, help="Write analysis + diagrams to DIR")

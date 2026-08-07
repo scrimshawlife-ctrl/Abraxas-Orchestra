@@ -8,7 +8,7 @@
   <strong>Hermes + OpenClaw coding-agent skill</strong> for structuring software with traditional symbolic maps
 </p>
 
-Version **0.4.3** · Skill name: `orchestra` · Python ≥ 3.11 · Offline CLI · License: [Apache-2.0](LICENSE)
+Version **0.5.0** · Skill name: `orchestra` · Python ≥ 3.11 · Offline CLI · License: [Apache-2.0](LICENSE)
 
 ---
 
@@ -79,13 +79,16 @@ python3 scripts/orchestra.py project -f enochian -o chaos-magic --out /tmp/orch-
 python3 scripts/orchestra.py diagram -f numogram --out /tmp/orch-diag
 ```
 
-**Analyze an existing Python package**
+**Analyze an existing package** (Python AST by default; also js/ts/go/rust/ruby/`auto`)
 
 ```bash
 python3 scripts/orchestra.py analyze \
   --path /path/to/your/package \
   -f tree-of-life \
   --out /tmp/orch-an
+
+# Multi-language tree
+python3 scripts/orchestra.py analyze --path . --lang auto --out /tmp/orch-an
 ```
 
 Produces `analysis.json` plus the same diagram trio. Mapping strengths: `STRONG` / `ADEQUATE` / `WEAK` / `FORCED`. Weak or forced maps fail closed (non-zero exit) so agents do not “paper over” bad fits.
@@ -150,7 +153,7 @@ Publish freeze: [`docs/COMPLETION.md`](docs/COMPLETION.md) · Public debut: [`do
 
 ## Release notes
 
-**Current: 0.4.3** — integrity CI floors, apply module split, framework-fit guide (see `CHANGELOG.md`). Prior: [0.4.0](docs/RELEASE_NOTES.md#040--2026-08-05) broader `safe_apply`.
+**Current: 0.5.0** — integrity CI floors, apply module split, framework-fit guide (see `CHANGELOG.md`). Prior: [0.4.0](docs/RELEASE_NOTES.md#040--2026-08-05) broader `safe_apply`.
 
 | Theme | What landed |
 |-------|-------------|

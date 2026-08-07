@@ -1,7 +1,7 @@
 # Abraxas Orchestra — Design
 
 **Status**: Executable skill surface  
-******Version target**: 0.4.3  
+**Version target**: 0.5.0  
 **Hosts**: Hermes, OpenClaw  
 **Repository**: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra
 
@@ -19,7 +19,7 @@ Structure software architecture using traditional correspondence systems as hier
 6. **Observed first** — `analyze` records OBSERVED import structure; mappings never invent loci outside `schemas/frameworks.v1.json`.
 7. **Human sovereignty** — Optimize mutates the tree only with `--apply --confirm`; dry-run is the default apply path.
 
-## Executable surface (v0.4.3)
+## Executable surface (v0.5.0)
 
 CLI entry: `python3 scripts/orchestra.py` (legacy `do <cmd>` prefix still accepted).
 
@@ -30,7 +30,7 @@ CLI entry: `python3 scripts/orchestra.py` (legacy `do <cmd>` prefix still accept
 | `structure` | Emit dual-named skeleton + correspondence table; auto diagram on `--out` |
 | `project` | Collapse oversized / forced maps before emit |
 | `diagram` | Graph-only HTML / JSON / Mermaid emission |
-| `analyze` | Read-only OBSERVED Python import graph; optional `-f` map; fail-closed on WEAK/FORCED |
+| `analyze` | Read-only OBSERVED import graph (`--lang` python/js/ts/go/rust/ruby/auto); optional `-f` map; fail-closed on WEAK/FORCED |
 | `optimize` | Plan only by default from `analysis.json` |
 | `optimize --apply` | Dry-run of `safe_apply` mechanical moves |
 | `optimize --apply --confirm` | Gated writes after backup (rename / promote / flatten); optional `--steps` / `--actions` / `--refresh` |
