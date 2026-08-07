@@ -33,8 +33,10 @@ We **do not** claim domain scoring is generally CPU-faster. Structure optimizes 
 
 ## Hermes route
 
-1. **repo** `analyze --path examples/benchmark-tree-of-life/before -f tree-of-life`  
-2. **repo** `analyze --path examples/benchmark-tree-of-life/after -f tree-of-life`  
-3. Compare scorecards, or run `harness.py` for the full table  
+1. **repo** `analyze --path examples/benchmark-tree-of-life/before -f tree-of-life --out /tmp/b`  
+2. **repo** `analyze --path examples/benchmark-tree-of-life/after -f tree-of-life --out /tmp/a`  
+3. Diff `structure-metrics.json` (or run `harness.py` for parity + early-exit too)  
+
+Analyze always prints `# metrics: map_quality=… strong=… cycles=… mixed_files=…` on stderr.
 
 Site: [before & after + metrics](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/#before-after).

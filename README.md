@@ -105,7 +105,7 @@ python3 scripts/orchestra.py analyze \
 python3 scripts/orchestra.py analyze --path . --lang auto --out /tmp/orch-an
 ```
 
-Produces `analysis.json` plus the same diagram trio. Mapping strengths: `STRONG` / `ADEQUATE` / `WEAK` / `FORCED`. Weak or forced maps fail closed (non-zero exit) so agents do not “paper over” bad fits. Non-Python languages contribute OBSERVED import edges only; framework mapping still keys off path/name tokens.
+Produces `analysis.json` (with embedded **`metrics`**), `structure-metrics.json`, and the same diagram trio. Mapping strengths: `STRONG` / `ADEQUATE` / `WEAK` / `FORCED`. Weak or forced maps fail closed (non-zero exit) so agents do not “paper over” bad fits. Non-Python languages contribute OBSERVED import edges only; framework mapping still keys off path/name tokens. Compare structure with `examples/benchmark-tree-of-life/harness.py`.
 
 **repo — optimize plan** (read-only)
 
@@ -182,6 +182,7 @@ Publish freeze: [`docs/COMPLETION.md`](docs/COMPLETION.md) · Public debut: [`do
 | Analyze | OBSERVED graphs: Python AST; JS/TS/Go/Rust/Ruby import-surface parsers; `--lang auto` |
 | Optimize | Plan only by default; `--apply --confirm` gated rename/promote/flatten + backup |
 | Diagrams | Auto HTML/JSON/Mermaid on structure/project/analyze `--out` |
+| Metrics | `analyze` embeds map quality / cycles / mix; `structure-metrics.json` on `--out` |
 | CI | `ci-ok` required on `main` (admins enforced); integrity + coverage-gate |
 | Release | `.github/workflows/release.yml` on tag push |
 

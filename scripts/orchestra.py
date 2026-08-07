@@ -646,6 +646,8 @@ def cmd_analyze(args: argparse.Namespace) -> int:
         write_analysis_artifacts(analysis, out_dir, version=VERSION)
         print(f"# wrote analysis → {out_dir}")
         print("#   analysis.json")
+        if (out_dir / "structure-metrics.json").exists():
+            print("#   structure-metrics.json")
         if (out_dir / "correspondence-table.json").exists():
             print("#   correspondence-table.json")
         print("#   architecture.json")
@@ -656,6 +658,11 @@ def cmd_analyze(args: argparse.Namespace) -> int:
 
     status = analysis.get("status")
     print(f"# status: {status}", file=sys.stderr)
+    metrics = analysis.get("metrics")
+    if metrics and not metrics.get("error"):
+        from structure_metrics import format_metrics_summary
+
+        print(format_metrics_summary(metrics), file=sys.stderr)
     if status == "NOT_COMPUTABLE":
         err = (analysis.get("provenance") or {}).get("error")
         if err:

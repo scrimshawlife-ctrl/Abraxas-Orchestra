@@ -109,7 +109,8 @@ python3 scripts/orchestra.py optimize --from analysis.json --apply --confirm [--
 
 1. **`analyze --path DIR`** — read-only OBSERVED import graph.  
    - `--lang python` (default) full AST; `javascript` / `typescript` / `go` / `rust` / `ruby` / `auto` for multi-lang.  
-   - Writes `analysis.json` + diagram trio when `--out` is set.
+   - Always embeds **`metrics`** (map quality, import cycles, responsibility mix); stderr prints `# metrics: …`.  
+   - Writes `analysis.json` + `structure-metrics.json` + diagram trio when `--out` is set.
 2. **`-f FRAMEWORK`** — fail-closed mappings (`STRONG` / `ADEQUATE` / `WEAK` / `FORCED`). Exit `1` if WEAK/FORCED; `2` on NOT_COMPUTABLE.
 3. **`optimize --from analysis.json`** — plan only by default (no tree writes).
 4. **`--apply`** — dry-run of `safe_apply` (rename / promote / flatten); **`--apply --confirm`** writes after backup. FORCED blocks apply.

@@ -190,7 +190,10 @@ def _imports_from_ast(
             level = node.level or 0
             if level == 0 and mod is None:
                 continue
-            if mod is not None or level == 0:
+            # Prefer edges to concrete submodules: `from pkg import sub` → pkg.sub
+            # when that module is known (needed for cycle detection / structure metrics).
+            names = list(node.names) or []
+            if any(a.name == "*" for a in names) or not names:
                 target = _resolve_import(
                     root=root,
                     current_file=current_file,
@@ -202,18 +205,55 @@ def _imports_from_ast(
                 if target:
                     found.append((target, target not in known))
                 continue
-            # from . import name, name2
-            for alias in node.names:
+            for alias in names:
                 if alias.name == "*":
                     continue
-                target = _resolve_import(
-                    root=root,
-                    current_file=current_file,
-                    module=None,
-                    level=level,
-                    name=alias.name,
-                    known=known,
-                )
+                target: str | None = None
+                if level == 0 and mod:
+                    full = f"{mod}.{alias.name}"
+                    if full in known:
+                        target = full
+                    else:
+                        target = _resolve_import(
+                            root=root,
+                            current_file=current_file,
+                            module=mod,
+                            level=0,
+                            name=None,
+                            known=known,
+                        )
+                elif level > 0:
+                    # from . import name  OR  from .pkg import name
+                    if mod:
+                        base = _resolve_import(
+                            root=root,
+                            current_file=current_file,
+                            module=mod,
+                            level=level,
+                            name=None,
+                            known=known,
+                        )
+                        if base:
+                            full = f"{base}.{alias.name}"
+                            target = full if full in known else base
+                    else:
+                        target = _resolve_import(
+                            root=root,
+                            current_file=current_file,
+                            module=None,
+                            level=level,
+                            name=alias.name,
+                            known=known,
+                        )
+                else:
+                    target = _resolve_import(
+                        root=root,
+                        current_file=current_file,
+                        module=mod,
+                        level=level,
+                        name=alias.name,
+                        known=known,
+                    )
                 if target:
                     found.append((target, target not in known))
 
@@ -788,6 +828,16 @@ def analyze_path(
     if candidate_frameworks:
         analysis["candidate_frameworks"] = candidate_frameworks
         analysis["provenance"]["kind"] = "SPECULATIVE"
+    # Structure metrics (map quality, cycles, responsibility mix) — always on
+    try:
+        from structure_metrics import compute_structure_metrics
+
+        analysis["metrics"] = compute_structure_metrics(analysis, tree=root)
+    except Exception as exc:  # pragma: no cover — metrics must not break analyze
+        analysis["metrics"] = {
+            "schema": "orchestra-structure-metrics.v1",
+            "error": f"metrics unavailable: {exc}",
+        }
     return analysis, exit_code
 
 
@@ -854,6 +904,10 @@ def write_analysis_artifacts(
     (out_dir / "analysis.json").write_text(
         json.dumps(analysis, indent=2) + "\n", encoding="utf-8"
     )
+    if analysis.get("metrics"):
+        (out_dir / "structure-metrics.json").write_text(
+            json.dumps(analysis["metrics"], indent=2) + "\n", encoding="utf-8"
+        )
 
     if analysis.get("framework") and analysis.get("mappings"):
         status = analysis["status"]
