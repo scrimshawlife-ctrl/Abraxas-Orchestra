@@ -1,7 +1,7 @@
 # Abraxas Orchestra — Design
 
 **Status**: Executable skill surface  
-**Version target**: 0.4.1  
+****Version target**: 0.4.2  
 **Hosts**: Hermes, OpenClaw  
 **Repository**: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra
 
@@ -19,7 +19,7 @@ Structure software architecture using traditional correspondence systems as hier
 6. **Observed first** — `analyze` records OBSERVED import structure; mappings never invent loci outside `schemas/frameworks.v1.json`.
 7. **Human sovereignty** — Optimize mutates the tree only with `--apply --confirm`; dry-run is the default apply path.
 
-## Executable surface (v0.4.1)
+## Executable surface (v0.4.2)
 
 CLI entry: `python3 scripts/orchestra.py` (legacy `do <cmd>` prefix still accepted).
 

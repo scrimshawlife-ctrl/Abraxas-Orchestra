@@ -6,6 +6,16 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.4.2] — 2026-08-07
+
+### Added
+- Deeper analyze mapping: role synonyms, compound/suffix stripping, docstring/`def` signals, secondary `match_score`
+- Token-aware `candidate_frameworks` ranking when analyze runs without `-f`
+- `tests/test_mapping.py` for mapping heuristics
+
+### Changed
+- `docs/FRAMEWORK_FIT.md` documents the scoring signals
+
 ## [0.4.1] — 2026-08-07
 
 ### Added

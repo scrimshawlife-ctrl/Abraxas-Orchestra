@@ -222,6 +222,230 @@ def _norm_ident(s: str) -> str:
     return re.sub(r"[^a-z0-9]+", "", s.lower())
 
 
+# Common software-role tokens → conceptual families used only to boost matching
+# against existing locus tokens/notes. Never invents symbolic names.
+_ROLE_SYNONYMS: dict[str, frozenset[str]] = {
+    # intake / edge
+    "ingest": frozenset({"intake", "ingest", "raw", "edge", "signal", "pull", "fetch", "load"}),
+    "intake": frozenset({"intake", "ingest", "raw", "edge", "signal", "pull", "fetch", "load"}),
+    "loader": frozenset({"intake", "ingest", "load", "raw"}),
+    "reader": frozenset({"intake", "ingest", "load", "read"}),
+    "parser": frozenset({"intake", "constraint", "schema", "parse", "form"}),
+    "cli": frozenset({"intake", "human", "surface", "entry", "intent"}),
+    "main": frozenset({"intent", "entry", "init", "sovereign"}),
+    "entrypoint": frozenset({"intent", "entry", "init", "edge"}),
+    "entry": frozenset({"intent", "entry", "init", "edge", "domain"}),
+    # constraint / schema
+    "schema": frozenset({"constraint", "schema", "type", "form", "validate"}),
+    "validator": frozenset({"constraint", "schema", "validate", "judgment"}),
+    "policy": frozenset({"constraint", "governance", "policy", "boundary"}),
+    "auth": frozenset({"constraint", "protection", "boundary", "binding"}),
+    "guard": frozenset({"constraint", "protection", "boundary", "guard"}),
+    # analysis / transform
+    "analyzer": frozenset({"analyze", "analysis", "score", "illuminate", "transform"}),
+    "scorer": frozenset({"analyze", "score", "illuminate", "judgment"}),
+    "transform": frozenset({"transform", "analyze", "purify", "fire"}),
+    "worker": frozenset({"task", "executive", "transform", "agent"}),
+    "handler": frozenset({"task", "executive", "handler", "agent"}),
+    "processor": frozenset({"transform", "analyze", "process", "task"}),
+    # store / memory
+    "repo": frozenset({"store", "memory", "repository", "inherited", "yesod"}),
+    "repository": frozenset({"store", "memory", "repository", "yesod"}),
+    "cache": frozenset({"store", "memory", "cache"}),
+    "db": frozenset({"store", "memory", "database"}),
+    "database": frozenset({"store", "memory", "database"}),
+    "state": frozenset({"store", "memory", "state"}),
+    # output / surface
+    "emit": frozenset({"output", "emit", "export", "surface", "outcome", "malkuth"}),
+    "export": frozenset({"output", "export", "emit", "outcome", "malkuth"}),
+    "render": frozenset({"output", "render", "surface", "human", "malkuth"}),
+    "writer": frozenset({"output", "write", "emit", "surface", "malkuth"}),
+    "response": frozenset({"output", "response", "comms", "surface"}),
+    "api": frozenset({"surface", "comms", "convention", "human", "output"}),
+    # control / intent
+    "orchestrator": frozenset({"intent", "sovereign", "governance", "core", "synthesis"}),
+    "controller": frozenset({"governance", "executive", "control", "core"}),
+    "gateway": frozenset({"edge", "boundary", "intake", "comms", "bus"}),
+    "bus": frozenset({"bus", "comms", "cross", "domain", "relation"}),
+    "router": frozenset({"comms", "bus", "route", "cross", "domain"}),
+    # adversarial / judgment
+    "critic": frozenset({"adversarial", "judgment", "critique", "conflict"}),
+    "judge": frozenset({"judgment", "adversarial", "just"}),
+    "filter": frozenset({"purify", "constraint", "filter", "adversarial"}),
+}
+
+_NOISE_SUFFIXES = (
+    "_module",
+    "_service",
+    "_handler",
+    "_manager",
+    "_mgr",
+    "_util",
+    "_utils",
+    "_helper",
+    "_helpers",
+    "_impl",
+    "_api",
+    "_cli",
+    "_core",
+    "_lib",
+    "_pkg",
+    "_package",
+    "module",
+    "service",
+    "handler",
+    "manager",
+)
+
+
+def _split_ident_tokens(ident: str) -> set[str]:
+    """Split snake/kebab/camel identifiers into lowercase tokens."""
+    s = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", ident)
+    s = s.replace("-", "_").replace(".", "_")
+    return {t for t in s.lower().split("_") if t and len(t) > 1}
+
+
+def _strip_noise_suffix(leaf: str) -> str:
+    """Remove common boilerplate suffixes for mechanical comparison."""
+    low = leaf.lower()
+    for suf in _NOISE_SUFFIXES:
+        if low.endswith(suf) and len(low) > len(suf) + 2:
+            return low[: -len(suf)].rstrip("_")
+    return low
+
+
+def _expand_role_tokens(tokens: set[str]) -> set[str]:
+    """Expand known role *keys* only (not every token) into conceptual families."""
+    expanded: set[str] = set()
+    for t in tokens:
+        syns = _ROLE_SYNONYMS.get(t)
+        if syns:
+            expanded |= set(syns)
+    return expanded
+
+
+def _extract_source_signals(source_text: str) -> set[str]:
+    """Tokenize docstring first lines + def/class names from source prefix."""
+    if not source_text:
+        return set()
+    tokens = _tokenize(source_text[:2000])
+    # Module docstring: first triple-quoted block
+    m = re.search(r'^\s*(?:"""|\'\'\')([\s\S]*?)(?:"""|\'\'\')', source_text)
+    if m:
+        tokens |= _tokenize(m.group(1)[:400])
+    for name in re.findall(r"\b(?:def|class)\s+([A-Za-z_][A-Za-z0-9_]*)", source_text[:2000]):
+        tokens |= _split_ident_tokens(name)
+        tokens.add(name.lower())
+    return tokens
+
+
+def _locus_token_set(mech: str, sym: str, note: str) -> set[str]:
+    return _tokenize(mech) | _tokenize(sym) | _tokenize(note) | _split_ident_tokens(mech)
+
+
+def _score_locus_match(
+    *,
+    leaf: str,
+    nid: str,
+    tokens: set[str],
+    role_tokens: set[str],
+    path_segs: set[str],
+    mech: str,
+    sym: str,
+    note: str,
+) -> tuple[str, int] | None:
+    """
+    Return (strength, secondary_score) or None if no match.
+
+    secondary_score breaks ties within the same strength (higher is better).
+    Never invents loci — only ranks existing framework rows.
+    """
+    leaf_l = leaf.lower()
+    leaf_n = _norm_ident(leaf)
+    leaf_stem = _strip_noise_suffix(leaf_l)
+    leaf_stem_n = _norm_ident(leaf_stem)
+    leaf_parts = _split_ident_tokens(leaf) | _split_ident_tokens(leaf_stem)
+    nid_l = nid.lower()
+    nid_parts = set(nid_l.split("."))
+
+    mech_l = mech.lower()
+    sym_l = sym.lower()
+    mech_n = _norm_ident(mech)
+    sym_n = _norm_ident(sym)
+    mech_parts = _split_ident_tokens(mech)
+    locus_toks = _locus_token_set(mech, sym, note)
+    note_toks = _tokenize(note)
+
+    # --- STRONG: exact / normalized identity ---
+    if (
+        leaf_l == mech_l
+        or nid_l == mech_l
+        or leaf_l == sym_l
+        or leaf_n == mech_n
+        or leaf_n == sym_n
+        or leaf_stem == mech_l
+        or leaf_stem_n == mech_n
+        or leaf_stem_n == sym_n
+    ):
+        return "STRONG", 100
+
+    secondary = 0
+
+    # --- ADEQUATE: path segment, compound, containment, multi-token ---
+    adequate = False
+    if mech_l in tokens or mech_l in nid_parts or mech_n in path_segs:
+        adequate = True
+        secondary += 40
+    if mech_n and mech_n in leaf_n:
+        adequate = True
+        secondary += 35
+    if leaf_n and leaf_n in mech_n and len(leaf_n) >= 4:
+        adequate = True
+        secondary += 30
+    # Note: do not treat leaf ∈ path_segs as a signal — every module is its own path segment.
+    # Whole mechanical token is a leaf part: user_intake ↔ intake / edge_intake
+    if mech_parts and mech_parts <= (leaf_parts | tokens):
+        adequate = True
+        secondary += 20 + 5 * len(mech_parts)
+    elif mech_parts and (mech_parts & leaf_parts):
+        # partial compound: edge_intake leaf vs edge_intake mech (subset)
+        if len(mech_parts & leaf_parts) >= max(1, len(mech_parts) - 1):
+            adequate = True
+            secondary += 15 + 5 * len(mech_parts & leaf_parts)
+    # Leaf ends with mechanical name: foo_intake → intake
+    if len(mech_l) >= 4 and (leaf_l.endswith(mech_l) or leaf_stem.endswith(mech_l)):
+        adequate = True
+        secondary += 28
+    if len(mech_l) >= 4 and (leaf_l.startswith(mech_l) or leaf_stem.startswith(mech_l)):
+        adequate = True
+        secondary += 22
+    # Role synonyms (from known role *keys* only) hit locus tokens
+    role_hits = role_tokens & locus_toks
+    if mech_l in role_tokens or mech_n in {_norm_ident(x) for x in role_tokens}:
+        # Direct hit on this mechanical name via synonym expansion
+        adequate = True
+        secondary += 32 + 4 * len(role_hits)
+    elif len(role_hits) >= 2:
+        adequate = True
+        secondary += 16 + 3 * len(role_hits)
+    elif len(role_hits) == 1 and (mech_parts & role_tokens):
+        adequate = True
+        secondary += 12
+
+    if adequate:
+        # Boost for docstring/note alignment
+        secondary += min(15, 3 * len(tokens & note_toks))
+        return "ADEQUATE", secondary
+
+    # --- WEAK: single-token / loose overlap ---
+    plain_hits = tokens & locus_toks
+    role_only = role_tokens & locus_toks
+    if plain_hits or role_only:
+        secondary = 2 * len(plain_hits) + len(role_only)
+        return "WEAK", secondary
+    return None
+
+
 def _map_node_to_locus(
     node: dict[str, Any],
     loci: list[tuple[str, str, str]],
@@ -231,44 +455,36 @@ def _map_node_to_locus(
     """Score best locus match. Never invents symbolic names."""
     nid = node["id"]
     leaf = nid.split(".")[-1]
-    leaf_n = _norm_ident(leaf)
-    tokens = _tokenize(nid + " " + source_text)
+    base_tokens = _tokenize(nid + " " + source_text) | _split_ident_tokens(leaf)
+    base_tokens |= _extract_source_signals(source_text)
+    role_tokens = _expand_role_tokens(base_tokens)
     path_segs = {_norm_ident(p) for p in nid.lower().split(".") if p}
-    best: tuple[int, tuple[str, str, str], str] | None = None
+
+    best: tuple[int, int, tuple[str, str, str], str] | None = None
+    # (strength_rank, secondary, locus_tuple, strength)
 
     for mech, sym, note in loci:
-        mech_l = mech.lower()
-        sym_l = sym.lower()
-        mech_n = _norm_ident(mech)
-        sym_n = _norm_ident(sym)
-        note_toks = _tokenize(note)
-        if (
-            leaf == mech_l
-            or nid.lower() == mech_l
-            or leaf == sym_l
-            or leaf_n == mech_n
-            or leaf_n == sym_n
-        ):
-            strength = "STRONG"
-        elif (
-            mech_l in tokens
-            or mech_l in nid.lower().split(".")
-            or mech_n in path_segs
-            or (mech_n and mech_n in leaf_n)
-            or (leaf_n and leaf_n in mech_n and len(leaf_n) >= 4)
-        ):
-            strength = "ADEQUATE"
-        elif tokens & (_tokenize(mech) | _tokenize(sym) | note_toks):
-            strength = "WEAK"
-        else:
+        scored = _score_locus_match(
+            leaf=leaf,
+            nid=nid,
+            tokens=base_tokens,
+            role_tokens=role_tokens,
+            path_segs=path_segs,
+            mech=mech,
+            sym=sym,
+            note=note,
+        )
+        if scored is None:
             continue
+        strength, secondary = scored
         rank = STRENGTH_RANK[strength]
-        if best is None or rank > best[0]:
-            best = (rank, (mech, sym, note), strength)
+        cand = (rank, secondary, (mech, sym, note), strength)
+        if best is None or cand[:2] > best[:2]:
+            best = cand
 
     if best is None:
         return None
-    _, (mech, sym, note), strength = best
+    _, secondary, (mech, sym, note), strength = best
     return {
         "functional_concern": note or mech,
         "mechanical_name": mech,
@@ -277,6 +493,7 @@ def _map_node_to_locus(
         "strength": strength,
         "notes": note,
         "node_id": nid,
+        "match_score": secondary,
     }
 
 
@@ -284,13 +501,28 @@ def _suggest_frameworks(
     nodes: list[dict[str, Any]],
     frameworks: dict[str, dict[str, Any]],
 ) -> list[str]:
+    """Rank frameworks by leaf/token overlap with mechanical loci and notes."""
     leaves = {n["id"].split(".")[-1].lower() for n in nodes}
+    leaf_norms = {_norm_ident(x) for x in leaves}
+    leaf_tokens: set[str] = set()
+    for n in nodes:
+        leaf = n["id"].split(".")[-1]
+        leaf_tokens |= _split_ident_tokens(leaf)
+        leaf_tokens |= _expand_role_tokens(_split_ident_tokens(leaf) | {leaf.lower()})
+
     scored: list[tuple[int, str]] = []
     for key, meta in frameworks.items():
-        mechs = {m.lower() for m, _, _ in meta.get("default_loci") or []}
-        hit = len(leaves & mechs)
-        if hit:
-            scored.append((hit, key))
+        loci = meta.get("default_loci") or []
+        mechs = {m.lower() for m, _, _ in loci}
+        mech_norms = {_norm_ident(m) for m in mechs}
+        score = 10 * len(leaves & mechs)
+        score += 6 * len(leaf_norms & mech_norms)
+        locus_bag: set[str] = set()
+        for m, s, note in loci:
+            locus_bag |= _locus_token_set(m, s, note)
+        score += 2 * len(leaf_tokens & locus_bag)
+        if score:
+            scored.append((score, key))
     scored.sort(key=lambda x: (-x[0], x[1]))
     return [k for _, k in scored[:5]]
 

@@ -54,6 +54,21 @@ python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --apply 
 - Put role words in the **module leaf** or package segment, not only deep in comments.
 - For greenfield work, prefer `structure` / `project` emit over force-fitting a messy tree.
 
+## How mapping scores (0.4.2+)
+
+Analyzer heuristics (still **fail-closed** — loci only from `frameworks.v1.json`):
+
+| Signal | Typical strength |
+|--------|------------------|
+| Leaf / path equals mechanical or symbolic (incl. hyphen-normalize) | `STRONG` |
+| Strip boilerplate suffix (`_handler`, `_service`, `_module`, …) then match | `STRONG` / `ADEQUATE` |
+| Compound name contains full locus (`user_intake` → `intake`) | `ADEQUATE` |
+| Role synonyms (`repository`→store family, `emit`→output, `cli`→entry/intent, …) | `ADEQUATE` / `WEAK` |
+| Module docstring + `def`/`class` names token overlap with locus notes | boosts score |
+| Single loose token only | `WEAK` |
+
+`match_score` on each mapping is a secondary tie-break (higher is better) within the same strength.
+
 ## When not to map
 
 - Polyglot repos (Python-only analyze in 0.4.x)
