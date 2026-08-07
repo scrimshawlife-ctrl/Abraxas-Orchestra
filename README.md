@@ -3,7 +3,7 @@
 **Site:** [https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/)
 
 <p align="center">
-  <img src="assets/hero.svg" alt="Abraxas Orchestra — symbolic architecture skill" width="720"/>
+  <img src="assets/hero.jpg" alt="Abraxas Orchestra — symbolic architecture skill" width="720"/>
 </p>
 
 <p align="center">
