@@ -23,7 +23,7 @@ from typing import Any
 
 from orchestra_router import CommandRouter, CommandSpec
 
-VERSION = "0.6.0"
+VERSION = "0.7.0"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:

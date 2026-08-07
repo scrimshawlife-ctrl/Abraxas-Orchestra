@@ -33,13 +33,12 @@ Version policy: [`SEMVER.md`](SEMVER.md) · bump tool: `scripts/bump_version.py`
 | Soft coverage | 0.4.3 | `coverage-soft` CI job | Import + linkage + in-process report (no floor) |
 | Multi-lang + floors | 0.5.0 | analyze --lang + coverage-gate | JS/TS/Go/Rust/Ruby/auto; hard floors |
 | AST-grade + floors↑ | 0.6.0 | token parsers + CLI-under-trace | Import AST nodes; higher floors |
-| Structure proof | unreleased | structure metrics + benchmark | `analyze` metrics; before/after harness |
+| Structure proof | 0.7.0 | structure metrics + benchmark | `analyze` metrics; before/after harness; contract emission |
 
 ## Next
 
 - Use `docs/SEMVER.md` + `scripts/bump_version.py` for all releases
 - Merge via PR only; `main` enforces `ci-ok` for admins (`docs/CI.md`)
-- Cut **0.6.1** (or **0.7.0**) from Unreleased: contract emission, structure benchmark, analyze metrics
 - Full language ASTs / type-aware resolve (optional future deps)
 - Broader safe_apply that invents file content (explicit MAJOR / operator request)
 

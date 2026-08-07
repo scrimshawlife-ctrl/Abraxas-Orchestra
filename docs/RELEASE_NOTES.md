@@ -2,6 +2,20 @@
 
 Narrative notes for operators and agents. Machine changelog: [`CHANGELOG.md`](../CHANGELOG.md).
 
+## 0.7.0 — 2026-08-07
+
+Structure as optimization — contracts, metrics, and a measurable proof path.
+
+- **Emit:** stage stubs carry locus ALLOWED/FORBIDDEN contracts (`run` + `contract`); multi-stage `--out` writes `pipeline.py`
+- **Repo analyze:** always embeds structure metrics (map quality, cycles, mix); `structure-metrics.json` on `--out`
+- **Proof:** `examples/benchmark-tree-of-life/` + harness (parity, map, cycles, mix, early-exit)
+- **Hermes:** route via **meta** / **emit** / **repo** (same as CLI CommandRouter)
+- Site documents Python best-case optimized by the map, not rename-only
+
+## 0.6.0 — 2026-08-07
+
+AST-grade multi-language import parsers + higher, subprocess-aware coverage floors.
+
 ## 0.4.0 — 2026-08-05
 
 Broader gated `safe_apply` beyond mechanical rename.
