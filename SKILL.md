@@ -142,7 +142,9 @@ Agents: if you would write a Mermaid block for Orchestra-mapped code, run emissi
 3. Choose primary framework (and optional overlay); **meta** `list` if unsure.
 4. Prefer **emit** with `--out` (auto-diagram) or **repo** analyze/optimize.
 5. Emit correspondence table JSON matching schema; diagrams auto-write on `--out`.
-6. Stop on `NOT_COMPUTABLE` or label `FORCED` — do not invent loci.
+6. **Implement domain logic inside each stage’s locus contract** — do not stop at empty scaffolds.
+   The map optimizes responsibilities and call direction (see `examples/python-tree-of-life-pipeline/`).
+7. Stop on `NOT_COMPUTABLE` or label `FORCED` — do not invent loci.
 
 ---
 

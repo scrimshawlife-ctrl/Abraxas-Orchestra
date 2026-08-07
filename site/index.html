@@ -290,145 +290,131 @@
     </section>
 
     <section id="before-after">
-      <h2>Python best case — before &amp; after</h2>
+      <h2>Python best case — structure that optimizes the code</h2>
       <p>
-        Best fit for staged Python packages: <strong>Tree of Life</strong> (<code>-f tree-of-life</code>).
-        Concerns map cleanly to mechanical module names that already match the framework
-        (<code>intent</code> → <code>intake</code> → <code>analyze</code> → <code>store</code> → <code>output</code>),
-        so analyze/emit stays <span class="pill ok">CLEAN</span> / <span class="pill ok">ADEQUATE</span>
-        instead of WEAK/FORCED.
-      </p>
-      <p>
-        <strong>Hermes route:</strong> <code>emit</code> → <code>structure</code>
-        (or <code>repo</code> → <code>analyze</code> if the tree already exists).
+        Choosing <strong>Tree of Life</strong> is not a rename game. The map becomes the
+        <em>control plane</em>: each mechanical stage is allowed only the work of its locus.
+        Hermes route: <strong>emit</strong> → scaffold, then implement domain logic
+        <em>inside</em> each stage’s contract (see
+        <code>examples/python-tree-of-life-pipeline/</code>).
       </p>
 
       <div class="ba-grid">
         <div class="ba-panel before">
-          <header>Before — flat / ad-hoc Python</header>
-<pre><code># myapp/  (no stages, no provenance)
-myapp/
-  utils.py
-  helpers.py
-  stuff.py
-  main.py
-  do_things.py
+          <header>Before — flat code (not optimized)</header>
+<pre><code># myapp/ — mixed responsibilities
+utils.py / helpers.py / stuff.py / main.py
 
-# main.py — everything tangled
+# main.py — intake, scoring, and I/O tangled
 from utils import load
 from helpers import score
 from stuff import dump
 
 def run(src):
-    data = load(src)      # intake? intent?
-    out = score(data)     # analyze? transform?
-    dump(out)             # store? output?
+    data = load(src)       # no contract
+    out = score(data)      # scoring knows about files?
+    dump(out)              # store? emit? both?
     return out
 
-# No dual names, no correspondence table,
-# Mermaid invented by hand if at all.</code></pre>
+# Hard to test, hard to map, easy to invent
+# WEAK/FORCED correspondences later.</code></pre>
         </div>
         <div class="ba-panel after">
-          <header>After — tree-of-life (emit structure)</header>
-<pre><code># Dual-named modules + auto diagrams
-intent/          # kether — entry contract
-  __init__.py
-intake/          # chokmah — raw force intake
-  __init__.py
-analyze/         # hod — analytical decomposition
-  __init__.py
-store/           # yesod — foundation / substrate
-  __init__.py
-output/          # malkuth — concrete manifestation
-  __init__.py
-SKELETON.md
-correspondence-table.json
-architecture.html | .json | .mmd
+          <header>After — optimized by the map</header>
+<pre><code># tol/pipeline.py — one-way flow along the Tree
+from .intent import accept     # kether — contract only
+from .intake import pull       # chokmah — raw force only
+from .analyze import score     # hod — analysis only
+from .store import persist     # yesod — foundation only
+from .output import emit       # malkuth — manifestation only
 
-# intake/__init__.py (emitted stub)
-"""
-intake — dual-named module stub
-mechanical: intake
-symbolic:   chokmah
-locus:      Raw force intake
-"""
-def scaffold() -> dict:
-    return {"mechanical": "intake",
-            "symbolic": "chokmah",
-            "status": "SCAFFOLD"}</code></pre>
+def run(source: str, *, max_items: int = 12):
+    intent = accept(source, max_items=max_items)
+    raw    = pull(intent)           # no scoring here
+    scored = score(intent, raw)     # no file I/O here
+    saved  = persist(scored)        # no new scores here
+    return emit(saved)              # final shape only
+
+# Each module forbids the others' jobs.
+# Structure is the optimization, not a label.
+# Package: examples/python-tree-of-life-pipeline/</code></pre>
         </div>
       </div>
 
-      <div class="ba-cmd">
-        <p><strong>Command that produces the after state:</strong></p>
-<pre><code>python3 scripts/orchestra.py structure \
-  -f tree-of-life \
-  -c "intent,intake,analyze,store,output" \
-  --out ./myapp-skel</code></pre>
-      </div>
-
-      <div class="ba-map">
-        <p><strong>Correspondence (best-case mapping):</strong></p>
+      <div class="ba-map" style="margin-top:1.25rem">
+        <p><strong>What the map optimizes (stage contracts):</strong></p>
         <table>
           <thead>
             <tr>
-              <th>Mechanical</th>
+              <th>Stage</th>
               <th>Symbolic</th>
-              <th>Locus</th>
-              <th>Strength</th>
+              <th>Allowed</th>
+              <th>Forbidden</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><code>intent</code></td>
-              <td><code>kether</code></td>
-              <td>System intent / entry contract</td>
-              <td><span class="pill ok">ADEQUATE+</span></td>
+              <td>kether</td>
+              <td>Validate goals / limits</td>
+              <td>I/O, scoring</td>
             </tr>
             <tr>
               <td><code>intake</code></td>
-              <td><code>chokmah</code></td>
-              <td>Raw force intake</td>
-              <td><span class="pill ok">ADEQUATE+</span></td>
+              <td>chokmah</td>
+              <td>Pull raw records</td>
+              <td>Scoring, persist</td>
             </tr>
             <tr>
               <td><code>analyze</code></td>
-              <td><code>hod</code></td>
-              <td>Analytical decomposition</td>
-              <td><span class="pill ok">ADEQUATE+</span></td>
+              <td>hod</td>
+              <td>Score / filter</td>
+              <td>File I/O, emission</td>
             </tr>
             <tr>
               <td><code>store</code></td>
-              <td><code>yesod</code></td>
-              <td>Foundation / substrate</td>
-              <td><span class="pill ok">ADEQUATE+</span></td>
+              <td>yesod</td>
+              <td>Persist</td>
+              <td>New scoring rules</td>
             </tr>
             <tr>
               <td><code>output</code></td>
-              <td><code>malkuth</code></td>
-              <td>Concrete manifestation</td>
-              <td><span class="pill ok">ADEQUATE+</span></td>
+              <td>malkuth</td>
+              <td>Final payload shape</td>
+              <td>Intake, analysis</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div class="ba-cmd">
-        <p><strong>Mermaid emitted automatically</strong> (<code>architecture.mmd</code>):</p>
+        <p><strong>1) Emit the dual-named layout</strong> (Hermes: <code>emit</code>):</p>
+<pre><code>python3 scripts/orchestra.py structure \
+  -f tree-of-life \
+  -c "intent,intake,analyze,store,output" \
+  --out ./myapp-skel</code></pre>
+        <p><strong>2) Implement logic under each stage’s contract</strong> (this repo ships a full example):</p>
+<pre><code>cd examples/python-tree-of-life-pipeline
+python3 pipeline.py</code></pre>
+        <p><strong>3) Optional — re-check the graph</strong> (Hermes: <code>repo</code>):</p>
+<pre><code>python3 scripts/orchestra.py analyze \
+  --path examples/python-tree-of-life-pipeline \
+  -f tree-of-life --out /tmp/orch-py-best</code></pre>
+      </div>
+
+      <div class="ba-cmd">
+        <p><strong>Flow the code is optimized to follow:</strong></p>
 <pre><code>flowchart LR
-  intent["intent · kether"]
-  intake["intake · chokmah"]
-  analyze["analyze · hod"]
-  store["store · yesod"]
-  output["output · malkuth"]
-  intent --> intake --> analyze --> store --> output</code></pre>
+  intent["intent · kether"] --> intake["intake · chokmah"]
+  intake --> analyze["analyze · hod"]
+  analyze --> store["store · yesod"]
+  store --> output["output · malkuth"]</code></pre>
       </div>
 
       <p class="note">
-        Why this is the Python best case: stage names already match framework mechanical loci,
-        so Hermes can <code>emit structure</code> without FORCED maps. For messy repos, use
-        <code>repo analyze -f tree-of-life</code> first — if strength is WEAK, pick another map
-        or stay OBSERVED-only (see <code>docs/FRAMEWORK_FIT.md</code>).
+        Scaffold stubs alone are not the product. Orchestra’s value is when
+        <em>implementation</em> obeys the map: one locus per package, one-way edges,
+        fail-closed boundaries. That is optimization by structure — not inheritance of folder names.
       </p>
     </section>
 
