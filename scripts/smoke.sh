@@ -51,4 +51,7 @@ echo "==> enochian-chaos demo"
 echo "==> python-tree-of-life-pipeline (optimized by structure)"
 python3 examples/python-tree-of-life-pipeline/pipeline.py >/dev/null
 
+echo "==> structure benchmark (before/after metrics)"
+python3 examples/benchmark-tree-of-life/harness.py >/dev/null
+
 echo "SMOKE OK"
