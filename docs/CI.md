@@ -20,26 +20,72 @@ Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 | `coverage-gate` | Hard floors + linkage (`coverage_report.py --gate`); subprocess-aware via in-process CLI under trace — **required** by `ci-ok` |
 | `ci-ok` | Aggregate — version-parity, path-jail, integrity, smoke, coverage-gate |
 
-Local soft report:
+Local reports:
 
 ```bash
-python3 scripts/coverage_report.py
+python3 scripts/coverage_report.py          # soft
+python3 scripts/coverage_report.py --gate  # hard floors (CI gate)
 ```
 
 Permissions: `contents: read` only.
 
 Version policy: [`SEMVER.md`](SEMVER.md).
 
-## Branch protection (recommended)
+## Branch protection (required for this repo)
 
-GitHub → **Settings** → **Branches** → **Add rule** for `main`:
+`main` is protected. **Do not bypass** status checks or force-push.
 
-1. Require a pull request before merging (optional but preferred)
-2. Require status checks to pass before merging
-3. Required check name: **`ci-ok`**
-4. Do not allow bypassing the above settings (org policy dependent)
+| Setting | Value |
+|---------|--------|
+| Required status check | **`ci-ok`** (strict: branch up to date) |
+| Enforce for administrators | **On** (no admin bypass) |
+| Require pull request | **On** (0 approving reviews — solo-friendly) |
+| Dismiss stale reviews | On |
+| Force pushes | **Off** |
+| Branch deletions | **Off** |
 
-Until the first Actions run completes on `main`, the check name may not appear in the dropdown — push any commit or use **Re-run jobs**, then select `ci-ok`.
+### Operator workflow (no direct push to main)
+
+```bash
+# 1. Feature branch
+git checkout -b fix/my-change
+# … edit, commit …
+
+# 2. Push branch and open PR
+git push -u origin HEAD
+gh pr create --fill
+
+# 3. Wait for CI
+gh pr checks
+# required: ci-ok green
+
+# 4. Merge only via PR (UI or gh)
+gh pr merge --squash
+```
+
+If you see `Bypassed rule violations for refs/heads/main`, protection was not enforcing admins — that must stay **enabled**.
+
+### Re-apply protection (API)
+
+```bash
+gh api -X PUT repos/scrimshawlife-ctrl/Abraxas-Orchestra/branches/main/protection \
+  --input - <<'EOF'
+{
+  "required_status_checks": { "strict": true, "contexts": ["ci-ok"] },
+  "enforce_admins": true,
+  "required_pull_request_reviews": {
+    "dismiss_stale_reviews": true,
+    "require_code_owner_reviews": false,
+    "required_approving_review_count": 0
+  },
+  "restrictions": null,
+  "allow_force_pushes": false,
+  "allow_deletions": false
+}
+EOF
+```
+
+Until the first Actions run completes on a new fork, the check name may not appear in the UI dropdown — push a PR or re-run jobs, then select **`ci-ok`**.
 
 ## Local mirror
 
@@ -58,15 +104,15 @@ Workflow: [`.github/workflows/release.yml`](../.github/workflows/release.yml)
 
 **Tag rule:** annotated tag `vX.Y.Z` must equal `VERSION` file (`X.Y.Z`).
 
-Release notes preference:
-
-1. `docs/RELEASE_BODY_vX.Y.Z.md` if present
-2. Else CHANGELOG section for that version
-
-Operator:
+Tags can still be pushed after `main` has the release commit via merged PR:
 
 ```bash
 bash scripts/publish.sh
 git push origin v$(tr -d '[:space:]' < VERSION)
 # Actions → release workflow creates the GitHub Release
 ```
+
+Release notes preference:
+
+1. `docs/RELEASE_BODY_vX.Y.Z.md` if present  
+2. Else CHANGELOG section for that version  

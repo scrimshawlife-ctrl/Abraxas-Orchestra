@@ -7,7 +7,7 @@
 
 ## Intent
 
-Structure software architecture using traditional correspondence systems as hierarchical maps. Emit dual-named modules (mechanical primary, symbolic secondary) with recoverable provenance. Fail closed on weak mappings. Preserve human sovereignty over forced correspondences. Analyze existing Python trees and emit optimize plans without silent mutation.
+Structure software architecture using traditional correspondence systems as hierarchical maps. Emit dual-named modules (mechanical primary, symbolic secondary) with recoverable provenance. Fail closed on weak mappings. Preserve human sovereignty over forced correspondences. Analyze local trees (Python AST; other languages via import-surface token parsers) and emit optimize plans without silent mutation.
 
 ## Core contracts
 

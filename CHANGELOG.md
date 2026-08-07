@@ -6,6 +6,15 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [Unreleased]
+
+### Added
+- Pure unit tests for `diagram_emit` / `diagram_mermaid` (`tests/test_diagrams.py`)
+
+### Changed
+- Branch protection on `main`: require PR + `ci-ok`, **enforce for admins** (no bypass)
+- README + `docs/CI.md` + `docs/FRAMEWORK_FIT.md` document protection and multi-lang limits
+
 ## [0.6.0] — 2026-08-07
 
 ### Added

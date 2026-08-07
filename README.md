@@ -20,9 +20,11 @@ In practice it does three things:
 
 1. **Scaffold** — emit a dual-named project skeleton (mechanical name + symbolic name) from a chosen map  
 2. **Diagram** — write HTML, JSON, and Mermaid architecture graphs next to that skeleton  
-3. **Analyze → plan → optionally rename** — read a local Python tree, map modules onto a framework when the fit is honest, propose renames, and only write files when you explicitly confirm
+3. **Analyze → plan → optionally rename** — read a local tree (Python by default; optional multi-lang), map modules onto a framework when the fit is honest, propose renames, and only write files when you explicitly confirm
 
 It is **not** a network service, a magic runtime, or a silent auto-refactorer. Weak or forced mappings are labeled and can stop the pipeline. You stay in control of anything that changes the filesystem.
+
+**Analyze language limits:** Python uses a full AST. JavaScript/TypeScript, Go, Rust, and Ruby use **import-surface** token parsers (dependency edges only — not full language compilers or type-aware resolve). Prefer `--lang auto` for mixed trees; treat non-Python graphs as best-effort OBSERVED structure.
 
 ---
 
@@ -91,7 +93,7 @@ python3 scripts/orchestra.py analyze \
 python3 scripts/orchestra.py analyze --path . --lang auto --out /tmp/orch-an
 ```
 
-Produces `analysis.json` plus the same diagram trio. Mapping strengths: `STRONG` / `ADEQUATE` / `WEAK` / `FORCED`. Weak or forced maps fail closed (non-zero exit) so agents do not “paper over” bad fits.
+Produces `analysis.json` plus the same diagram trio. Mapping strengths: `STRONG` / `ADEQUATE` / `WEAK` / `FORCED`. Weak or forced maps fail closed (non-zero exit) so agents do not “paper over” bad fits. Non-Python languages contribute OBSERVED import edges only; framework mapping still keys off path/name tokens.
 
 **Optimize plan (read-only)**
 
@@ -123,16 +125,22 @@ Use Orchestra when the user wants:
 - architecture shaped by a traditional symbolic map  
 - dual naming (code identifiers + symbolic loci) with provenance  
 - automatic Mermaid/HTML/JSON diagrams for a mapped design  
-- a fail-closed read of a Python repo before any rename plan  
+- a fail-closed read of a repo before any rename plan (Python first; multi-lang observe with care)  
 
 Agents: prefer `structure` / `project` / `analyze` with `--out` over inventing ad-hoc Mermaid. Do not invent loci that are not in `schemas/frameworks.v1.json`.
 
-### Integrity check
+### Integrity + coverage
 
 ```bash
 python3 scripts/orchestra.py check
 python3 scripts/bump_version.py check
+python3 scripts/integrity_check.py
+python3 scripts/coverage_report.py --gate   # hard floors (same as CI coverage-gate)
 ```
+
+### Contributing / main branch
+
+`main` requires a **pull request** and a green **`ci-ok`** check. Administrators are **not** exempt (no status-check bypass). See [`docs/CI.md`](docs/CI.md).
 
 ---
 
@@ -153,14 +161,15 @@ Publish freeze: [`docs/COMPLETION.md`](docs/COMPLETION.md) · Public debut: [`do
 
 ## Release notes
 
-**Current: 0.6.0** — integrity CI floors, apply module split, framework-fit guide (see `CHANGELOG.md`). Prior: [0.4.0](docs/RELEASE_NOTES.md#040--2026-08-05) broader `safe_apply`.
+**Current: 0.6.0** — multi-lang analyze (AST-grade import parsers), coverage-gate floors, branch protection on `main` (see `CHANGELOG.md`). Prior: [0.4.0](docs/RELEASE_NOTES.md#040--2026-08-05) broader `safe_apply`.
 
 | Theme | What landed |
 |-------|-------------|
 | Semver | `docs/SEMVER.md`, `scripts/bump_version.py`, CI parity |
-| Analyze | OBSERVED Python import graph + optional framework map |
+| Analyze | OBSERVED graphs: Python AST; JS/TS/Go/Rust/Ruby import-surface parsers; `--lang auto` |
 | Optimize | Plan only by default; `--apply --confirm` gated rename/promote/flatten + backup |
 | Diagrams | Auto HTML/JSON/Mermaid on structure/project/analyze `--out` |
+| CI | `ci-ok` required on `main` (admins enforced); integrity + coverage-gate |
 | Release | `.github/workflows/release.yml` on tag push |
 
 Narrative: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md) · Changelog: [`CHANGELOG.md`](CHANGELOG.md)
@@ -181,17 +190,21 @@ Human-readable tables: `references/`. Agent posture when filling stubs: `referen
 
 ```text
 SKILL.md                 # Agent contract + triggers
-scripts/orchestra.py     # CLI entry
-scripts/bump_version.py  # Semver parity tool
-scripts/publish.sh       # Operator publish helper
-scripts/smoke.sh         # Production smoke
-references/              # Framework tables + agent-posture
-schemas/                 # correspondence, frameworks, analysis, optimize-plan
-examples/                # signal-forager; enochian-chaos
-tests/                   # stdlib unittest + fixtures
-docs/                    # DESIGN, DEPLOY, COMPLETION, SEMVER, …
-install.sh               # Atomic installer (path jail)
-LICENSE / NOTICE         # Apache-2.0
+scripts/orchestra.py       # CLI entry
+scripts/analyze_repo.py    # Analyze walk + mapping
+scripts/analyze_langs.py   # Multi-lang import-surface parsers
+scripts/diagram_emit.py    # HTML / graph emission
+scripts/diagram_mermaid.py # Mermaid writer
+scripts/coverage_report.py # Soft report + --gate floors
+scripts/bump_version.py    # Semver parity tool
+scripts/smoke.sh           # Production smoke
+references/                # Framework tables + agent-posture
+schemas/                   # correspondence, frameworks, analysis, optimize-plan
+examples/                  # signal-forager; enochian-chaos
+tests/                     # stdlib unittest + fixtures
+docs/                      # DESIGN, DEPLOY, CI, SEMVER, …
+install.sh                 # Atomic installer (path jail)
+LICENSE / NOTICE           # Apache-2.0
 ```
 
 ---
@@ -215,9 +228,9 @@ LICENSE / NOTICE         # Apache-2.0
 
 | Doc | Audience |
 |-----|----------|
-| `docs/CI.md` | Actions + branch protection |
+| `docs/CI.md` | Actions + **branch protection** (required `ci-ok`, no admin bypass) |
 | `docs/FRAMEWORK_FIT.md` | Which map to use; strength labels |
-| `scripts/coverage_report.py` | Soft import/linkage/coverage report |
+| `scripts/coverage_report.py` | Soft report + `--gate` hard floors |
 | `docs/ANALYZE_OPTIMIZE_PLAN.md` | Analyze → optimize design (shipped) |
 | `docs/OPENCLAW.md` | OpenClaw packaging |
 | `docs/COMMUNITY.md` | Community-skills notes |
@@ -253,6 +266,6 @@ Details: [`docs/SECURITY.md`](docs/SECURITY.md) (live) · [`docs/SECURITY_AUDIT.
 
 - Repo: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra  
 - Deploy: [`docs/DEPLOY.md`](docs/DEPLOY.md)  
-- Freeze: [`docs/COMPLETION.md`](docs/COMPLETION.md)  
+- CI / branch protection: [`docs/CI.md`](docs/CI.md)  
 - Semver: [`docs/SEMVER.md`](docs/SEMVER.md)  
-- Release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md)  
+- Changelog: [`CHANGELOG.md`](CHANGELOG.md)  
