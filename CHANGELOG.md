@@ -6,6 +6,18 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.4.1] — 2026-08-07
+
+### Added
+- `scripts/integrity_check.py` — critical-file line floors + markers (anti-truncation)
+- CI job `integrity` required by `ci-ok`
+- `docs/FRAMEWORK_FIT.md` — which map to use and strength labels
+- Optimize apply split: `optimize_enrich.py` + `optimize_rewrite.py` (public API still `optimize_apply`)
+
+### Changed
+- Mapping: normalize hyphen/underscore identifiers for STRONG/ADEQUATE locus match
+- Smoke runs integrity check before unit tests
+
 ## [0.4.0] — 2026-08-05
 
 ### Added

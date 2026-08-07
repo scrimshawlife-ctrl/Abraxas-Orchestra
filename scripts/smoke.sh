@@ -4,6 +4,9 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
+echo "==> integrity"
+python3 scripts/integrity_check.py
+
 echo "==> orchestra check"
 python3 scripts/orchestra.py check
 

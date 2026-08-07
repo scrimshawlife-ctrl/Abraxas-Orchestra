@@ -217,6 +217,11 @@ def _tokenize(text: str) -> set[str]:
     return {t for t in re.split(r"[^a-z0-9_]+", text.lower()) if t and len(t) > 1}
 
 
+def _norm_ident(s: str) -> str:
+    """Normalize identifiers for fuzzy mechanical match (hyphen/underscore/case)."""
+    return re.sub(r"[^a-z0-9]+", "", s.lower())
+
+
 def _map_node_to_locus(
     node: dict[str, Any],
     loci: list[tuple[str, str, str]],
@@ -226,16 +231,32 @@ def _map_node_to_locus(
     """Score best locus match. Never invents symbolic names."""
     nid = node["id"]
     leaf = nid.split(".")[-1]
+    leaf_n = _norm_ident(leaf)
     tokens = _tokenize(nid + " " + source_text)
+    path_segs = {_norm_ident(p) for p in nid.lower().split(".") if p}
     best: tuple[int, tuple[str, str, str], str] | None = None
 
     for mech, sym, note in loci:
         mech_l = mech.lower()
         sym_l = sym.lower()
+        mech_n = _norm_ident(mech)
+        sym_n = _norm_ident(sym)
         note_toks = _tokenize(note)
-        if leaf == mech_l or nid.lower() == mech_l or leaf == sym_l:
+        if (
+            leaf == mech_l
+            or nid.lower() == mech_l
+            or leaf == sym_l
+            or leaf_n == mech_n
+            or leaf_n == sym_n
+        ):
             strength = "STRONG"
-        elif mech_l in tokens or mech_l in nid.lower().split("."):
+        elif (
+            mech_l in tokens
+            or mech_l in nid.lower().split(".")
+            or mech_n in path_segs
+            or (mech_n and mech_n in leaf_n)
+            or (leaf_n and leaf_n in mech_n and len(leaf_n) >= 4)
+        ):
             strength = "ADEQUATE"
         elif tokens & (_tokenize(mech) | _tokenize(sym) | note_toks):
             strength = "WEAK"

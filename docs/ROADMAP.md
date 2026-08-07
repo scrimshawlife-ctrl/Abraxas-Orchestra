@@ -28,11 +28,12 @@ Version policy: [`SEMVER.md`](SEMVER.md) · bump tool: `scripts/bump_version.py`
 | CI | 0.3.1 | Actions | version-parity, path-jail, smoke 3.11/3.12, `ci-ok` |
 | Semver | 0.3.1+ | `bump_version.py` | Policy + parity tool + CI check |
 | C++ | 0.4.0 | promote / flatten / `--steps` / `--actions` | Broader mechanical `safe_apply` |
+| Hardening | 0.4.1 | integrity CI + apply split + framework-fit | Anti-truncation floors; enrich/rewrite modules |
 
 ## Next
 
 - Use `docs/SEMVER.md` + `scripts/bump_version.py` for all releases
-- Operator: tag `v0.4.0`, host install, optional branch protection (`docs/CI.md`)
+- Operator: host install after tags; optional branch protection (`docs/CI.md`)
 - Multi-language analyze (see Deferred)
 - Broader safe_apply that invents file content (explicit MAJOR / operator request)
 

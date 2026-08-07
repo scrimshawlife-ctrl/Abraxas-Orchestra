@@ -8,7 +8,7 @@
   <strong>Hermes + OpenClaw coding-agent skill</strong> for structuring software with traditional symbolic maps
 </p>
 
-Version **0.4.0** · Skill name: `orchestra` · Python ≥ 3.11 · Offline CLI · License: [Apache-2.0](LICENSE)
+Version **0.4.1** · Skill name: `orchestra` · Python ≥ 3.11 · Offline CLI · License: [Apache-2.0](LICENSE)
 
 ---
 
@@ -150,7 +150,7 @@ Publish freeze: [`docs/COMPLETION.md`](docs/COMPLETION.md) · Public debut: [`do
 
 ## Release notes
 
-**Current: [0.4.0](docs/RELEASE_NOTES.md#040--2026-08-05)** — broader `safe_apply` (promote / flatten) + selective `--steps` / `--actions`.
+**Current: 0.4.1** — integrity CI floors, apply module split, framework-fit guide (see `CHANGELOG.md`). Prior: [0.4.0](docs/RELEASE_NOTES.md#040--2026-08-05) broader `safe_apply`.
 
 | Theme | What landed |
 |-------|-------------|
@@ -213,6 +213,7 @@ LICENSE / NOTICE         # Apache-2.0
 | Doc | Audience |
 |-----|----------|
 | `docs/CI.md` | Actions + branch protection |
+| `docs/FRAMEWORK_FIT.md` | Which map to use; strength labels |
 | `docs/ANALYZE_OPTIMIZE_PLAN.md` | Analyze → optimize design (shipped) |
 | `docs/OPENCLAW.md` | OpenClaw packaging |
 | `docs/COMMUNITY.md` | Community-skills notes |

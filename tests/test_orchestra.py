@@ -231,7 +231,7 @@ class TestPackageIdentity(unittest.TestCase):
 
     def test_design_documents_040_surface(self) -> None:
         design = self._read("docs/DESIGN.md")
-        self.assertIn("0.4.0", design)
+        self.assertRegex(design, r"0\.4\.\d+")
         for cmd in ("analyze", "optimize", "structure", "diagram", "check", "list"):
             self.assertIn(cmd, design)
         self.assertNotIn("Version target**: 0.1.2", design)

@@ -14,6 +14,7 @@ Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 |-----|---------|
 | `version-parity` | Semver format + `python3 scripts/bump_version.py check` |
 | `path-jail` | Installer refuses `/etc/orchestra`; `analyze --path /etc` exits 2 |
+| `integrity` | Critical-file line floors + markers (`scripts/integrity_check.py`) |
 | `smoke` | Full `scripts/smoke.sh` on Python 3.11 and 3.12 |
 | `ci-ok` | Aggregate — all of the above must succeed |
 

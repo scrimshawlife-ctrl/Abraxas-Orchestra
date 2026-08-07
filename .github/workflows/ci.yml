@@ -57,10 +57,24 @@ jobs:
           test "$code" -eq 2
           echo "analyze path-jail OK (exit $code)"
 
+  integrity:
+    name: integrity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Critical-file integrity floors
+        run: |
+          set -euo pipefail
+          python3 scripts/integrity_check.py
+          echo "integrity OK"
+
   smoke:
     name: smoke (py${{ matrix.python-version }})
     runs-on: ubuntu-latest
-    needs: [version-parity]
+    needs: [version-parity, integrity]
     strategy:
       fail-fast: false
       matrix:
@@ -83,14 +97,16 @@ jobs:
   ci-ok:
     name: ci-ok
     runs-on: ubuntu-latest
-    needs: [version-parity, path-jail, smoke]
+    needs: [version-parity, path-jail, integrity, smoke]
     if: always()
     steps:
       - name: Require all jobs green
         run: |
           echo "version-parity=${{ needs.version-parity.result }}"
           echo "path-jail=${{ needs.path-jail.result }}"
+          echo "integrity=${{ needs.integrity.result }}"
           echo "smoke=${{ needs.smoke.result }}"
           test "${{ needs.version-parity.result }}" = "success"
           test "${{ needs.path-jail.result }}" = "success"
+          test "${{ needs.integrity.result }}" = "success"
           test "${{ needs.smoke.result }}" = "success"
