@@ -15,6 +15,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - Hermes agent routing aligned with CLI CommandRouter groups (**meta** / **emit** / **repo**) in `SKILL.md`
 - Site: Python best-case before/after (`tree-of-life`) — structure that *optimizes* code, not rename-only
 - Example: `examples/python-tree-of-life-pipeline/` (stage contracts + runnable `pipeline.py`)
+- **Contract-oriented structure emission:** each stage stub ships `run()` + `contract()` with locus **ALLOWED** / **FORBIDDEN**; multi-stage `--out` also writes a linear `pipeline.py` and documents contracts in `SKELETON.md`
 
 ### Changed
 - CLI commands registered via `CommandRouter` (`scripts/orchestra_router.py`) — same surface, clearer groups
@@ -22,7 +23,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - README + `docs/CI.md` + `docs/FRAMEWORK_FIT.md` document protection and multi-lang limits
 - Default hero image is the 3D render; flat `hero.svg` kept as legacy vector
 - `references/agent-posture.md`, `docs/DEPLOY.md`, site page, and manifest document Hermes group routing
-
+- Smoke includes the optimized Tree-of-Life Python pipeline example
 ## [0.6.0] — 2026-08-07
 
 ### Added
