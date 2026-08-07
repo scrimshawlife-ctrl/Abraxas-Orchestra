@@ -8,6 +8,8 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
 ## [Unreleased]
 
+## [0.7.0] — 2026-08-07
+
 ### Added
 - Pure unit tests for `diagram_emit` / `diagram_mermaid` (`tests/test_diagrams.py`)
 - Static landing page under `site/` deployed via GitHub Pages (`.github/workflows/pages.yml`)
@@ -18,6 +20,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - **Contract-oriented structure emission:** each stage stub ships `run()` + `contract()` with locus **ALLOWED** / **FORBIDDEN**; multi-stage `--out` also writes a linear `pipeline.py` and documents contracts in `SKELETON.md`
 - **Structure benchmark:** `examples/benchmark-tree-of-life/` — paired before/after trees + `harness.py` measuring parity, analyze map quality, import cycles, responsibility mix, and early-exit latency
 - **`analyze` structure metrics:** every analysis embeds `metrics` (map quality, import cycles, responsibility mix); `--out` also writes `structure-metrics.json`; stderr prints `# metrics: …`
+- `scripts/structure_metrics.py` — shared metrics engine used by analyze
 
 ### Changed
 - CLI commands registered via `CommandRouter` (`scripts/orchestra_router.py`) — same surface, clearer groups
@@ -25,7 +28,9 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - README + `docs/CI.md` + `docs/FRAMEWORK_FIT.md` document protection and multi-lang limits
 - Default hero image is the 3D render; flat `hero.svg` kept as legacy vector
 - `references/agent-posture.md`, `docs/DEPLOY.md`, site page, and manifest document Hermes group routing
-- Smoke includes the optimized Tree-of-Life Python pipeline example
+- Smoke includes optimized Tree-of-Life pipeline + structure benchmark
+- Import-from resolution prefers known submodules (`from pkg import sub` → `pkg.sub`) so cycles surface in metrics
+
 ## [0.6.0] — 2026-08-07
 
 ### Added

@@ -1,7 +1,7 @@
 ---
 name: orchestra
 description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, automatic Mermaid/HTML/JSON diagrams, repo analyze→map→optimize plans, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra. Route work through meta (check/list), emit (structure/project/diagram), or repo (analyze/optimize) — same groups as the CLI CommandRouter."
-version: 0.6.0
+version: 0.7.0
 license: Apache-2.0
 metadata:
   openclaw:
