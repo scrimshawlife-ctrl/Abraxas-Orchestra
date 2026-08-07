@@ -272,7 +272,7 @@
       <div class="grid" style="margin-top:1.25rem">
         <div class="card">
           <h3>1. Scaffold</h3>
-          <p>Emit dual-named project skeletons (mechanical + symbolic) from a chosen map, with provenance.</p>
+          <p>Emit dual-named skeletons with locus <strong>ALLOWED</strong> / <strong>FORBIDDEN</strong> contracts (<code>run</code> + <code>contract</code>) and optional <code>pipeline.py</code>.</p>
         </div>
         <div class="card">
           <h3>2. Diagram</h3>
@@ -280,7 +280,7 @@
         </div>
         <div class="card">
           <h3>3. Analyze → optimize</h3>
-          <p>Observe import graphs, map when the fit is honest, plan renames — write only with <code>--confirm</code>.</p>
+          <p>Observe import graphs, embed <strong>structure metrics</strong> (map quality, cycles, mix), plan renames — write only with <code>--confirm</code>.</p>
         </div>
       </div>
       <p class="note" style="margin-top:1.25rem">
@@ -442,10 +442,12 @@ def run(source: str, *, max_items: int = 12):
 python3 pipeline.py</code></pre>
         <p><strong>3) Measure structure improvement</strong> (parity + map + cycles + mix + early-exit):</p>
 <pre><code>python3 examples/benchmark-tree-of-life/harness.py</code></pre>
-        <p><strong>4) Optional — re-check the graph</strong> (Hermes: <code>repo</code>):</p>
+        <p><strong>4) Re-check with product metrics</strong> (Hermes: <code>repo</code>):</p>
 <pre><code>python3 scripts/orchestra.py analyze \
-  --path examples/python-tree-of-life-pipeline \
-  -f tree-of-life --out /tmp/orch-py-best</code></pre>
+  --path examples/benchmark-tree-of-life/after \
+  -f tree-of-life --out /tmp/orch-py-best
+# stderr: # metrics: map_quality=… strong=… cycles=… mixed_files=…
+# writes: analysis.json + structure-metrics.json + diagrams</code></pre>
       </div>
 
       <div class="ba-cmd">
@@ -518,11 +520,11 @@ bash install.sh                          # → ~/.hermes/skills/orchestra
 python3 scripts/orchestra.py check
 python3 scripts/orchestra.py list
 
-# emit
-python3 scripts/orchestra.py structure -f tree-of-life -c "intent,synthesis,output" --out /tmp/orch-skel
+# emit — contracts + pipeline on multi-stage --out
+python3 scripts/orchestra.py structure -f tree-of-life -c "intent,intake,analyze,store,output" --out /tmp/orch-skel
 python3 scripts/orchestra.py diagram -f numogram --out /tmp/orch-diag
 
-# repo
+# repo — metrics always embedded; structure-metrics.json on --out
 python3 scripts/orchestra.py analyze --path /path/to/pkg -f tree-of-life --out /tmp/orch-an
 python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --out /tmp/orch-plan
 python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --apply --confirm</code></pre>
@@ -536,7 +538,7 @@ python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --apply 
     </section>
 
     <section id="analyze">
-      <h2>Multi-language analyze</h2>
+      <h2>Multi-language analyze + structure metrics</h2>
       <table>
         <thead>
           <tr><th>Language</th><th>Fidelity</th></tr>
@@ -551,10 +553,17 @@ python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --apply 
         </tbody>
       </table>
       <p style="margin-top:1rem">
-        Non-Python resolution is best-effort (import-surface only, not full compilers).
-        Optimize apply remains Python-oriented.
+        Every <code>analyze</code> run embeds <strong>structure metrics</strong> (map quality, import cycles,
+        responsibility mix). With <code>--out</code> you also get <code>structure-metrics.json</code>.
+        Stderr: <code># metrics: map_quality=… strong=… cycles=… mixed_files=…</code>
       </p>
-<pre><code>python3 scripts/orchestra.py analyze --path . --lang auto --out /tmp/orch-an</code></pre>
+      <p>
+        Non-Python resolution is best-effort (import-surface only, not full compilers).
+        Optimize apply remains Python-oriented. Measurable proof path:
+        <code>examples/benchmark-tree-of-life/</code>.
+      </p>
+<pre><code>python3 scripts/orchestra.py analyze --path . --lang auto --out /tmp/orch-an
+python3 examples/benchmark-tree-of-life/harness.py</code></pre>
     </section>
 
     <section id="safety">
