@@ -22,6 +22,13 @@ from analyze_langs import (  # noqa: E402
     extract_rust_imports,
     normalize_lang,
     extensions_for_lang,
+    parse_go_imports,
+    parse_js_imports,
+    parse_ruby_imports,
+    parse_rust_imports,
+    tokenize_js,
+    tokenize_go,
+    tokenize_rust,
 )
 from analyze_repo import analyze_path  # noqa: E402
 
@@ -61,6 +68,17 @@ class TestLangExtractors(unittest.TestCase):
         self.assertIn("../lib/util", specs)
         self.assertIn("./emit.ts", specs)
 
+    def test_js_ast_nodes_and_tokenizer(self) -> None:
+        text = "import {x} from './analyze.js';\n// comment\nrequire(\"pkg\");\n"
+        toks = tokenize_js(text)
+        self.assertTrue(any(t.kind == "KEYWORD" and t.value == "import" for t in toks))
+        self.assertTrue(any(t.kind == "STRING" and t.value == "./analyze.js" for t in toks))
+        nodes = parse_js_imports(text)
+        kinds = {n.kind for n in nodes}
+        self.assertIn("import", kinds)
+        self.assertIn("require", kinds)
+        self.assertTrue(any(n.is_relative for n in nodes if n.module.startswith(".")))
+
     def test_go_imports(self) -> None:
         text = """
         package main
@@ -74,6 +92,9 @@ class TestLangExtractors(unittest.TestCase):
         self.assertIn("fmt", specs)
         self.assertIn("os", specs)
         self.assertIn("github.com/x/y", specs)
+        nodes = parse_go_imports(text)
+        self.assertTrue(all(n.kind == "go_import" for n in nodes))
+        self.assertGreaterEqual(len(tokenize_go(text)), 5)
 
     def test_rust_imports(self) -> None:
         text = """
@@ -82,9 +103,14 @@ class TestLangExtractors(unittest.TestCase):
         mod store;
         """
         specs = extract_rust_imports(text)
-        self.assertTrue(any("HashMap" in s or "collections" in s for s in specs))
+        self.assertTrue(any("collections" in s or "std" in s for s in specs))
         self.assertTrue(any("intake" in s for s in specs))
         self.assertIn("store", specs)
+        nodes = parse_rust_imports(text)
+        kinds = {n.kind for n in nodes}
+        self.assertIn("use", kinds)
+        self.assertIn("mod", kinds)
+        self.assertTrue(any(t.kind == "OP" and t.value == "::" for t in tokenize_rust(text)))
 
     def test_ruby_imports(self) -> None:
         text = """
@@ -185,10 +211,23 @@ class TestIntegrityInProcess(unittest.TestCase):
     """Drive integrity_check in-process so coverage floors can measure it."""
 
     def test_check_integrity_real_repo(self) -> None:
-        from integrity_check import check_integrity
+        from integrity_check import check_integrity, main, skill_root, LINE_FLOORS
 
         errs = check_integrity(ROOT)
         self.assertEqual(errs, [])
+        self.assertEqual(skill_root(), ROOT)
+        self.assertGreater(len(LINE_FLOORS), 5)
+        self.assertEqual(main([]), 0)
+        # truncated tree fails
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as td:
+            d = Path(td)
+            (d / "VERSION").write_text("0.0.0\n", encoding="utf-8")
+            (d / "scripts").mkdir()
+            (d / "scripts" / "orchestra.py").write_text("# tiny\n", encoding="utf-8")
+            errs2 = check_integrity(d)
+            self.assertTrue(errs2)
 
 
 if __name__ == "__main__":

@@ -32,18 +32,19 @@ Version policy: [`SEMVER.md`](SEMVER.md) · bump tool: `scripts/bump_version.py`
 | Mapping | 0.4.2 | deeper analyze heuristics | Role synonyms, compounds, docstring signals |
 | Soft coverage | 0.4.3 | `coverage-soft` CI job | Import + linkage + in-process report (no floor) |
 | Multi-lang + floors | 0.5.0 | analyze --lang + coverage-gate | JS/TS/Go/Rust/Ruby/auto; hard floors |
+| AST-grade + floors↑ | 0.6.0 | token parsers + CLI-under-trace | Import AST nodes; higher floors |
 
 ## Next
 
 - Use `docs/SEMVER.md` + `scripts/bump_version.py` for all releases
 - Optional branch protection without admin bypass (`docs/CI.md`)
-- Expand multi-language fidelity (AST-grade beyond Python)
+- Full language ASTs / type-aware resolve (optional future deps)
 - Broader safe_apply that invents file content (explicit MAJOR / operator request)
 
 ## Deferred
 
-- AST-grade multi-language analyze beyond regex extractors
+- Full compiler-grade multi-language ASTs (optional future deps)
 - Network install / remote repo fetch
-- Higher coverage floors / subprocess-aware measurement
+- Still-higher floors; optional branch coverage
 - Ritual/network runtime systems
 - Dedicated OpenClaw fork branch

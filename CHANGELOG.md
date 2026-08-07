@@ -6,6 +6,16 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.6.0] — 2026-08-07
+
+### Added
+- AST-grade multi-language import parsers (tokenizers + structured ImportNode trees for JS/TS, Go, Rust, Ruby)
+- Subprocess-aware coverage: in-process CLI exercises under the same tracer as pure unit tests
+- Higher hard floors on core modules (orchestra, analyze_*, optimize_*, diagrams, integrity, bump_version)
+
+### Changed
+- `analyze_langs.py` no longer relies on regex-only import extraction for non-Python languages
+
 ## [0.5.0] — 2026-08-07
 
 ### Added

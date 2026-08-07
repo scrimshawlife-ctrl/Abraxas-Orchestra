@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:

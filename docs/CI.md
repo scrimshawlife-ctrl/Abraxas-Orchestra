@@ -17,7 +17,7 @@ Workflow: [`.github/workflows/ci.yml`](../.github/workflows/ci.yml)
 | `integrity` | Critical-file line floors + markers (`scripts/integrity_check.py`) |
 | `smoke` | Full `scripts/smoke.sh` on Python 3.11 and 3.12 |
 | `coverage-soft` | Soft quality report — **informational** artifact |
-| `coverage-gate` | Hard floors + required linkage (`coverage_report.py --gate`) — **required** by `ci-ok` |
+| `coverage-gate` | Hard floors + linkage (`coverage_report.py --gate`); subprocess-aware via in-process CLI under trace — **required** by `ci-ok` |
 | `ci-ok` | Aggregate — version-parity, path-jail, integrity, smoke, coverage-gate |
 
 Local soft report:

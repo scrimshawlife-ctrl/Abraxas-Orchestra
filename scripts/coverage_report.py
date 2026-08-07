@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 """Soft quality / coverage report for Orchestra (stdlib only).
 
-Most CLI tests drive the product via *subprocess*, so a naive line tracer on
-unittest discovery under-reports real coverage. This report therefore has three
-layers:
+Coverage measurement is **subprocess-aware**: pure unit tests plus in-process
+CLI exercises (``orchestra.main([...])``) run under one ``trace`` session, so
+modules normally hit only via ``subprocess`` CLI tests still count.
+
+Layers:
 
 1. **Import check** — every ``scripts/*.py`` imports cleanly
 2. **Test linkage** — which scripts are named/imported from ``tests/``
-3. **In-process line coverage** — modules exercised by pure unit tests
-   (``test_mapping``, ``test_integrity``, ``test_semver``, …) under ``trace``
+3. **In-process line coverage** — unit tests + CLI exercises under ``trace``
 
 Exit codes:
-  0 — report produced and import check passed
-  2 — import failure or unit tests failed under the tracer
-
-With ``--gate``, also enforces hard floors on core modules (CI gate).
+  0 — report produced (and gates pass when ``--gate``)
+  2 — import failure, unit/CLI exercise failure, or gate floor miss
 """
 
 from __future__ import annotations
@@ -29,12 +28,19 @@ import unittest
 from pathlib import Path
 
 # In-process line-coverage floors for core modules (percent).
-# Tuned to pure unit tests (not CLI subprocess suite). Raise deliberately.
+# Measured under unit tests + in-process CLI exercises (subprocess-aware).
+# Raise deliberately when coverage improves.
 COVERAGE_FLOORS: dict[str, float] = {
-    "analyze_repo.py": 15.0,
-    "analyze_langs.py": 35.0,
-    "bump_version.py": 40.0,
-    "integrity_check.py": 25.0,
+    "analyze_repo.py": 50.0,
+    "analyze_langs.py": 50.0,
+    "bump_version.py": 48.0,
+    "integrity_check.py": 40.0,
+    "orchestra.py": 40.0,
+    "optimize_plan.py": 30.0,
+    "optimize_apply.py": 17.0,
+    "optimize_enrich.py": 20.0,
+    "diagram_emit.py": 15.0,
+    "diagram_mermaid.py": 40.0,
 }
 
 # Scripts that must be mentioned from tests/ (subprocess CLI coverage counts).
@@ -102,9 +108,56 @@ def _test_linkage(root: Path, scripts: list[Path]) -> dict[str, list[str]]:
     return linked
 
 
+def _run_cli_exercises(root: Path) -> None:
+    """Drive orchestra CLI in-process (subprocess-aware coverage)."""
+    import contextlib
+    import io
+    import tempfile
+
+    import orchestra  # type: ignore
+
+    fixture = root / "tests" / "fixtures" / "mini_pkg"
+    sink = io.StringIO()
+    err = io.StringIO()
+
+    def run(argv: list[str]) -> None:
+        with contextlib.redirect_stdout(sink), contextlib.redirect_stderr(err):
+            try:
+                orchestra.main(list(argv))
+            except SystemExit:
+                pass
+
+    run(["check"])
+    run(["list"])
+    run(["structure", "-f", "tree-of-life", "-c", "intent,output"])
+    run(["diagram", "-f", "alchemical-stages"])
+    if fixture.is_dir():
+        run(["analyze", "--path", str(fixture)])
+        run(["analyze", "--path", str(fixture), "-f", "tree-of-life"])
+        with tempfile.TemporaryDirectory() as td:
+            out = str(Path(td) / "an")
+            run(["analyze", "--path", str(fixture), "-f", "tree-of-life", "--out", out])
+            analysis = Path(out) / "analysis.json"
+            if analysis.is_file():
+                run(["optimize", "--from", str(analysis)])
+                run(["optimize", "--from", str(analysis), "--apply"])
+    # multi-lang path if present under a temp tree
+    with tempfile.TemporaryDirectory() as td:
+        pkg = Path(td) / "js"
+        pkg.mkdir()
+        (pkg / "intake.js").write_text(
+            "import { score } from './analyze.js';\n", encoding="utf-8"
+        )
+        (pkg / "analyze.js").write_text(
+            "export function score(){ return 1; }\n", encoding="utf-8"
+        )
+        run(["analyze", "--path", str(pkg), "--lang", "javascript"])
+        run(["analyze", "--path", str(pkg), "--lang", "auto"])
+
+
 def _inprocess_coverage(root: Path) -> tuple[bool, dict[str, tuple[int, int, float]], str]:
     """
-    Run pure (non-CLI-subprocess-heavy) unit modules under trace.
+    Run pure unit modules + in-process CLI exercises under one tracer.
 
     Returns (ok, {script_name: (hit, exec, pct)}, note).
     """
@@ -116,7 +169,6 @@ def _inprocess_coverage(root: Path) -> tuple[bool, dict[str, tuple[int, int, flo
         sys.path.insert(0, str(tests_dir))
     os.chdir(root)
 
-    # Prefer unit modules that import scripts in-process (not CLI subprocess)
     preferred = [
         "test_mapping",
         "test_integrity",
@@ -130,27 +182,31 @@ def _inprocess_coverage(root: Path) -> tuple[bool, dict[str, tuple[int, int, flo
         f = tests_dir / f"{name}.py"
         if not f.is_file():
             continue
-        # Load by path so discovery does not depend on package layout
         suite.addTests(loader.discover(str(tests_dir), pattern=f"{name}.py"))
 
     if suite.countTestCases() == 0:
         return False, {}, "no in-process unit tests found"
 
-    # Hide unittest noise
     runner = unittest.TextTestRunner(verbosity=0, stream=open(os.devnull, "w"))
     tracer = trace.Trace(
         count=True,
         trace=False,
         ignoredirs=[sys.prefix, sys.exec_prefix],
     )
-    holder: dict[str, object] = {"result": None}
+    holder: dict[str, object] = {"result": None, "cli_error": None}
 
     def _run() -> None:
         holder["result"] = runner.run(suite)
+        try:
+            _run_cli_exercises(root)
+        except Exception as exc:  # noqa: BLE001
+            holder["cli_error"] = exc
 
     tracer.runfunc(_run)
     result = holder["result"]
     ok = bool(result and getattr(result, "wasSuccessful", lambda: False)())
+    if holder["cli_error"] is not None:
+        ok = False
 
     counts: dict[str, dict[int, int]] = {}
     for (fname, lineno), n in tracer.results().counts.items():
@@ -179,14 +235,15 @@ def _inprocess_coverage(root: Path) -> tuple[bool, dict[str, tuple[int, int, flo
         n_exec = len(exec_lines)
         n_hit = len(hit)
         pct = (100.0 * n_hit / n_exec) if n_exec else 0.0
-        # Always record gate modules; others only if touched
         if n_hit > 0 or path.name in COVERAGE_FLOORS:
             per_file[path.name] = (n_hit, n_exec, pct)
 
     note = (
-        "in-process coverage from pure unit tests only "
-        f"({', '.join(preferred)}); CLI subprocess tests are not line-traced"
+        "subprocess-aware: pure unit tests "
+        f"({', '.join(preferred)}) + in-process CLI exercises under one tracer"
     )
+    if holder["cli_error"] is not None:
+        note += f"; CLI exercise error: {holder['cli_error']!r}"
     return ok, per_file, note
 
 
