@@ -94,6 +94,31 @@ jobs:
           echo "$out"
           echo "$out" | grep -q "CHECK OK"
 
+  # Soft only — must not block ci-ok (no coverage floor; see ROADMAP Deferred).
+  coverage-soft:
+    name: coverage-soft
+    runs-on: ubuntu-latest
+    needs: [integrity]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Soft quality / coverage report
+        run: |
+          set -euo pipefail
+          python3 scripts/coverage_report.py | tee coverage-soft.txt
+          # Fail only on import/unit failure (exit 2), not on low %
+          test -s coverage-soft.txt
+          grep -q "Import check" coverage-soft.txt
+      - name: Upload soft report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-soft-report
+          path: coverage-soft.txt
+          if-no-files-found: ignore
+
   ci-ok:
     name: ci-ok
     runs-on: ubuntu-latest
@@ -106,6 +131,7 @@ jobs:
           echo "path-jail=${{ needs.path-jail.result }}"
           echo "integrity=${{ needs.integrity.result }}"
           echo "smoke=${{ needs.smoke.result }}"
+          echo "coverage-soft is informational and not required for ci-ok"
           test "${{ needs.version-parity.result }}" = "success"
           test "${{ needs.path-jail.result }}" = "success"
           test "${{ needs.integrity.result }}" = "success"

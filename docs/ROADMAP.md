@@ -29,11 +29,13 @@ Version policy: [`SEMVER.md`](SEMVER.md) · bump tool: `scripts/bump_version.py`
 | Semver | 0.3.1+ | `bump_version.py` | Policy + parity tool + CI check |
 | C++ | 0.4.0 | promote / flatten / `--steps` / `--actions` | Broader mechanical `safe_apply` |
 | Hardening | 0.4.1 | integrity CI + apply split + framework-fit | Anti-truncation floors; enrich/rewrite modules |
+| Mapping | 0.4.2 | deeper analyze heuristics | Role synonyms, compounds, docstring signals |
+| Soft coverage | 0.4.3 | `coverage-soft` CI job | Import + linkage + in-process report (no floor) |
 
 ## Next
 
 - Use `docs/SEMVER.md` + `scripts/bump_version.py` for all releases
-- Operator: host install after tags; optional branch protection (`docs/CI.md`)
+- Optional branch protection without admin bypass (`docs/CI.md`)
 - Multi-language analyze (see Deferred)
 - Broader safe_apply that invents file content (explicit MAJOR / operator request)
 
@@ -41,6 +43,6 @@ Version policy: [`SEMVER.md`](SEMVER.md) · bump tool: `scripts/bump_version.py`
 
 - Multi-language analyze beyond Python
 - Network install / remote repo fetch
-- pytest coverage gates as hard CI requirement
+- Coverage **floors** as hard CI requirement (soft report exists since 0.4.3)
 - Ritual/network runtime systems
 - Dedicated OpenClaw fork branch

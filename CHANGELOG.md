@@ -6,6 +6,16 @@ The format follows Keep a Changelog principles. Versions follow Semantic Version
 
 Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
+## [0.4.3] — 2026-08-07
+
+### Added
+- `scripts/coverage_report.py` — soft quality report (imports, test linkage, in-process line coverage)
+- CI job `coverage-soft` (artifact upload; **not** required by `ci-ok`)
+- `tests/test_coverage_report.py`
+
+### Changed
+- `docs/CI.md` / `docs/ROADMAP.md` document soft vs hard coverage policy
+
 ## [0.4.2] — 2026-08-07
 
 ### Added
