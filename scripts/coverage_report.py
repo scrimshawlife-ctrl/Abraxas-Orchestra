@@ -41,6 +41,7 @@ COVERAGE_FLOORS: dict[str, float] = {
     "optimize_enrich.py": 20.0,
     "diagram_emit.py": 15.0,
     "diagram_mermaid.py": 40.0,
+    "structure_metrics.py": 40.0,
 }
 
 # Scripts that must be mentioned from tests/ (subprocess CLI coverage counts).
@@ -54,6 +55,7 @@ REQUIRED_LINKAGE: tuple[str, ...] = (
     "bump_version.py",
     "integrity_check.py",
     "coverage_report.py",
+    "structure_metrics.py",
 )
 
 

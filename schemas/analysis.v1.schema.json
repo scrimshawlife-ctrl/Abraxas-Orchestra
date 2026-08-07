@@ -91,6 +91,18 @@
       "items": { "type": "string" },
       "description": "SPECULATIVE framework suggestions when -f is omitted"
     },
+    "metrics": {
+      "type": "object",
+      "description": "Structure metrics (map quality, import cycles, responsibility mix)",
+      "properties": {
+        "schema": { "type": "string" },
+        "map": { "type": "object", "additionalProperties": true },
+        "graph": { "type": "object", "additionalProperties": true },
+        "mix": { "type": "object", "additionalProperties": true },
+        "error": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
     "provenance": {
       "type": "object",
       "properties": {
