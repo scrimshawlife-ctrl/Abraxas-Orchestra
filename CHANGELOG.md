@@ -16,6 +16,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - Site: Python best-case before/after (`tree-of-life`) — structure that *optimizes* code, not rename-only
 - Example: `examples/python-tree-of-life-pipeline/` (stage contracts + runnable `pipeline.py`)
 - **Contract-oriented structure emission:** each stage stub ships `run()` + `contract()` with locus **ALLOWED** / **FORBIDDEN**; multi-stage `--out` also writes a linear `pipeline.py` and documents contracts in `SKELETON.md`
+- **Structure benchmark:** `examples/benchmark-tree-of-life/` — paired before/after trees + `harness.py` measuring parity, analyze map quality, import cycles, responsibility mix, and early-exit latency
 
 ### Changed
 - CLI commands registered via `CommandRouter` (`scripts/orchestra_router.py`) — same surface, clearer groups

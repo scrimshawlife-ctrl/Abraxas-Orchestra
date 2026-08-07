@@ -1,6 +1,6 @@
 # Abraxas Orchestra
 
-**Site:** [https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/) · [Python best-case: optimized by structure](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/#before-after) · example `examples/python-tree-of-life-pipeline/`
+**Site:** [https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/) · [Python best-case: optimized by structure](https://scrimshawlife-ctrl.github.io/Abraxas-Orchestra/#before-after) · example `examples/python-tree-of-life-pipeline/` · measurable [structure benchmark](examples/benchmark-tree-of-life/)
 
 <p align="center">
   <img src="assets/hero.jpg" alt="Abraxas Orchestra — symbolic architecture skill" width="720"/>
@@ -214,7 +214,7 @@ scripts/bump_version.py    # Semver parity tool
 scripts/smoke.sh           # Production smoke
 references/                # Framework tables + agent-posture
 schemas/                   # correspondence, frameworks, analysis, optimize-plan
-examples/                  # signal-forager; enochian-chaos
+examples/                  # signal-forager; enochian-chaos; tree-of-life pipeline; structure benchmark
 tests/                     # stdlib unittest + fixtures
 docs/                      # DESIGN, DEPLOY, CI, SEMVER, …
 install.sh                 # Atomic installer (path jail)

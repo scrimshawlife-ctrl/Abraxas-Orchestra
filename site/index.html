@@ -387,6 +387,50 @@ def run(source: str, *, max_items: int = 12):
         </table>
       </div>
 
+      <div class="ba-map" style="margin-top:1.25rem">
+        <p><strong>Measurable before → after</strong> (<code>examples/benchmark-tree-of-life/</code>):</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Before (flat tangle)</th>
+              <th>After (map stages)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Happy-path parity</td>
+              <td colspan="2">Same payload for <code>demo-source</code> / <code>max_items=8</code></td>
+            </tr>
+            <tr>
+              <td>Map quality (STRONG×3 + ADEQUATE×2…)</td>
+              <td>~8 (0 STRONG)</td>
+              <td>~17 (5 STRONG)</td>
+            </tr>
+            <tr>
+              <td>Nodes in import cycles</td>
+              <td>3</td>
+              <td>0</td>
+            </tr>
+            <tr>
+              <td>Mixed-responsibility files</td>
+              <td>4</td>
+              <td>1 (orchestrator only)</td>
+            </tr>
+            <tr>
+              <td>Empty source</td>
+              <td>Still runs intake+score</td>
+              <td>Rejects at <code>intent</code> (~30× cheaper)</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note" style="margin-top:0.75rem">
+          We do <em>not</em> claim domain scoring is generally CPU-faster. Structure
+          wins on map quality, graph hygiene, mix, and fail-closed control flow.
+          Re-run: <code>python3 examples/benchmark-tree-of-life/harness.py</code>
+        </p>
+      </div>
+
       <div class="ba-cmd">
         <p><strong>1) Emit the dual-named layout</strong> (Hermes: <code>emit</code>):</p>
 <pre><code>python3 scripts/orchestra.py structure \
@@ -396,7 +440,9 @@ def run(source: str, *, max_items: int = 12):
         <p><strong>2) Implement logic under each stage’s contract</strong> (this repo ships a full example):</p>
 <pre><code>cd examples/python-tree-of-life-pipeline
 python3 pipeline.py</code></pre>
-        <p><strong>3) Optional — re-check the graph</strong> (Hermes: <code>repo</code>):</p>
+        <p><strong>3) Measure structure improvement</strong> (parity + map + cycles + mix + early-exit):</p>
+<pre><code>python3 examples/benchmark-tree-of-life/harness.py</code></pre>
+        <p><strong>4) Optional — re-check the graph</strong> (Hermes: <code>repo</code>):</p>
 <pre><code>python3 scripts/orchestra.py analyze \
   --path examples/python-tree-of-life-pipeline \
   -f tree-of-life --out /tmp/orch-py-best</code></pre>
