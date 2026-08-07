@@ -12,12 +12,14 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - Pure unit tests for `diagram_emit` / `diagram_mermaid` (`tests/test_diagrams.py`)
 - Static landing page under `site/` deployed via GitHub Pages (`.github/workflows/pages.yml`)
 - 3D brand hero (`assets/hero.jpg`) for README and GitHub Pages
+- Hermes agent routing aligned with CLI CommandRouter groups (**meta** / **emit** / **repo**) in `SKILL.md`
 
 ### Changed
 - CLI commands registered via `CommandRouter` (`scripts/orchestra_router.py`) — same surface, clearer groups
 - Branch protection on `main`: require PR + `ci-ok`, **enforce for admins** (no bypass)
 - README + `docs/CI.md` + `docs/FRAMEWORK_FIT.md` document protection and multi-lang limits
 - Default hero image is the 3D render; flat `hero.svg` kept as legacy vector
+- `references/agent-posture.md`, `docs/DEPLOY.md`, site page, and manifest document Hermes group routing
 
 ## [0.6.0] — 2026-08-07
 

@@ -1,6 +1,18 @@
 # Agent posture — code implementation under Orchestra
 
-When implementing code structured by this skill:
+Hermes/OpenClaw agents using this skill must follow the same **command router** as the CLI:
+**meta** · **emit** · **repo** (`scripts/orchestra_router.py` / `SKILL.md`).
+
+## Route first
+
+| User intent | Group | Default command |
+|-------------|-------|-----------------|
+| Is the skill healthy? What maps exist? | **meta** | `check` / `list` |
+| New dual-named layout or diagram from a framework | **emit** | `structure` or `diagram` |
+| Oversized map needs collapse | **emit** | `project` |
+| Observe / map / refactor an existing tree | **repo** | `analyze` then `optimize` |
+
+Do not freestyle architecture Mermaid or invent loci outside the framework tables.
 
 ## Naming
 
@@ -15,7 +27,7 @@ When implementing code structured by this skill:
 ## Provenance
 
 - Tag OBSERVED / INFERRED / SPECULATIVE when scoring or promoting structure into larger Abraxas systems.
-- No silent collapse of oversized maps — use `project` for pragmatic projection.
+- No silent collapse of oversized maps — use **emit** `project` for pragmatic projection.
 
 ## Layered growth
 
@@ -31,8 +43,14 @@ Framework loci for structure emission: `schemas/frameworks.v1.json` (do not inve
 
 When emitting dual-named skeletons or when a Mermaid/architecture diagram would help:
 
-- Use `structure`/`project --out` or `diagram` — never freehand a graph that invents loci.
+- Use **emit** `structure` / `project --out` or `diagram` — never freehand a graph that invents loci.
 - Consume `architecture.mmd` for Mermaid embeds; `architecture.json` for agent hops.
 - HTML is for human review; JSON is the source of truth for nodes/edges/flows.
 
 If you would write a Mermaid block for Orchestra-mapped code, emit via the CLI first and embed `architecture.mmd`.
+
+## Repo path discipline
+
+- **repo** `analyze` before any rename discussion on an existing tree.
+- **repo** `optimize` is plan-only unless the operator confirms `--apply --confirm`.
+- Never apply FORCED/WEAK maps silently.

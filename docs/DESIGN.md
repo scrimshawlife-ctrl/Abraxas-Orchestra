@@ -23,6 +23,8 @@ Structure software architecture using traditional correspondence systems as hier
 
 CLI entry: `python3 scripts/orchestra.py` — commands registered on `CommandRouter` (`scripts/orchestra_router.py`): **meta** (check, list), **emit** (structure, project, diagram), **repo** (analyze, optimize). Legacy `do <cmd>` prefix still accepted.
 
+**Hermes / OpenClaw:** the same groups are the agent routing contract in `SKILL.md` and `references/agent-posture.md`. Agents pick a group first, then a command — not freehand architecture.
+
 | Command | Role |
 |---------|------|
 | `check` | Integrity: frameworks load, schema validate, skill root |

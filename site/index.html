@@ -210,6 +210,7 @@
       <nav class="toc" aria-label="On this page">
         <a href="#what">What it is</a>
         <a href="#install">Install</a>
+        <a href="#routing">Hermes routing</a>
         <a href="#commands">Commands</a>
         <a href="#analyze">Analyze</a>
         <a href="#safety">Safety</a>
@@ -258,11 +259,53 @@ bash install.sh                          # → ~/.hermes/skills/orchestra
       <p>After install, the host discovers the skill from <code>SKILL.md</code> (<code>name: orchestra</code>).</p>
     </section>
 
+    <section id="routing">
+      <h2>Hermes routing (same as CLI)</h2>
+      <p>
+        Inside Hermes, agents must pick a <strong>CommandRouter</strong> group first,
+        then a command — not freehand architecture. Groups match
+        <code>scripts/orchestra_router.py</code> and <code>SKILL.md</code>.
+      </p>
+      <table>
+        <thead>
+          <tr><th>Group</th><th>When</th><th>Commands</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>meta</strong></td>
+            <td>Integrity, discovery</td>
+            <td><code>check</code>, <code>list</code></td>
+          </tr>
+          <tr>
+            <td><strong>emit</strong></td>
+            <td>Greenfield skeleton / diagrams from a framework</td>
+            <td><code>structure</code>, <code>project</code>, <code>diagram</code></td>
+          </tr>
+          <tr>
+            <td><strong>repo</strong></td>
+            <td>Existing tree observe → map → plan → gated moves</td>
+            <td><code>analyze</code>, <code>optimize</code></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="note" style="margin-top:1rem">
+        After install, Hermes loads <code>~/.hermes/skills/orchestra/SKILL.md</code>.
+        Prefer one group per turn; never invent symbolic loci outside
+        <code>schemas/frameworks.v1.json</code>.
+      </p>
+    </section>
+
     <section id="commands">
       <h2>Day-to-day commands</h2>
-<pre><code>python3 scripts/orchestra.py list
+<pre><code># meta
+python3 scripts/orchestra.py check
+python3 scripts/orchestra.py list
+
+# emit
 python3 scripts/orchestra.py structure -f tree-of-life -c "intent,synthesis,output" --out /tmp/orch-skel
 python3 scripts/orchestra.py diagram -f numogram --out /tmp/orch-diag
+
+# repo
 python3 scripts/orchestra.py analyze --path /path/to/pkg -f tree-of-life --out /tmp/orch-an
 python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --out /tmp/orch-plan
 python3 scripts/orchestra.py optimize --from /tmp/orch-an/analysis.json --apply --confirm</code></pre>
