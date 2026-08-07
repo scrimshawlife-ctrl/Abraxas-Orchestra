@@ -19,6 +19,8 @@ Hosts: **Hermes**, **OpenClaw**. Same contract, different install roots.
 
 ## Commands
 
+Routed via `scripts/orchestra_router.py` (groups: **meta** · **emit** · **repo**).
+
 ```text
 python3 scripts/orchestra.py check
 python3 scripts/orchestra.py list

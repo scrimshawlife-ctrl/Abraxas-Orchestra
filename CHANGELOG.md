@@ -14,6 +14,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - 3D brand hero (`assets/hero.jpg`) for README and GitHub Pages
 
 ### Changed
+- CLI commands registered via `CommandRouter` (`scripts/orchestra_router.py`) — same surface, clearer groups
 - Branch protection on `main`: require PR + `ci-ok`, **enforce for admins** (no bypass)
 - README + `docs/CI.md` + `docs/FRAMEWORK_FIT.md` document protection and multi-lang limits
 - Default hero image is the 3D render; flat `hero.svg` kept as legacy vector

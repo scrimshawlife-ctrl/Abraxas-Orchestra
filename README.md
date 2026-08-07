@@ -193,6 +193,7 @@ Human-readable tables: `references/`. Agent posture when filling stubs: `referen
 ```text
 SKILL.md                 # Agent contract + triggers
 scripts/orchestra.py       # CLI entry
+scripts/orchestra_router.py # Command registration + dispatch
 scripts/analyze_repo.py    # Analyze walk + mapping
 scripts/analyze_langs.py   # Multi-lang import-surface parsers
 scripts/diagram_emit.py    # HTML / graph emission

@@ -47,6 +47,7 @@ class TestIntegrityCheck(unittest.TestCase):
                 "scripts/optimize_apply.py",
                 "scripts/optimize_enrich.py",
                 "scripts/optimize_rewrite.py",
+                "scripts/orchestra_router.py",
                 "scripts/analyze_repo.py",
                 "scripts/analyze_langs.py",
                 "scripts/optimize_plan.py",
