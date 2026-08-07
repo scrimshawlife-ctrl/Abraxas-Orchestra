@@ -21,7 +21,7 @@ Analyze exit codes: `0` CLEAN / OBSERVED_ONLY · `1` WEAK_MAPPINGS present · `2
 
 | Shape of the code | Prefer | Why |
 |-------------------|--------|-----|
-| Linear pipeline / stages (intake → process → out) | `alchemical-stages`, `tree-of-life` | Ordered stages map cleanly to modules |
+| Linear pipeline / stages (intake → process → out) | `tree-of-life` (**Python best case**), `alchemical-stages` | Ordered stages map cleanly to modules when names match loci |
 | Layered agent / multi-domain system | `enochian`, `chaos-magic` (overlay) | Domains + seals + intent layers |
 | Ranked authority / command hierarchy | `solomonic`, `planetary-spheres` | Clear rank order |
 | Token / sign / interface taxonomy | `peircean-signs` | Types of signs ↔ API roles |

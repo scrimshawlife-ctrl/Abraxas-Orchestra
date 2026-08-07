@@ -189,6 +189,47 @@
       font-size: 0.92rem;
       color: var(--muted);
     }
+    .ba-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 800px) {
+      .ba-grid { grid-template-columns: 1fr; }
+    }
+    .ba-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .ba-panel header {
+      padding: 0.55rem 0.9rem;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 600;
+      border-bottom: 1px solid var(--line);
+    }
+    .ba-panel.before header { color: #e8a0a0; background: #1a1218; }
+    .ba-panel.after header { color: var(--ok); background: #121a16; }
+    .ba-panel pre {
+      margin: 0;
+      border: none;
+      border-radius: 0;
+      flex: 1;
+      font-size: 0.78rem;
+    }
+    .ba-cmd {
+      margin-top: 1rem;
+    }
+    .ba-map {
+      margin-top: 1rem;
+      overflow-x: auto;
+    }
   </style>
 </head>
 <body>
@@ -209,6 +250,7 @@
       </div>
       <nav class="toc" aria-label="On this page">
         <a href="#what">What it is</a>
+        <a href="#before-after">Python best case</a>
         <a href="#install">Install</a>
         <a href="#routing">Hermes routing</a>
         <a href="#commands">Commands</a>
@@ -244,6 +286,149 @@
       <p class="note" style="margin-top:1.25rem">
         Not a network service, magic runtime, or silent auto-refactorer. Weak or forced mappings fail closed.
         You stay in control of filesystem changes.
+      </p>
+    </section>
+
+    <section id="before-after">
+      <h2>Python best case — before &amp; after</h2>
+      <p>
+        Best fit for staged Python packages: <strong>Tree of Life</strong> (<code>-f tree-of-life</code>).
+        Concerns map cleanly to mechanical module names that already match the framework
+        (<code>intent</code> → <code>intake</code> → <code>analyze</code> → <code>store</code> → <code>output</code>),
+        so analyze/emit stays <span class="pill ok">CLEAN</span> / <span class="pill ok">ADEQUATE</span>
+        instead of WEAK/FORCED.
+      </p>
+      <p>
+        <strong>Hermes route:</strong> <code>emit</code> → <code>structure</code>
+        (or <code>repo</code> → <code>analyze</code> if the tree already exists).
+      </p>
+
+      <div class="ba-grid">
+        <div class="ba-panel before">
+          <header>Before — flat / ad-hoc Python</header>
+<pre><code># myapp/  (no stages, no provenance)
+myapp/
+  utils.py
+  helpers.py
+  stuff.py
+  main.py
+  do_things.py
+
+# main.py — everything tangled
+from utils import load
+from helpers import score
+from stuff import dump
+
+def run(src):
+    data = load(src)      # intake? intent?
+    out = score(data)     # analyze? transform?
+    dump(out)             # store? output?
+    return out
+
+# No dual names, no correspondence table,
+# Mermaid invented by hand if at all.</code></pre>
+        </div>
+        <div class="ba-panel after">
+          <header>After — tree-of-life (emit structure)</header>
+<pre><code># Dual-named modules + auto diagrams
+intent/          # kether — entry contract
+  __init__.py
+intake/          # chokmah — raw force intake
+  __init__.py
+analyze/         # hod — analytical decomposition
+  __init__.py
+store/           # yesod — foundation / substrate
+  __init__.py
+output/          # malkuth — concrete manifestation
+  __init__.py
+SKELETON.md
+correspondence-table.json
+architecture.html | .json | .mmd
+
+# intake/__init__.py (emitted stub)
+"""
+intake — dual-named module stub
+mechanical: intake
+symbolic:   chokmah
+locus:      Raw force intake
+"""
+def scaffold() -> dict:
+    return {"mechanical": "intake",
+            "symbolic": "chokmah",
+            "status": "SCAFFOLD"}</code></pre>
+        </div>
+      </div>
+
+      <div class="ba-cmd">
+        <p><strong>Command that produces the after state:</strong></p>
+<pre><code>python3 scripts/orchestra.py structure \
+  -f tree-of-life \
+  -c "intent,intake,analyze,store,output" \
+  --out ./myapp-skel</code></pre>
+      </div>
+
+      <div class="ba-map">
+        <p><strong>Correspondence (best-case mapping):</strong></p>
+        <table>
+          <thead>
+            <tr>
+              <th>Mechanical</th>
+              <th>Symbolic</th>
+              <th>Locus</th>
+              <th>Strength</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>intent</code></td>
+              <td><code>kether</code></td>
+              <td>System intent / entry contract</td>
+              <td><span class="pill ok">ADEQUATE+</span></td>
+            </tr>
+            <tr>
+              <td><code>intake</code></td>
+              <td><code>chokmah</code></td>
+              <td>Raw force intake</td>
+              <td><span class="pill ok">ADEQUATE+</span></td>
+            </tr>
+            <tr>
+              <td><code>analyze</code></td>
+              <td><code>hod</code></td>
+              <td>Analytical decomposition</td>
+              <td><span class="pill ok">ADEQUATE+</span></td>
+            </tr>
+            <tr>
+              <td><code>store</code></td>
+              <td><code>yesod</code></td>
+              <td>Foundation / substrate</td>
+              <td><span class="pill ok">ADEQUATE+</span></td>
+            </tr>
+            <tr>
+              <td><code>output</code></td>
+              <td><code>malkuth</code></td>
+              <td>Concrete manifestation</td>
+              <td><span class="pill ok">ADEQUATE+</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="ba-cmd">
+        <p><strong>Mermaid emitted automatically</strong> (<code>architecture.mmd</code>):</p>
+<pre><code>flowchart LR
+  intent["intent · kether"]
+  intake["intake · chokmah"]
+  analyze["analyze · hod"]
+  store["store · yesod"]
+  output["output · malkuth"]
+  intent --> intake --> analyze --> store --> output</code></pre>
+      </div>
+
+      <p class="note">
+        Why this is the Python best case: stage names already match framework mechanical loci,
+        so Hermes can <code>emit structure</code> without FORCED maps. For messy repos, use
+        <code>repo analyze -f tree-of-life</code> first — if strength is WEAK, pick another map
+        or stay OBSERVED-only (see <code>docs/FRAMEWORK_FIT.md</code>).
       </p>
     </section>
 

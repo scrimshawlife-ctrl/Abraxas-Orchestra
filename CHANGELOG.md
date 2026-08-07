@@ -13,6 +13,7 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 - Static landing page under `site/` deployed via GitHub Pages (`.github/workflows/pages.yml`)
 - 3D brand hero (`assets/hero.jpg`) for README and GitHub Pages
 - Hermes agent routing aligned with CLI CommandRouter groups (**meta** / **emit** / **repo**) in `SKILL.md`
+- Site: Python best-case before/after (`tree-of-life` emit) on the GitHub Pages landing page
 
 ### Changed
 - CLI commands registered via `CommandRouter` (`scripts/orchestra_router.py`) — same surface, clearer groups
