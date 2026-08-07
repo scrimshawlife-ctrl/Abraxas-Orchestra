@@ -76,7 +76,8 @@ python3 scripts/orchestra.py structure \
 
 Writes under `--out`:
 
-- `SKELETON.md` + per-module stubs  
+- `SKELETON.md` + per-module stubs with locus **ALLOWED** / **FORBIDDEN** contracts (`run()` + `contract()`)  
+- `pipeline.py` when two or more stages are emitted (calls stages in map order)  
 - `correspondence-table.json`  
 - `architecture.html` · `architecture.json` · `architecture.mmd` (auto)
 

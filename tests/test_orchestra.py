@@ -69,6 +69,64 @@ class TestOrchestraCLI(unittest.TestCase):
             self.assertIn("```mermaid", mmd)
             self.assertIn("flowchart", mmd)
 
+    def test_structure_emits_contracts_and_pipeline(self) -> None:
+        """Stubs carry ALLOWED/FORBIDDEN contracts; multi-stage --out gets pipeline.py."""
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td) / "skel"
+            r = run_cli(
+                "structure",
+                "-f",
+                "tree-of-life",
+                "-c",
+                "intent,intake,analyze,store,output",
+                "--out",
+                str(out),
+            )
+            self.assertEqual(r.returncode, 0, r.stderr)
+            skel = (out / "SKELETON.md").read_text(encoding="utf-8")
+            self.assertIn("allowed:", skel)
+            self.assertIn("forbidden:", skel)
+            self.assertIn("structure optimizes work", skel)
+            self.assertTrue((out / "pipeline.py").is_file())
+
+            intent = (out / "intent" / "__init__.py").read_text(encoding="utf-8")
+            self.assertIn("ALLOWED:", intent)
+            self.assertIn("FORBIDDEN:", intent)
+            self.assertIn("def run(", intent)
+            self.assertIn("def contract(", intent)
+            self.assertNotIn("def scaffold(", intent)
+
+            pipe = subprocess.run(
+                [PYTHON, str(out / "pipeline.py")],
+                cwd=str(out),
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+            self.assertEqual(pipe.returncode, 0, pipe.stdout + pipe.stderr)
+            data = json.loads(pipe.stdout)
+            self.assertEqual(data.get("status"), "STAGE_OK")
+            self.assertEqual(data.get("mechanical"), "output")
+
+            # Load by path so suite-local packages named `intent` cannot shadow
+            import importlib.util
+
+            stub_path = out / "intent" / "__init__.py"
+            spec = importlib.util.spec_from_file_location(
+                "orch_emit_intent_stub", stub_path
+            )
+            self.assertIsNotNone(spec)
+            assert spec is not None and spec.loader is not None
+            intent_mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(intent_mod)
+            c = intent_mod.contract()
+            self.assertEqual(c["mechanical"], "intent")
+            self.assertIn("Validate", c["allowed"])
+            self.assertTrue(c["forbidden"])
+            stage = intent_mod.run({"goal": "demo"})
+            self.assertEqual(stage["status"], "STAGE_OK")
+            self.assertIn("goal", stage["input_keys"])
+
     def test_diagram_writes(self) -> None:
         with tempfile.TemporaryDirectory() as td:
             out = Path(td) / "arch"

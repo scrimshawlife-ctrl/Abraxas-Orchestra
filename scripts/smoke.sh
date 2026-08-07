@@ -47,4 +47,8 @@ bash install.sh --dry-run >/dev/null
 
 echo "==> enochian-chaos demo"
 ( cd examples/enochian-chaos-skeleton && python3 run_demo.py >/dev/null )
+
+echo "==> python-tree-of-life-pipeline (optimized by structure)"
+python3 examples/python-tree-of-life-pipeline/pipeline.py >/dev/null
+
 echo "SMOKE OK"

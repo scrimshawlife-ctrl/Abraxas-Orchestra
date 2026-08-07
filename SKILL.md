@@ -90,7 +90,7 @@ python3 scripts/orchestra.py project   -f <framework> [-c concerns] [-o overlay]
 python3 scripts/orchestra.py diagram   -f <framework> [-c concerns] [-o overlay] [--out DIR] [--project]
 ```
 
-- **structure** — dual-named skeleton + correspondence table; with `--out`, auto-writes diagrams.
+- **structure** — dual-named skeleton + correspondence table; stage stubs carry **ALLOWED** / **FORBIDDEN** locus contracts (`run()` + `contract()`); multi-stage `--out` also writes `pipeline.py`; auto-writes diagrams.
 - **project** — like structure, but collapses oversized / forced maps (explicit projection).
 - **diagram** — graph only (`diagrammit` alias); optional `--project` projection.
 
