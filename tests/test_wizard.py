@@ -181,5 +181,50 @@ class TestWizardResolve(unittest.TestCase):
             self.assertEqual(plan["group"], "meta")
 
 
+CLI = ROOT / "scripts" / "orchestra.py"
+PYTHON = sys.executable
+
+
+def run_cli(*args: str, input_text: str | None = None) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [PYTHON, str(CLI), *args],
+        cwd=str(ROOT),
+        capture_output=True,
+        text=True,
+        input=input_text,
+    )
+
+
+class TestWizardCLI(unittest.TestCase):
+    def test_wizard_help(self) -> None:
+        r = run_cli("wizard", "--help")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        self.assertIn("answers", r.stdout)
+
+    def test_wizard_print_only_observe_json(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            ans_path = Path(td) / "answers.json"
+            ans_path.write_text(
+                json.dumps({
+                    "schema": "orchestra-wizard-answers.v1",
+                    "intent": "observe",
+                    "path": "tests/fixtures/mini_pkg",
+                    "out": str(Path(td) / "out"),
+                }),
+                encoding="utf-8",
+            )
+            r = run_cli("wizard", "--answers", str(ans_path), "--json")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            plan = json.loads(r.stdout)
+            self.assertEqual(plan["command"], "analyze")
+            self.assertIn("analyze", plan["argv"][0])
+            self.assertFalse(plan["run"])
+
+    def test_wizard_non_tty_without_answers_exits_2(self) -> None:
+        # Subprocess has no TTY for stdin
+        r = run_cli("wizard")
+        self.assertEqual(r.returncode, 2)
+
+
 if __name__ == "__main__":
     unittest.main()
