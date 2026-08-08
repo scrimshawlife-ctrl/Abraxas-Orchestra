@@ -72,7 +72,7 @@ class TestCommandRouter(unittest.TestCase):
     def test_orchestra_router_commands(self) -> None:
         r = build_router()
         expected = {
-            "check", "list", "structure", "project", "diagram", "analyze", "optimize",
+            "check", "list", "wizard", "structure", "project", "diagram", "analyze", "optimize",
         }
         self.assertEqual(set(r.names()), expected)
         # aliases resolve

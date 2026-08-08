@@ -6,7 +6,7 @@ Minimal, fail-closed, dual-naming skeleton emitter + repo analyze/optimize plan.
 Stdlib only. No external dependencies.
 
 Commands are registered on a CommandRouter (see orchestra_router.py):
-  meta:  check | list
+  meta:  check | list | wizard
   emit:  structure | project | diagram
   repo:  analyze | optimize
 Legacy: do <command> still accepted.
@@ -22,8 +22,18 @@ from pathlib import Path
 from typing import Any
 
 from orchestra_router import CommandRouter, CommandSpec
+from orchestra_wizard import (
+    WizardError,
+    format_plan_human,
+    format_plan_json,
+    interactive_collect,
+    load_answers,
+    merge_preset,
+    resolve_plan,
+    validate_answers,
+)
 
-VERSION = "0.7.0"
+VERSION = "0.8.0"
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 
 def _load_frameworks() -> dict[str, dict[str, Any]]:
@@ -120,6 +130,7 @@ def cmd_check(_: argparse.Namespace) -> int:
         "schemas/analysis.v1.schema.json",
         "schemas/optimize-plan.v1.schema.json",
         "schemas/optimize-apply.v1.schema.json",
+        "schemas/wizard-answers.v1.schema.json",
     ]
     for rel in required:
         if not (SKILL_ROOT / rel).exists():
@@ -849,6 +860,83 @@ def _add_optimize_args(sp: argparse.ArgumentParser) -> None:
     )
 
 
+def cmd_wizard(args: argparse.Namespace) -> int:
+    """Guided plan (default) or execute resolved Orchestra command."""
+    try:
+        answers_in: dict | None = None
+        if getattr(args, "answers", None):
+            answers_in = load_answers(args.answers)
+        preset = getattr(args, "preset", None)
+        if preset or answers_in is not None:
+            raw = merge_preset(preset, answers_in)
+        else:
+            if not sys.stdin.isatty():
+                print(
+                    "wizard: non-interactive use requires --answers and/or --preset "
+                    "(Hermes Desktop: collect fields in chat, then pass --answers)",
+                    file=sys.stderr,
+                )
+                return 2
+            raw = interactive_collect(FRAMEWORKS)
+        answers = validate_answers(raw, FRAMEWORKS)
+        run = bool(getattr(args, "run", False))
+        # Absence of --run means print-only; --print-only is a no-op for agents
+        if getattr(args, "print_only", False) and run:
+            print("wizard: both --print-only and --run set; using --run", file=sys.stderr)
+        plan = resolve_plan(answers, FRAMEWORKS, run=run)
+        if getattr(args, "json", False):
+            sys.stdout.write(format_plan_json(plan))
+        else:
+            sys.stdout.write(format_plan_human(plan, skill_root_hint=str(Path(sys.argv[0]))))
+        if not run:
+            return 0
+        return _wizard_run(plan)
+    except WizardError as e:
+        print(f"wizard error: {e.message}", file=sys.stderr)
+        return 2
+    except json.JSONDecodeError as e:
+        print(f"wizard error: invalid JSON: {e}", file=sys.stderr)
+        return 2
+
+
+def _wizard_run(plan: dict) -> int:
+    """Dispatch resolved argv in-process; refuse re-entering wizard."""
+    argv = list(plan["argv"])
+    if not argv or argv[0] == "wizard":
+        print("wizard error: refusing to dispatch wizard", file=sys.stderr)
+        return 2
+    return build_router().dispatch(argv)
+
+
+def _add_wizard_args(sp: argparse.ArgumentParser) -> None:
+    sp.add_argument(
+        "--answers",
+        default=None,
+        help="Path to answers JSON, or '-' for stdin",
+    )
+    sp.add_argument(
+        "--preset",
+        choices=["greenfield", "observe", "map", "optimize-plan"],
+        default=None,
+        help="Seed answers from a named preset",
+    )
+    sp.add_argument(
+        "--print-only",
+        action="store_true",
+        help="Print plan only (default if --run omitted)",
+    )
+    sp.add_argument(
+        "--run",
+        action="store_true",
+        help="Execute resolved command after printing plan",
+    )
+    sp.add_argument(
+        "--json",
+        action="store_true",
+        help="Emit orchestra-wizard-plan.v1 JSON",
+    )
+
+
 # ---------------------------------------------------------------------------
 # Router registration
 # ---------------------------------------------------------------------------
@@ -873,6 +961,13 @@ def build_router() -> CommandRouter:
         help="List available frameworks",
         aliases=("list-frameworks",),
         group="meta",
+    ))
+    router.add(CommandSpec(
+        name="wizard",
+        handler=cmd_wizard,
+        help="Guided plan/execute for Hermes (answers JSON or interactive TTY)",
+        group="meta",
+        configure=_add_wizard_args,
     ))
     router.add(CommandSpec(
         name="structure",
@@ -911,6 +1006,7 @@ def build_router() -> CommandRouter:
         configure=_add_optimize_args,
     ))
     return router
+
 
 
 def build_parser() -> argparse.ArgumentParser:

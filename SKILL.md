@@ -1,7 +1,7 @@
 ---
 name: orchestra
-description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, automatic Mermaid/HTML/JSON diagrams, repo analyze→map→optimize plans, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra. Route work through meta (check/list), emit (structure/project/diagram), or repo (analyze/optimize) — same groups as the CLI CommandRouter."
-version: 0.7.0
+description: "Structure code, modules, pipelines, and agent systems using traditional esoteric correspondence maps (Tree of Life, alchemy, runes, planetary spheres, I Ching, Solomonic ranks, Peircean signs, Numogram, sacred geometry, Enochian, Chaos Magic). Use when the user wants dual-named architecture skeletons, symbolic hierarchy for software, fail-closed mapping, automatic Mermaid/HTML/JSON diagrams, repo analyze→map→optimize plans, guided wizard plans, or Hermes/OpenClaw skill-style packaging for Abraxas Orchestra. Route work through meta (check/list/wizard), emit (structure/project/diagram), or repo (analyze/optimize) — same groups as the CLI CommandRouter. Prefer wizard when unsure or collecting fields in Desktop chat."
+version: 0.8.0
 license: Apache-2.0
 metadata:
   openclaw:
@@ -39,9 +39,10 @@ When this skill activates, **route the user request** into exactly one primary g
 
 | Group | When to use | Commands |
 |-------|-------------|----------|
-| **meta** | Integrity, discovery, “what maps exist?” | `check`, `list` |
+| **meta** | Integrity, discovery, “what maps exist?”, guided path | `check`, `list`, `wizard` |
 | **emit** | Greenfield / skeleton / diagrams from a framework | `structure`, `project`, `diagram` |
 | **repo** | Existing codebase observe → map → plan → gated moves | `analyze`, `optimize` |
+| Guided path / unsure / Desktop chat collect | **meta** | `wizard` |
 
 Rules:
 
@@ -49,12 +50,16 @@ Rules:
 2. Inside a group, pick the smallest command that satisfies the ask.
 3. Never invent symbolic loci — only `schemas/frameworks.v1.json`.
 4. Prefer CLI emission over freehand architecture diagrams.
+5. When unsure which flags/command, prefer **meta** `wizard` over freestyle argv.
 
 ### Decision tree
 
 ```text
 Need to verify install / list maps?
   → meta: check | list
+
+Unsure of path / collecting fields in Desktop chat?
+  → meta: wizard  (chat → --answers; print-only default)
 
 Building new dual-named layout or diagram from a framework?
   → emit:
@@ -70,6 +75,23 @@ Reading or reshaping an existing tree?
 
 ---
 
+## Wizard (Hermes + Desktop)
+
+When the operator is unsure or you would otherwise freestyle flags:
+
+1. Collect missing fields **in chat** (one at a time). Do **not** use interactive stdin.
+2. Write `orchestra-wizard-answers.v1` JSON to a temp file.
+3. `python3 scripts/orchestra.py wizard --answers FILE --print-only` (or `--json`).
+4. On approval: `wizard --answers FILE --run` or run the printed argv.
+5. Never set `confirm_apply: true` unless the user explicitly approved gated renames.
+
+```bash
+python3 scripts/orchestra.py wizard --preset greenfield --answers answers.json --print-only
+python3 scripts/orchestra.py wizard --answers answers.json --run
+```
+
+---
+
 ## Commands by group
 
 ### meta
@@ -77,10 +99,12 @@ Reading or reshaping an existing tree?
 ```text
 python3 scripts/orchestra.py check
 python3 scripts/orchestra.py list
+python3 scripts/orchestra.py wizard [--answers FILE] [--preset NAME] [--print-only|--run] [--json]
 ```
 
 - **check** — skill integrity (schemas, version parity surface).
 - **list** — frameworks available (alias: `list-frameworks`).
+- **wizard** — guided plan from answers/preset; print-only by default; `--run` dispatches in-process. Desktop: chat collect → `--answers` (no interactive stdin).
 
 ### emit
 
@@ -138,7 +162,7 @@ Agents: if you would write a Mermaid block for Orchestra-mapped code, run emissi
 
 ## Mandatory sequence (Hermes)
 
-1. **Route** to meta / emit / repo (table above).
+1. **Route** to meta / emit / repo (table above). Prefer **meta** `wizard` when flags/path are unclear.
 2. Identify functional concerns — or **repo** `analyze` an existing tree.
 3. Choose primary framework (and optional overlay); **meta** `list` if unsure.
 4. Prefer **emit** with `--out` (auto-diagram) or **repo** analyze/optimize.

@@ -8,11 +8,13 @@ Hermes/OpenClaw agents using this skill must follow the same **command router** 
 | User intent | Group | Default command |
 |-------------|-------|-----------------|
 | Is the skill healthy? What maps exist? | **meta** | `check` / `list` |
+| Unsure which path / flags; Desktop chat collect | **meta** | `wizard` |
 | New dual-named layout or diagram from a framework | **emit** | `structure` or `diagram` |
 | Oversized map needs collapse | **emit** | `project` |
 | Observe / map / refactor an existing tree | **repo** | `analyze` then `optimize` |
 
 Do not freestyle architecture Mermaid or invent loci outside the framework tables.
+Prefer **meta** `wizard` (chat → `--answers` → print-only, then `--run` on approval) over freestyle argv when unsure.
 
 ## Naming
 

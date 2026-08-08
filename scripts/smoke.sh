@@ -10,6 +10,19 @@ python3 scripts/integrity_check.py
 echo "==> orchestra check"
 python3 scripts/orchestra.py check
 
+echo "==> wizard print-only observe"
+WIZ_DIR="$(mktemp -d "${TMPDIR:-/tmp}/orchestra-wizard.XXXXXX")"
+cat > "$WIZ_DIR/answers.json" <<EOF
+{
+  "schema": "orchestra-wizard-answers.v1",
+  "intent": "observe",
+  "path": "tests/fixtures/mini_pkg",
+  "out": "$WIZ_DIR/out"
+}
+EOF
+python3 scripts/orchestra.py wizard --answers "$WIZ_DIR/answers.json" --json | grep -q '"command": "analyze"'
+rm -rf "$WIZ_DIR"
+
 echo "==> unit tests"
 python3 -m unittest discover -s tests -v
 
