@@ -70,7 +70,10 @@ def load_answers(path_or_dash: str) -> dict[str, Any]:
     if path_or_dash == "-":
         text = sys.stdin.read()
     else:
-        text = Path(path_or_dash).read_text(encoding="utf-8")
+        try:
+            text = Path(path_or_dash).read_text(encoding="utf-8")
+        except OSError as e:
+            raise WizardError(f"cannot read answers file: {e}") from e
     data = json.loads(text)
     if not isinstance(data, dict):
         raise WizardError("answers must be a JSON object")
@@ -108,6 +111,10 @@ def validate_answers(answers: dict[str, Any], frameworks: dict[str, Any]) -> dic
     out.setdefault("lang", "python")
     out.setdefault("min_strength", "ADEQUATE")
     out.setdefault("emit_mode", "structure")
+
+    for flag in ("apply", "confirm_apply", "refresh"):
+        if not isinstance(out[flag], bool):
+            raise WizardError(f"{flag} must be a boolean (got {type(out[flag]).__name__})")
 
     if out["confirm_apply"] and not out["apply"]:
         raise WizardError("confirm_apply requires apply: true")
@@ -151,7 +158,10 @@ def validate_answers(answers: dict[str, Any], frameworks: dict[str, Any]) -> dic
             missing.append("from")
     # check/list: no extra required
 
-    if intent == "optimize-apply-dry":
+    if intent == "optimize-plan":
+        out["apply"] = False
+        out["confirm_apply"] = False
+    elif intent == "optimize-apply-dry":
         out["apply"] = True
         out["confirm_apply"] = False
     elif intent == "optimize-apply-confirm":

@@ -19,6 +19,7 @@ sys.path.insert(0, str(SCRIPTS))
 from orchestra_wizard import (  # noqa: E402
     ANSWERS_SCHEMA,
     WizardError,
+    load_answers,
     merge_preset,
     resolve_plan,
     validate_answers,
@@ -50,6 +51,13 @@ FW = {
         "core_collapse": ["raw_ingest", "illuminate", "coagulate"],
     },
 }
+
+
+class TestWizardLoadAnswers(unittest.TestCase):
+    def test_missing_file_raises_wizard_error(self) -> None:
+        with self.assertRaises(WizardError) as ctx:
+            load_answers("/nonexistent/path/answers.json")
+        self.assertIn("cannot read answers file", ctx.exception.message)
 
 
 class TestWizardResolve(unittest.TestCase):
@@ -116,6 +124,60 @@ class TestWizardResolve(unittest.TestCase):
                 },
                 FW,
             )
+
+    def test_string_bool_flags_rejected(self) -> None:
+        """JSON-ish string "true"/"false" must not coerce; reject as non-bool."""
+        for flag, value in (
+            ("confirm_apply", "false"),
+            ("confirm_apply", "true"),
+            ("apply", "true"),
+            ("apply", "false"),
+            ("refresh", "true"),
+            ("refresh", "false"),
+        ):
+            with self.subTest(flag=flag, value=value):
+                with self.assertRaises(WizardError) as ctx:
+                    validate_answers(
+                        {
+                            "schema": ANSWERS_SCHEMA,
+                            "intent": "list",
+                            flag: value,
+                        },
+                        FW,
+                    )
+                self.assertIn(flag, ctx.exception.message)
+                self.assertIn("boolean", ctx.exception.message)
+
+    def test_string_confirm_apply_false_does_not_emit_confirm(self) -> None:
+        """Regression: truthy string "false" must not slip into --confirm."""
+        with self.assertRaises(WizardError):
+            validate_answers(
+                {
+                    "schema": ANSWERS_SCHEMA,
+                    "intent": "optimize-plan",
+                    "from": "/tmp/a.json",
+                    "apply": True,
+                    "confirm_apply": "false",
+                },
+                FW,
+            )
+
+    def test_optimize_plan_forces_no_apply(self) -> None:
+        ans = validate_answers(
+            {
+                "schema": ANSWERS_SCHEMA,
+                "intent": "optimize-plan",
+                "from": "/tmp/a.json",
+                "apply": True,
+                "confirm_apply": True,
+            },
+            FW,
+        )
+        self.assertFalse(ans["apply"])
+        self.assertFalse(ans["confirm_apply"])
+        plan = resolve_plan(ans, FW)
+        self.assertNotIn("--apply", plan["argv"])
+        self.assertNotIn("--confirm", plan["argv"])
 
     def test_unknown_framework_rejected(self) -> None:
         with self.assertRaises(WizardError):
@@ -224,6 +286,12 @@ class TestWizardCLI(unittest.TestCase):
         # Subprocess has no TTY for stdin
         r = run_cli("wizard")
         self.assertEqual(r.returncode, 2)
+
+    def test_wizard_missing_answers_file_exits_2(self) -> None:
+        r = run_cli("wizard", "--answers", "/nonexistent/path/answers.json")
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("wizard error:", r.stderr)
+        self.assertNotIn("Traceback", r.stderr)
 
     def test_wizard_run_structure(self) -> None:
         with tempfile.TemporaryDirectory() as td:
