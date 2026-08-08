@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra/schemas/wizard-answers.v1.schema.json",
+  "title": "orchestra-wizard-answers.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "intent"],
+  "properties": {
+    "schema": { "const": "orchestra-wizard-answers.v1" },
+    "intent": {
+      "type": "string",
+      "enum": [
+        "greenfield", "observe", "map", "optimize-plan",
+        "optimize-apply-dry", "optimize-apply-confirm", "check", "list"
+      ]
+    },
+    "framework": { "type": ["string", "null"] },
+    "concerns": {
+      "oneOf": [
+        { "type": "array", "items": { "type": "string" } },
+        { "type": "string" },
+        { "type": "null" }
+      ]
+    },
+    "overlay": { "type": ["string", "null"] },
+    "emit_mode": {
+      "type": "string",
+      "enum": ["structure", "project", "diagram"]
+    },
+    "path": { "type": ["string", "null"] },
+    "from": { "type": ["string", "null"] },
+    "out": { "type": ["string", "null"] },
+    "lang": {
+      "type": "string",
+      "enum": ["python", "auto", "javascript", "typescript", "go", "rust", "ruby"]
+    },
+    "min_strength": {
+      "type": "string",
+      "enum": ["STRONG", "ADEQUATE", "WEAK", "FORCED"]
+    },
+    "apply": { "type": "boolean" },
+    "confirm_apply": { "type": "boolean" },
+    "refresh": { "type": "boolean" },
+    "steps": {
+      "oneOf": [
+        { "type": "array", "items": { "type": "string" } },
+        { "type": "string" },
+        { "type": "null" }
+      ]
+    },
+    "actions": {
+      "oneOf": [
+        { "type": "array", "items": { "type": "string" } },
+        { "type": "string" },
+        { "type": "null" }
+      ]
+    }
+  }
+}

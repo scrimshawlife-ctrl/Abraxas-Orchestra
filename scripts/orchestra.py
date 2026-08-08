@@ -130,6 +130,7 @@ def cmd_check(_: argparse.Namespace) -> int:
         "schemas/analysis.v1.schema.json",
         "schemas/optimize-plan.v1.schema.json",
         "schemas/optimize-apply.v1.schema.json",
+        "schemas/wizard-answers.v1.schema.json",
     ]
     for rel in required:
         if not (SKILL_ROOT / rel).exists():
