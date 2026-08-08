@@ -226,5 +226,17 @@ class TestWizardCLI(unittest.TestCase):
         self.assertEqual(r.returncode, 2)
 
 
+class TestWizardInteractive(unittest.TestCase):
+    def test_interactive_list(self) -> None:
+        from orchestra_wizard import interactive_collect
+
+        with mock.patch("builtins.input", side_effect=["list"]):
+            ans = interactive_collect(FW)
+        self.assertEqual(ans["intent"], "list")
+        validated = validate_answers(ans, FW)
+        plan = resolve_plan(validated, FW)
+        self.assertEqual(plan["argv"], ["list"])
+
+
 if __name__ == "__main__":
     unittest.main()
