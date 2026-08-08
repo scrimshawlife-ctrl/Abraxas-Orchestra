@@ -10,7 +10,7 @@
   <strong>Hermes + OpenClaw coding-agent skill</strong> for structuring software with traditional symbolic maps
 </p>
 
-Version **0.7.0** · Skill name: `orchestra` · Python ≥ 3.11 · Offline CLI · License: [Apache-2.0](LICENSE)
+Version **0.8.0** · Skill name: `orchestra` · Python ≥ 3.11 · Offline CLI · License: [Apache-2.0](LICENSE)
 
 ---
 
@@ -52,7 +52,7 @@ Same groups for **CLI** and **Hermes** agents (`CommandRouter` / `SKILL.md`):
 
 | Group | Commands | Purpose |
 |-------|----------|---------|
-| **meta** | `check`, `list` | Integrity + framework discovery |
+| **meta** | `check`, `list`, `wizard` | Integrity, framework discovery, guided plans |
 | **emit** | `structure`, `project`, `diagram` | Skeleton + diagrams from a framework |
 | **repo** | `analyze`, `optimize` | Observe existing tree → plan → gated apply |
 
@@ -63,6 +63,19 @@ All commands work from the repo or install root (`~/.hermes/skills/orchestra`).
 ```bash
 python3 scripts/orchestra.py list
 python3 scripts/orchestra.py check
+```
+
+**meta — wizard** (guided plan; print-only by default)
+
+Hermes Desktop: collect fields **in chat**, write `orchestra-wizard-answers.v1` JSON, pass `--answers` (do not use interactive stdin). No `--run` means print-only.
+
+```bash
+# Plan only (human + optional --json)
+python3 scripts/orchestra.py wizard --preset greenfield --answers answers.json --print-only
+python3 scripts/orchestra.py wizard --answers answers.json --json
+
+# Dispatch resolved command in-process after operator approval
+python3 scripts/orchestra.py wizard --answers answers.json --run
 ```
 
 **emit — scaffold** (Tree of Life, three concerns)
@@ -137,10 +150,11 @@ Route first (**meta** / **emit** / **repo**), then run the matching CLI command:
 | User wants… | Group | Commands |
 |-------------|-------|----------|
 | Is the skill healthy? What maps exist? | **meta** | `check`, `list` |
+| Unsure of flags / guided path / Desktop chat collect | **meta** | `wizard` |
 | New dual-named skeleton or diagram from a map | **emit** | `structure`, `project`, `diagram` |
 | Observe / map / refactor an existing tree | **repo** | `analyze`, `optimize` |
 
-Prefer `structure` / `project` / `analyze` with `--out` over inventing ad-hoc Mermaid. Do not invent loci that are not in `schemas/frameworks.v1.json`. Full agent contract: installed `SKILL.md` + `references/agent-posture.md`.
+Prefer `structure` / `project` / `analyze` with `--out` over inventing ad-hoc Mermaid. Prefer **wizard** when unsure instead of freestyle flags. Do not invent loci that are not in `schemas/frameworks.v1.json`. Full agent contract: installed `SKILL.md` + `references/agent-posture.md`.
 
 ### Integrity + coverage
 
@@ -174,10 +188,12 @@ Publish freeze: [`docs/COMPLETION.md`](docs/COMPLETION.md) · Public debut: [`do
 
 ## Release notes
 
-**Current: 0.7.0** — contract emission, structure metrics, before/after benchmark (see `CHANGELOG.md`). Prior: [0.6.0](docs/RELEASE_BODY_v0.6.0.md) multi-lang AST parsers; [0.4.0](docs/RELEASE_NOTES.md#040--2026-08-05) broader `safe_apply`.
+**Current: 0.8.0** — Hermes wizard (`meta` guided plans via `--answers` / `--preset`; Desktop chat protocol) (see `CHANGELOG.md`). Prior: [0.7.0](docs/RELEASE_BODY_v0.7.0.md) contracts + metrics; [0.6.0](docs/RELEASE_BODY_v0.6.0.md) multi-lang parsers; [0.4.0](docs/RELEASE_NOTES.md#040--2026-08-05) broader `safe_apply`.
 
 | Theme | What landed |
 |-------|-------------|
+| Wizard | `wizard` meta command; `--answers` / `--preset`; print-only default; `--run` in-process |
+| Hermes | Desktop chat collect → answers JSON; never freestyle confirm_apply |
 | Semver | `docs/SEMVER.md`, `scripts/bump_version.py`, CI parity |
 | Analyze | OBSERVED graphs: Python AST; JS/TS/Go/Rust/Ruby import-surface parsers; `--lang auto` |
 | Optimize | Plan only by default; `--apply --confirm` gated rename/promote/flatten + backup |

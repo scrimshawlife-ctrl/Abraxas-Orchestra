@@ -1,5 +1,5 @@
 name: orchestra
-version: 0.7.0
+version: 0.8.0
 display_name: Abraxas Orchestra
 kind: hermes-openclaw-skill
 
@@ -10,6 +10,7 @@ description: >
   Fail-closed on weak mappings. Dual-named skeletons with recoverable provenance.
   Analyze local trees and emit optimize plans without silent mutation.
   Hermes agents route via CommandRouter groups: meta, emit, repo.
+  Prefer meta wizard when unsure or collecting fields in Desktop chat.
   Corpus remains open for expansion with additional traditional systems.
 
 homepage: https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra
@@ -49,6 +50,7 @@ command_groups:
   meta:
     - check
     - list
+    - wizard
   emit:
     - structure
     - project
@@ -60,6 +62,7 @@ command_groups:
 intents:
   - check
   - list
+  - wizard
   - structure
   - project
   - diagram
@@ -72,6 +75,7 @@ schemas:
   analysis: schemas/analysis.v1.schema.json
   optimize_plan: schemas/optimize-plan.v1.schema.json
   optimize_apply: schemas/optimize-apply.v1.schema.json
+  wizard_answers: schemas/wizard-answers.v1.schema.json
 
 examples:
   - examples/signal-forager-skeleton/

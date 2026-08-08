@@ -8,6 +8,22 @@ Narrative release notes: [`docs/RELEASE_NOTES.md`](docs/RELEASE_NOTES.md).
 
 ## [Unreleased]
 
+## [0.8.0] — 2026-08-08
+
+### Added
+- **`wizard` meta command** — guided plan/resolve from `--answers` and/or `--preset` (`scripts/orchestra_wizard.py`)
+- Answers schema `schemas/wizard-answers.v1.schema.json` (`orchestra-wizard-answers.v1`); plan shape `orchestra-wizard-plan.v1`
+- Print-only by default; `--json` emits plan JSON; `--run` dispatches resolved argv in-process via `CommandRouter`
+- Interactive TTY collect path; non-TTY without `--answers`/`--preset` exits `2` with Desktop guidance
+- Hermes Desktop protocol in `SKILL.md` / `references/agent-posture.md`: collect fields in chat → temp answers file → print-only → `--run` on approval
+- Presets (e.g. `greenfield`) and strict unknown-key rejection on answers
+- Unit + CLI tests (`tests/test_wizard.py`); smoke covers non-interactive wizard print-only
+
+### Changed
+- CommandRouter **meta** group: `check` | `list` | `wizard`
+- Docs: README, DESIGN, agent-posture, manifest schemas/intents document wizard-first when unsure
+- Never set `confirm_apply: true` unless the operator explicitly approved gated renames
+
 ## [0.7.0] — 2026-08-07
 
 ### Added
