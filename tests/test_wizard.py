@@ -225,6 +225,22 @@ class TestWizardCLI(unittest.TestCase):
         r = run_cli("wizard")
         self.assertEqual(r.returncode, 2)
 
+    def test_wizard_run_structure(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td) / "skel"
+            ans_path = Path(td) / "a.json"
+            ans_path.write_text(json.dumps({
+                "schema": "orchestra-wizard-answers.v1",
+                "intent": "greenfield",
+                "framework": "tree-of-life",
+                "emit_mode": "structure",
+                "concerns": ["intent", "output"],
+                "out": str(out),
+            }), encoding="utf-8")
+            r = run_cli("wizard", "--answers", str(ans_path), "--run")
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            self.assertTrue((out / "correspondence-table.json").exists())
+
 
 class TestWizardInteractive(unittest.TestCase):
     def test_interactive_list(self) -> None:

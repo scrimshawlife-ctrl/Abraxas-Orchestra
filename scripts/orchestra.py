@@ -899,8 +899,12 @@ def cmd_wizard(args: argparse.Namespace) -> int:
 
 
 def _wizard_run(plan: dict) -> int:
-    """Dispatch resolved argv in-process. Implemented fully in Task 4."""
-    return build_router().dispatch(list(plan["argv"]))
+    """Dispatch resolved argv in-process; refuse re-entering wizard."""
+    argv = list(plan["argv"])
+    if not argv or argv[0] == "wizard":
+        print("wizard error: refusing to dispatch wizard", file=sys.stderr)
+        return 2
+    return build_router().dispatch(argv)
 
 
 def _add_wizard_args(sp: argparse.ArgumentParser) -> None:
