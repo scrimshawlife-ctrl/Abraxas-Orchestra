@@ -57,6 +57,6 @@ Current `LICENSE` is **Apache-2.0**. Eligible for most community registries that
 - [x] LICENSE is Apache-2.0 (OSI-approved)
 - [x] `bash scripts/smoke.sh` green on clean clone
 - [x] Path-refusal check: `--target /etc/orchestra` fails
-- [ ] SKILL frontmatter validates on target host
+- [x] SKILL frontmatter validates on target host
 - [x] README states is / is-not clearly
 - [x] Contact path for security reports (`.github/SECURITY.md`)

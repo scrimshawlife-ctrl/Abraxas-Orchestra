@@ -111,15 +111,16 @@ python3 ~/.hermes/skills/orchestra/scripts/orchestra.py analyze \
 ## Optional: pin a release tag
 
 ```bash
+VERSION=$(cat VERSION)
 bash scripts/publish.sh
-git push origin v0.4.0
+git push origin "v${VERSION}"
 ```
 
 ```bash
-git clone --branch v0.4.0 https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra.git
+git clone --branch "v${VERSION}" https://github.com/scrimshawlife-ctrl/Abraxas-Orchestra.git
 ```
 
-Release notes body: [`RELEASE_BODY_v0.4.0.md`](RELEASE_BODY_v0.4.0.md)
+Release notes body: `docs/RELEASE_NOTES.md` for the latest release narrative.
 
 ---
 

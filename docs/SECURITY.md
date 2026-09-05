@@ -5,7 +5,7 @@ Abraxas Orchestra is a **local** Hermes/OpenClaw skill package.
 This file is the **live** threat model and write-surface source of truth for the current VERSION.  
 Audit history and status addenda: [`SECURITY_AUDIT.md`](SECURITY_AUDIT.md) · Policy: [`.github/SECURITY.md`](../.github/SECURITY.md)
 
-## Threat model (v0.4.0)
+## Threat model (current release)
 
 | Surface | Behavior |
 |---------|----------|

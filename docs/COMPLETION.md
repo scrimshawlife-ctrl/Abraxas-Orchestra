@@ -39,7 +39,7 @@ Release automation: [`.github/workflows/release.yml`](../.github/workflows/relea
 ## Operator gates (publish)
 
 - [x] `bash scripts/release_preflight.sh` green on your machine
-- [ ] Host install: `bash install.sh --dry-run && bash install.sh` then `check`
+- [x] Host install: `bash install.sh --dry-run && bash install.sh --target <path>` then skill `check`
 - [ ] Tag: `bash scripts/publish.sh` then `git push origin v0.8.0`
 - [ ] Confirm Actions **release** workflow green (creates GitHub Release)
 - [ ] Optional: branch protection requiring **`ci-ok`** (`docs/CI.md`)
