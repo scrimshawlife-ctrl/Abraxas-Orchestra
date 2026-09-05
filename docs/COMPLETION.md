@@ -42,7 +42,7 @@ Release automation: [`.github/workflows/release.yml`](../.github/workflows/relea
 - [x] Host install: `bash install.sh --dry-run && bash install.sh --target <path>` then skill `check`
 - [ ] Tag: `bash scripts/publish.sh` then `git push origin v0.8.0`
 - [ ] Confirm Actions **release** workflow green (creates GitHub Release)
-- [ ] Optional: branch protection requiring **`ci-ok`** (`docs/CI.md`)
+- [x] Optional: branch protection requiring **`ci-ok`** (`docs/CI.md`)
 - [ ] Optional: registry submit (`docs/COMMUNITY.md`)
 
 ## Explicitly deferred past 0.8.0
