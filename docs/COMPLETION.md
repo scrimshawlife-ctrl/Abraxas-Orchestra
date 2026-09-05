@@ -1,4 +1,4 @@
-# Completion checklist — v0.4.0
+# Completion checklist — v0.8.0
 
 Use this page to decide when the skill package is **frozen** for Hermes/OpenClaw use (private or public).
 
@@ -13,8 +13,8 @@ Release automation: [`.github/workflows/release.yml`](../.github/workflows/relea
 | Gate | Command | Expected |
 |------|---------|----------|
 | Smoke | `bash scripts/smoke.sh` | `SMOKE OK` |
-| Unit tests | included in smoke | 45+ tests OK |
-| CLI integrity | `python3 scripts/orchestra.py check` | `CHECK OK — Orchestra 0.4.0` |
+| Unit tests | included in smoke | 125+ tests OK |
+| CLI integrity | `python3 scripts/orchestra.py check` | `CHECK OK — Orchestra 0.8.0` |
 | Frameworks | `python3 scripts/orchestra.py list` | 11 keys |
 | Path jail (install) | `bash install.sh --dry-run --target /etc/orchestra` | non-zero exit |
 | Semver | `python3 scripts/bump_version.py check` | parity OK |
@@ -38,13 +38,13 @@ Release automation: [`.github/workflows/release.yml`](../.github/workflows/relea
 
 ## Operator gates (publish)
 
-- [ ] `bash scripts/release_preflight.sh` green on your machine
+- [x] `bash scripts/release_preflight.sh` green on your machine
 - [ ] Host install: `bash install.sh --dry-run && bash install.sh` then `check`
-- [ ] Tag: `bash scripts/publish.sh` then `git push origin v0.4.0`
+- [ ] Tag: `bash scripts/publish.sh` then `git push origin v0.8.0`
 - [ ] Confirm Actions **release** workflow green (creates GitHub Release)
 - [ ] Optional: branch protection requiring **`ci-ok`** (`docs/CI.md`)
 - [ ] Optional: registry submit (`docs/COMMUNITY.md`)
 
-## Explicitly deferred past 0.4.0
+## Explicitly deferred past 0.8.0
 
 See `docs/ROADMAP.md`.

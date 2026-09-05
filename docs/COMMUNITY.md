@@ -21,7 +21,7 @@ Checklist for listing **orchestra** in agent skill hubs (OpenClaw, Hermes Skills
 | Install path documented | Pass | `~/.hermes/skills/orchestra`, `~/.openclaw/skills/orchestra` |
 | Atomic install + dry-run | Pass | `install.sh` |
 | Path jail | Pass | Outside-`$HOME` requires `--allow-outside-home` |
-| `metadata` for runtime gates | Partial | Prefer declaring `requires.bins: [python3]` in frontmatter |
+| `metadata` for runtime gates | Pass | `metadata.openclaw.requires.bins: [python3]` present |
 | No undeclared network/env secrets | Pass | CLI is local stdlib |
 | Mutable state outside package | Pass | Documented invariant |
 
@@ -46,7 +46,7 @@ Current `LICENSE` is **Apache-2.0**. Eligible for most community registries that
 
 ## Suggested submission packet
 
-1. Repo URL + tag `v0.1.3` (or later)
+1. Repo URL + tag `v0.8.0` (or later)
 2. One-paragraph description (from `SKILL.md` frontmatter)
 3. Install commands from `docs/DEPLOY.md`
 4. Security one-liner from `docs/PUBLIC_RELEASE.md`
@@ -55,8 +55,8 @@ Current `LICENSE` is **Apache-2.0**. Eligible for most community registries that
 ## Pre-submit checklist
 
 - [x] LICENSE is Apache-2.0 (OSI-approved)
-- [ ] `bash scripts/smoke.sh` green on clean clone
-- [ ] Path-refusal check: `--target /etc/orchestra` fails
+- [x] `bash scripts/smoke.sh` green on clean clone
+- [x] Path-refusal check: `--target /etc/orchestra` fails
 - [ ] SKILL frontmatter validates on target host
-- [ ] README states is / is-not clearly
-- [ ] Contact path for security reports (`.github/SECURITY.md`)
+- [x] README states is / is-not clearly
+- [x] Contact path for security reports (`.github/SECURITY.md`)
